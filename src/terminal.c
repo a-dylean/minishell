@@ -6,21 +6,28 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/08 11:46:32 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:37:53 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "../includes/minishell.h"
 
-int	main()
+int	ft_terminal()
 {
 	char	*buffer;
-	size_t	buf_size;
 
 	buffer = NULL;
-	buf_size = 2048;
-	
-	buffer = (char *)malloc(sizeof(char) * buf_size + 1); // use ft_calloc
+
+	//read lines written by the user and store them into buffer
+	// the readline function uses malloc, so buffer does not need to be allocated
+	// BUT it needs to be freed
+	while ((buffer = readline("minishell$> ")) != NULL)
+	{
+		// we don't want to store empty lines in the history, bash does not
+		if (buffer[0] != '\0')
+			add_history(buffer);
+		free(buffer);
+	}
+	rl_clear_history();
+	return (EXIT_SUCCESS);
 }
