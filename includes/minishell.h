@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/08 13:24:27 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/08 14:49:58 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,17 @@
 #include <readline/history.h>
 #include <limits.h>
 
-int	ft_terminal();
+/* structures */
 
+/* lexer */
+
+int valid_quotes(char *str);
+int get_tokens(char *str);
+
+/* parser */
+
+/* expander */
+
+/* executer */
+int	ft_terminal();
 #endif
