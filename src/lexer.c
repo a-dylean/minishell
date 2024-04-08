@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/08 13:22:18 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/08 13:41:20 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int get_tokens(char *str)
     i = 0;
     j = 0;
     //replace with split charset
-    tokens = ft_split(str, ' ');
+    tokens = ft_split_charset(str, " \t\n");
     while (tokens[i])
     {
         printf("Token %d: %s\n", i, tokens[i]);
