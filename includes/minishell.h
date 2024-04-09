@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/08 16:29:55 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:30:34 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "../libft/libft.h"
+# include "../pipex/pipex.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -22,10 +23,31 @@
 
 /* structures */
 
+typedef	enum s_quotes
+{
+	S_QUOTE,
+	D_QUOTE,
+	UNQUOTE,
+}	t_quotes;
+
+typedef enum s_keys
+{
+	CMD,
+	FLAG,
+	PIPE,
+	IN_DIR,
+	OUT_DIR,
+	APPEND,
+	DELIMITER,
+	DOLLAR,
+}	t_keys;
+
 typedef struct s_token
 {
     char    *value;
-    int     type;
+    int		key;
+	int		quoted;
+	struct t_token	*next;
 }   t_token;
 
 typedef struct s_command
