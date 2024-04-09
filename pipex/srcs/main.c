@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:18:11 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/03/11 14:51:08 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/09 10:07:33 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,6 @@ char	*check_path(char *cmd, t_struct *pipex)
 void	pipex_init(int ac, char **av, char **ev, t_struct *pipex)
 {
 	pipex->exit_code_child = 1;
-	pipex->is_bonus = (ft_strnstr(av[0], "_bonus", ft_strlen(av[0]))) != NULL;
-	if ((pipex->is_bonus == 0 && ac != 5) || (pipex->is_bonus == 1 && ac < 5))
-		exit_error(USAGE, pipex, 0, 0);
 	pipex->outfile_name = av[ac - 1];
 	pipex->infile_name = av[1];
 	pipex->env = ev;
@@ -100,7 +97,7 @@ void	exec(char *cmd, t_struct *pipex, int is_last)
 	exit(pipex->exit_code_child);
 }
 
-int	main(int ac, char **av, char **ev)
+int	pipex(int ac, char **av, char **ev)
 {
 	t_struct	pipex;
 
