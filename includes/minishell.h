@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/09 12:30:34 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/09 13:22:23 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,23 +46,24 @@ typedef struct s_token
 {
     char    *value;
     int		key;
-	int		quoted;
-	struct t_token	*next;
+	// int		quoted;
+	struct s_token	*next;
 }   t_token;
 
 typedef struct s_command
 {
-    char	*path;
 	char	**command;
-	char	**env;
     char	*outfile_name;
 	char	*infile_name;
+	// add delimiter and append data if needed
+	// add last or first command data if needed by pipex
 }   t_command;
 	
 /* lexer */
 
 int valid_quotes(char *str);
 int get_tokens(char *str);
+int	encode_tokens(char **str);
 
 /* parser */
 

@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/09 12:50:52 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/09 16:15:23 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,11 @@ int get_tokens(char *str)
     i = 0;
     j = 0;
     tokens = ft_split_charset(str, " \t\r\v\f\n");
-    while (tokens[i])
-    {
-        printf("Token %d: %s\n", i, tokens[i]);
-        i++;
-    }
+	encode_tokens(tokens);
     return (0);
 }
 
-t_token	*create_token(char *value, int key, int quoted)
+t_token	*create_token(char *value, int key)
 {
 	t_token *token;
 	
@@ -58,7 +54,6 @@ t_token	*create_token(char *value, int key, int quoted)
 		exit(EXIT_FAILURE);
 	token->value = value;
 	token->key = key;
-	token->quoted = quoted;
 	token->next = NULL;
 	return (token);
 }
@@ -90,44 +85,18 @@ void	ft_add_node_back(t_token *tokens, t_token *new_node)
 		(tokens)->next = NULL;
 	}
 }
-// t_token	*ft_lstlast(t_token *lst)
-// {
-// 	t_token	*temp;
-
-// 	if (!lst)
-// 		return (NULL);
-// 	temp = lst;
-// 	while (temp->next)
-// 		temp = temp->next;
-// 	return (temp);
-// }
-
-// void	ft_lstadd_back(t_token **lst, t_token *new)
-// {
-// 	t_token	*back;
-
-// 	if (!lst || !new)
-// 		return ;
-// 	if (!*lst)
-// 	{
-// 		*lst = new;
-// 		return ;
-// 	}
-// 	back = ft_lstlast(*lst);
-// 	back->next = new;
-// }
 
 int	check_special_char(char **str, int i, int j)
 {
 	if (str[i][j] == '|')
 		return (PIPE);
-	else if (str[i][j] == '<' && str[i][j + 1] && str[i][j + 1] != '<')
+	else if (str[i][j] == '<' && str[i][j + 1] != '<')
 		return (IN_DIR);
-	else if (str[i][j] == '>' && str[i][j + 1] && str[i][j + 1] != '>')
+	else if (str[i][j] == '>' && str[i][j + 1] != '>')
 		return (OUT_DIR);
-	else if (str[i][j] == '>' && str[i][j + 1] && str[i][j + 1] == '>')
+	else if (str[i][j] == '>' && str[i][j + 1] == '>')
 		return (APPEND);
-	else if (str[i][j] == '<' && str[i][j + 1] && str[i][j + 1] == '<')
+	else if (str[i][j] == '<' && str[i][j + 1] == '<')
 		return (DELIMITER);
 	else if (str[i][j] == '$')
 		return (DOLLAR);
@@ -147,25 +116,45 @@ int	encode_tokens(char **str)
 	t_token	*tokens;
 	t_token *temp;
 
-	i = -1;
+	i = 0;
 	j = 0;
 	quoted = -1;
 	key = -1;
 	value = NULL;
-	tokens = (t_token *)malloc(sizeof(t_token));
-	if (!tokens)
-		exit(EXIT_FAILURE);
-	
+	tokens = create_token(str[i], check_special_char(str, i ,j));
 	while(str[++i])
 	{
-		temp = create_token(str[i], check_special_char(str, i ,j), 0);
+		temp = create_token(str[i], check_special_char(str, i ,j));
 		ft_add_node_back(tokens, temp);
 	}
-	i = 0;
+	// join commands into array of strings (everything that is before a pipe and delimiter)
+	// check for quotes after that
+	// char	**commands;
+	// i = 0;
+	// commands = ft_calloc(150, sizeof(char *));
+	// commands[i] = ft_calloc(150, sizeof(char));
+	// while (tokens) {
+    //     if (tokens->key != PIPE) {
+    //         strcpy(commands[i] + j , tokens->value);
+    //         printf("i: %d, string: %c\n", i, commands[i][j]);
+    //         j += strlen(tokens->value);
+    //         tokens = tokens->next;
+    //     } else {
+    //         commands[i][j] = '\0'; // Null-terminate the string
+    //         i++;
+    //         j = 0;
+    //         tokens = tokens->next;
+    //         if (tokens) {
+    //             commands[i] = ft_calloc(100, sizeof(char));
+    //         }
+    //     }
+    // }
+	// commands[i][j] = '\0';
+	
 	while(tokens)
 	{
-		printf("key: %d, value: %s/n", tokens->key, tokens->value);
-		i++;
+		printf("key: %d, value: %s\n", tokens->key, tokens->value);
+		tokens = tokens->next;
 	}
 	return (0);
 }
