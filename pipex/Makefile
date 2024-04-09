@@ -1,7 +1,5 @@
 NAME = pipex
 
-NAME_BONUS = $(NAME)_bonus
-
 SRC_PATH = srcs
 
 SRC = main.c utils.c
@@ -28,18 +26,13 @@ $(LIBFT) :
 $(NAME) : $(LIBFT) ${OBJ} pipex.h Makefile
 	$(CC) $(CFLAGS) -o $(NAME) -g3 -Ilibft $(SRC) $(LIBFT)
 
-$(NAME_BONUS) : $(LIBFT) ${OBJ} pipex.h Makefile
-	$(CC) $(CFLAGS) -o $(NAME_BONUS) -g3 -Ilibft $(SRC) $(LIBFT)
-
-bonus: $(NAME_BONUS)
-
 clean :
 	make clean -C $(LIBFT_PATH)
 	@ $(RM) $(NAME) $(OBJ)
 
 fclean : clean
 	make fclean -C $(LIBFT_PATH)
-	@ $(RM) $(NAME) $(NAME_BONUS)
+	@ $(RM) $(NAME)
 
 c :
 	make -C $(LIBFT_PATH)
