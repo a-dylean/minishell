@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/09 13:22:23 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/09 17:32:23 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,11 @@ typedef struct s_command
 
 int valid_quotes(char *str);
 int get_tokens(char *str);
-int	encode_tokens(char **str);
+t_token	*encode_tokens(char **str);
+
 
 /* parser */
+char ***get_commands(t_token *tokens);
 
 /* expander */
 

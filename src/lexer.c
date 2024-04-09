@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/09 16:15:23 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/09 17:44:44 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,24 @@ int get_tokens(char *str)
     int i;
     int j;
     char **tokens;
+    t_token *list;
+    char ***commands;
 
     i = 0;
     j = 0;
     tokens = ft_split_charset(str, " \t\r\v\f\n");
-	encode_tokens(tokens);
+	list = encode_tokens(tokens);
+    commands = get_commands(list);
+    while (commands[i])
+    {
+        j = 0;
+        while (commands[i][j])
+        {
+            printf("command[%d]: %s\n", i, commands[i][j]);
+            j++;
+        }
+        i++;
+    }
     return (0);
 }
 
@@ -106,7 +119,7 @@ int	check_special_char(char **str, int i, int j)
 		return (CMD);
 }
 
-int	encode_tokens(char **str)
+t_token	*encode_tokens(char **str)
 {
 	int	i;
 	int	j;
@@ -151,10 +164,11 @@ int	encode_tokens(char **str)
     // }
 	// commands[i][j] = '\0';
 	
-	while(tokens)
-	{
-		printf("key: %d, value: %s\n", tokens->key, tokens->value);
-		tokens = tokens->next;
-	}
-	return (0);
+	// while(tokens)
+	// {
+	// 	printf("key: %d, value: %s\n", tokens->key, tokens->value);
+	// 	tokens = tokens->next;
+	// }
+	// return (0);
+    return (tokens);
 }
