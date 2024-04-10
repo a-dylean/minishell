@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/10 16:39:51 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/10 17:23:12 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,20 +114,14 @@ int	len_word(char *str, int i)
 	int	len;
 
 	len = 1;
-	if (ft_strchr("|><", str[i + len]))
-		return (len);
-	while (!ft_isspace(str[i + len]) && str[i + len] && str[i + len] != S_QUOTE
-		&& str[i + len] != D_QUOTE)
+	while (!ft_isspace(str[i + len]) && str[i + len])
 	{
-		if (!ft_strchr("|><", str[i + len]))
+		if (str[i + len] != S_QUOTE && str[i + len] != D_QUOTE
+			&& !ft_strchr("|><", str[i + len]))
 			len++;
 		else
-		{
-			if ((str[i + len + 1] == '<' && str[i + len] == '<') || (str[i + len + 1] == '>' && str[i + len] == '>'))
-				return (len + 2);
 			return (len);
-		}		
-	}	
+	}
 	return (len);
 }
 
@@ -139,6 +133,31 @@ int	count_spaces(char *str, int i)
 	while (ft_isspace(str[i + len]) && str[i])
 		len++;
 	return (len);
+}
+
+int	check_tokens(char *str, int i)
+{
+	while (str[i])
+	{
+		if (str[i] == '|' && str[i + 1] == '|')
+		{
+			printf("Double pipe error\n");
+			return(-1);
+		}
+		else if (str[i] == '|')
+			return (1);
+		else if (str[i] == '>' && str[i + 1] == '>')
+			return (2);
+		else if (str[i] == '<' && str[i + 1] == '<')
+			return (2);
+		else if (str[i] == '<')
+			return (1);
+		else if (str[i] == '>')
+			return (1);
+		else
+			return (0);
+	}
+	return (0);
 }
 t_token	*encode_tokens(char *str)
 {
@@ -161,8 +180,12 @@ t_token	*encode_tokens(char *str)
 		i += count_spaces(str, i);
 		if (str[i] == S_QUOTE || str[i] == D_QUOTE)
 			j = len_between_quotes(str, i, str[i]);
+		else if (ft_strchr("|<>", str[i]))
+			j = check_tokens(str, i);
 		else
 			j = len_word(str, i);
+		if (j < 0)
+			return (NULL);
 		substring = ft_substr(str, i, j);
 		ft_add_node_back(tokens, create_token(substring, get_type(substring)));
 		i += j;
