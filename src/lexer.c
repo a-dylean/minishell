@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/10 16:20:24 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/10 16:39:51 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,20 @@ int	len_word(char *str, int i)
 	int	len;
 
 	len = 1;
+	if (ft_strchr("|><", str[i + len]))
+		return (len);
 	while (!ft_isspace(str[i + len]) && str[i + len] && str[i + len] != S_QUOTE
 		&& str[i + len] != D_QUOTE)
-		len++;
+	{
+		if (!ft_strchr("|><", str[i + len]))
+			len++;
+		else
+		{
+			if ((str[i + len + 1] == '<' && str[i + len] == '<') || (str[i + len + 1] == '>' && str[i + len] == '>'))
+				return (len + 2);
+			return (len);
+		}		
+	}	
 	return (len);
 }
 
