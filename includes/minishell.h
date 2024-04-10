@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/09 17:32:23 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/10 12:18:55 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,20 @@ typedef	enum s_quotes
 	UNQUOTE,
 }	t_quotes;
 
-typedef enum s_keys
+typedef enum s_type
 {
-	CMD,
-	FLAG,
+	WORD,
 	PIPE,
-	IN_DIR,
-	OUT_DIR,
-	APPEND,
-	DELIMITER,
-	DOLLAR,
-}	t_keys;
+	LESS,
+	GREAT,
+	GREATGREAT,
+	LESSLESS,
+}	t_type;
 
 typedef struct s_token
 {
     char    *value;
-    int		key;
-	// int		quoted;
+    int		type;
 	struct s_token	*next;
 }   t_token;
 
@@ -63,7 +60,7 @@ typedef struct s_command
 
 int valid_quotes(char *str);
 int get_tokens(char *str);
-t_token	*encode_tokens(char **str);
+t_token	*encode_tokens(char *str);
 
 
 /* parser */

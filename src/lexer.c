@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/09 17:44:44 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/10 14:56:11 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,33 +32,38 @@ int valid_quotes(char *str)
     return result;
 }
 
-int get_tokens(char *str)
-{
-    int i;
-    int j;
-    char **tokens;
-    t_token *list;
-    char ***commands;
+// int get_tokens(char *str)
+// {
+//     int i;
+//     int j;
+//     // char **tokens;
+//     t_token *list;
+//     // char ***commands;
 
-    i = 0;
-    j = 0;
-    tokens = ft_split_charset(str, " \t\r\v\f\n");
-	list = encode_tokens(tokens);
-    commands = get_commands(list);
-    while (commands[i])
-    {
-        j = 0;
-        while (commands[i][j])
-        {
-            printf("command[%d]: %s\n", i, commands[i][j]);
-            j++;
-        }
-        i++;
-    }
-    return (0);
-}
+//     i = 0;
+//     j = 0;
+//     //tokens = ft_split_charset(str, " \t\r\v\f\n");
+// 	list = encode_tokens(tokens);
+//     //commands = get_commands(list);
+//     // while (commands[i])
+//     // {
+//     //     j = 0;
+//     //     while (commands[i][j])
+//     //     {
+//     //         printf("command[%d]: %s\n", i, commands[i][j]);
+//     //         j++;
+//     //     }
+//     //     i++;
+//     // }
+// 	while(list)
+// 	{
+// 		printf("type: %d, value: %s\n", list->type, list->value);
+// 		list = list->next;
+// 	}
+//     return (0);
+// }
 
-t_token	*create_token(char *value, int key)
+t_token	*create_token(char *value, int type)
 {
 	t_token *token;
 	
@@ -66,7 +71,7 @@ t_token	*create_token(char *value, int key)
 	if (!token)
 		exit(EXIT_FAILURE);
 	token->value = value;
-	token->key = key;
+	token->type = type;
 	token->next = NULL;
 	return (token);
 }
@@ -99,76 +104,90 @@ void	ft_add_node_back(t_token *tokens, t_token *new_node)
 	}
 }
 
-int	check_special_char(char **str, int i, int j)
+int	len_special_char(char *str, int i)
 {
-	if (str[i][j] == '|')
-		return (PIPE);
-	else if (str[i][j] == '<' && str[i][j + 1] != '<')
-		return (IN_DIR);
-	else if (str[i][j] == '>' && str[i][j + 1] != '>')
-		return (OUT_DIR);
-	else if (str[i][j] == '>' && str[i][j + 1] == '>')
-		return (APPEND);
-	else if (str[i][j] == '<' && str[i][j + 1] == '<')
-		return (DELIMITER);
-	else if (str[i][j] == '$')
-		return (DOLLAR);
-	else if (str[i][j] == '-')
-		return (FLAG);
-	else
-		return (CMD);
+	if (str[i] == '|')
+	{
+		//ft_add_node_back(tokens, create_token("|", PIPE));
+		return (1);
+	}	
+	else if (str[i] == '<' && str[i + 1] != '<')
+	{
+		//ft_add_node_back(tokens, create_token("<", LESS));
+		return (1);
+	}
+	else if (str[i] == '>' && str[i + 1] != '>')
+	{
+		//ft_add_node_back(tokens, create_token(">", GREAT));
+		return (1);
+	}
+	else if (str[i] == '>' && str[i + 1] == '>')
+	{
+		//ft_add_node_back(tokens, create_token(">>", GREATGREAT));
+		return (2);
+	}
+	else if (str[i] == '<' && str[i + 1] == '<')
+	{
+		//ft_add_node_back(tokens, create_token("<<", LESSLESS));
+		return (2);
+	}
+	return (0);
+}
+int len_between_quotes(char *str, int i, char quote)
+{
+	int	len;
+
+	len = 1;
+	while (str[i + len] != quote)
+		len++;
+	len++;
+	return (len);
+	
 }
 
-t_token	*encode_tokens(char **str)
+int len_word(char *str, int i)
+{
+	int	len;
+	
+	len = 1;
+	while (!ft_isspace(str[i + len]))
+		len++;		
+	return (len);
+}
+
+int count_spaces(char *str , int i)
+{
+	int len;
+
+	len = 0;
+	while (ft_isspace(str[i + len]) && str[i])
+			len++;
+	return (len);
+}
+t_token	*encode_tokens(char *str)
 {
 	int	i;
 	int	j;
-	int	quoted;
-	int	key;
-	char *value;
 	t_token	*tokens;
-	t_token *temp;
 
 	i = 0;
-	j = 0;
-	quoted = -1;
-	key = -1;
-	value = NULL;
-	tokens = create_token(str[i], check_special_char(str, i ,j));
-	while(str[++i])
+	tokens = create_token("", 0);
+	while(str[i])
 	{
-		temp = create_token(str[i], check_special_char(str, i ,j));
-		ft_add_node_back(tokens, temp);
+		i += count_spaces(str, i);
+		if (str[i] == '\'' || str[i] == '\"')
+			j = len_between_quotes(str, i, str[i]);
+		else if (len_special_char(str, i))
+				j = len_special_char(str, i);
+		else
+				j = len_word(str, i);	
+		ft_add_node_back(tokens, create_token(ft_substr(str, i, j), 0));
+		i += j;
 	}
-	// join commands into array of strings (everything that is before a pipe and delimiter)
-	// check for quotes after that
-	// char	**commands;
-	// i = 0;
-	// commands = ft_calloc(150, sizeof(char *));
-	// commands[i] = ft_calloc(150, sizeof(char));
-	// while (tokens) {
-    //     if (tokens->key != PIPE) {
-    //         strcpy(commands[i] + j , tokens->value);
-    //         printf("i: %d, string: %c\n", i, commands[i][j]);
-    //         j += strlen(tokens->value);
-    //         tokens = tokens->next;
-    //     } else {
-    //         commands[i][j] = '\0'; // Null-terminate the string
-    //         i++;
-    //         j = 0;
-    //         tokens = tokens->next;
-    //         if (tokens) {
-    //             commands[i] = ft_calloc(100, sizeof(char));
-    //         }
-    //     }
-    // }
-	// commands[i][j] = '\0';
-	
-	// while(tokens)
-	// {
-	// 	printf("key: %d, value: %s\n", tokens->key, tokens->value);
-	// 	tokens = tokens->next;
-	// }
-	// return (0);
+	while(tokens)
+	{
+		printf("type: %d, value: %s\n", tokens->type, tokens->value);
+		tokens = tokens->next;
+	}
     return (tokens);
 }
