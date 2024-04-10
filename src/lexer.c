@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/10 15:08:29 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/10 16:08:07 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,46 +24,15 @@ int	valid_quotes(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'')
+		if (str[i] == S_QUOTE)
 			in_single_quote = !in_single_quote;
-		else if (str[i] == '\"')
+		else if (str[i] == D_QUOTE)
 			in_double_quote = !in_double_quote;
 		i++;
 	}
 	result = !(in_single_quote || in_double_quote);
 	return (result);
 }
-
-// int get_tokens(char *str)
-// {
-//     int i;
-//     int j;
-//     // char **tokens;
-//     t_token *list;
-//     // char ***commands;
-
-//     i = 0;
-//     j = 0;
-//     //tokens = ft_split_charset(str, " \t\r\v\f\n");
-// 	list = encode_tokens(tokens);
-//     //commands = get_commands(list);
-//     // while (commands[i])
-//     // {
-//     //     j = 0;
-//     //     while (commands[i][j])
-//     //     {
-//     //         printf("command[%d]: %s\n", i, commands[i][j]);
-//     //         j++;
-//     //     }
-//     //     i++;
-//     // }
-// 	while(list)
-// 	{
-// 		printf("type: %d, value: %s\n", list->type, list->value);
-// 		list = list->next;
-// 	}
-//     return (0);
-// }
 
 t_token	*create_token(char *value, int type)
 {
@@ -145,7 +114,8 @@ int	len_word(char *str, int i)
 	int	len;
 
 	len = 1;
-	while (!ft_isspace(str[i + len]) && str[i + len])
+	while (!ft_isspace(str[i + len]) && str[i + len] && str[i + len] != S_QUOTE
+		&& str[i + len] != D_QUOTE)
 		len++;
 	return (len);
 }
@@ -167,17 +137,28 @@ t_token	*encode_tokens(char *str)
 	char	*substring;
 
 	i = 0;
+	j = 0;
+	if (!valid_quotes(str))
+	{
+		printf("Error: invalid quotes\n");
+		return (NULL);
+	}
 	tokens = create_token("", 0);
 	while (str[i])
 	{
 		i += count_spaces(str, i);
-		if (str[i] == '\'' || str[i] == '\"')
+		if (str[i] == S_QUOTE || str[i] == D_QUOTE)
 			j = len_between_quotes(str, i, str[i]);
 		else
 			j = len_word(str, i);
 		substring = ft_substr(str, i, j);
 		ft_add_node_back(tokens, create_token(substring, get_type(substring)));
 		i += j;
+	}
+	while (tokens)
+	{
+		printf("type: %d, value: %s\n", tokens->type, tokens->value);
+		tokens = tokens->next;
 	}
 	return (tokens);
 }

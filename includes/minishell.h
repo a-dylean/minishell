@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/10 12:18:55 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/10 16:06:39 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,17 @@
 #include <readline/history.h>
 #include <limits.h>
 
+#define S_QUOTE '\''
+#define D_QUOTE '\"'
+
 /* structures */
 
-typedef	enum s_quotes
-{
-	S_QUOTE,
-	D_QUOTE,
-	UNQUOTE,
-}	t_quotes;
+// typedef	enum s_quotes
+// {
+// 	S_QUOTE,
+// 	D_QUOTE,
+// 	UNQUOTE,
+// }	t_quotes;
 
 typedef enum s_type
 {
