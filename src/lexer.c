@@ -6,30 +6,32 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/10 14:56:11 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/10 14:58:24 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int valid_quotes(char *str)
+int	valid_quotes(char *str)
 {
-    int i;
-    int in_single_quote = 0;
-    int in_double_quote = 0;
-    int result;
+	int	i;
+	int	in_single_quote;
+	int	in_double_quote;
+	int	result;
 
-    i = 0;
-    while(str[i])
-    {
-        if (str[i] == '\'')
-            in_single_quote = !in_single_quote;
-        else if (str[i] == '\"')
-            in_double_quote = !in_double_quote;
-        i++;
-    }
-    result = !(in_single_quote || in_double_quote);
-    return result;
+	in_single_quote = 0;
+	in_double_quote = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+			in_single_quote = !in_single_quote;
+		else if (str[i] == '\"')
+			in_double_quote = !in_double_quote;
+		i++;
+	}
+	result = !(in_single_quote || in_double_quote);
+	return (result);
 }
 
 // int get_tokens(char *str)
@@ -65,8 +67,8 @@ int valid_quotes(char *str)
 
 t_token	*create_token(char *value, int type)
 {
-	t_token *token;
-	
+	t_token	*token;
+
 	token = malloc(sizeof(t_token));
 	if (!token)
 		exit(EXIT_FAILURE);
@@ -108,32 +110,32 @@ int	len_special_char(char *str, int i)
 {
 	if (str[i] == '|')
 	{
-		//ft_add_node_back(tokens, create_token("|", PIPE));
+		// ft_add_node_back(tokens, create_token("|", PIPE));
 		return (1);
-	}	
+	}
 	else if (str[i] == '<' && str[i + 1] != '<')
 	{
-		//ft_add_node_back(tokens, create_token("<", LESS));
+		// ft_add_node_back(tokens, create_token("<", LESS));
 		return (1);
 	}
 	else if (str[i] == '>' && str[i + 1] != '>')
 	{
-		//ft_add_node_back(tokens, create_token(">", GREAT));
+		// ft_add_node_back(tokens, create_token(">", GREAT));
 		return (1);
 	}
 	else if (str[i] == '>' && str[i + 1] == '>')
 	{
-		//ft_add_node_back(tokens, create_token(">>", GREATGREAT));
+		// ft_add_node_back(tokens, create_token(">>", GREATGREAT));
 		return (2);
 	}
 	else if (str[i] == '<' && str[i + 1] == '<')
 	{
-		//ft_add_node_back(tokens, create_token("<<", LESSLESS));
+		// ft_add_node_back(tokens, create_token("<<", LESSLESS));
 		return (2);
 	}
 	return (0);
 }
-int len_between_quotes(char *str, int i, char quote)
+int	len_between_quotes(char *str, int i, char quote)
 {
 	int	len;
 
@@ -142,52 +144,46 @@ int len_between_quotes(char *str, int i, char quote)
 		len++;
 	len++;
 	return (len);
-	
 }
 
-int len_word(char *str, int i)
+int	len_word(char *str, int i)
 {
 	int	len;
-	
+
 	len = 1;
 	while (!ft_isspace(str[i + len]))
-		len++;		
+		len++;
 	return (len);
 }
 
-int count_spaces(char *str , int i)
+int	count_spaces(char *str, int i)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	while (ft_isspace(str[i + len]) && str[i])
-			len++;
+		len++;
 	return (len);
 }
 t_token	*encode_tokens(char *str)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	t_token	*tokens;
 
 	i = 0;
 	tokens = create_token("", 0);
-	while(str[i])
+	while (str[i])
 	{
 		i += count_spaces(str, i);
 		if (str[i] == '\'' || str[i] == '\"')
 			j = len_between_quotes(str, i, str[i]);
 		else if (len_special_char(str, i))
-				j = len_special_char(str, i);
+			j = len_special_char(str, i);
 		else
-				j = len_word(str, i);	
+			j = len_word(str, i);
 		ft_add_node_back(tokens, create_token(ft_substr(str, i, j), 0));
 		i += j;
 	}
-	while(tokens)
-	{
-		printf("type: %d, value: %s\n", tokens->type, tokens->value);
-		tokens = tokens->next;
-	}
-    return (tokens);
+	return (tokens);
 }
