@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/10 14:58:24 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/10 15:08:29 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,34 +106,28 @@ void	ft_add_node_back(t_token *tokens, t_token *new_node)
 	}
 }
 
-int	len_special_char(char *str, int i)
+int	get_type(char *str)
 {
-	if (str[i] == '|')
+	int	i;
+
+	i = 0;
+	while (str[i])
 	{
-		// ft_add_node_back(tokens, create_token("|", PIPE));
-		return (1);
+		if (str[i] == '|')
+			return (PIPE);
+		else if (str[i] == '>' && str[i + 1] == '>')
+			return (GREATGREAT);
+		else if (str[i] == '<' && str[i + 1] == '<')
+			return (LESSLESS);
+		else if (str[i] == '<')
+			return (LESS);
+		else if (str[i] == '>')
+			return (GREAT);
+		else
+			return (WORD);
+		i++;
 	}
-	else if (str[i] == '<' && str[i + 1] != '<')
-	{
-		// ft_add_node_back(tokens, create_token("<", LESS));
-		return (1);
-	}
-	else if (str[i] == '>' && str[i + 1] != '>')
-	{
-		// ft_add_node_back(tokens, create_token(">", GREAT));
-		return (1);
-	}
-	else if (str[i] == '>' && str[i + 1] == '>')
-	{
-		// ft_add_node_back(tokens, create_token(">>", GREATGREAT));
-		return (2);
-	}
-	else if (str[i] == '<' && str[i + 1] == '<')
-	{
-		// ft_add_node_back(tokens, create_token("<<", LESSLESS));
-		return (2);
-	}
-	return (0);
+	return (-1);
 }
 int	len_between_quotes(char *str, int i, char quote)
 {
@@ -151,7 +145,7 @@ int	len_word(char *str, int i)
 	int	len;
 
 	len = 1;
-	while (!ft_isspace(str[i + len]))
+	while (!ft_isspace(str[i + len]) && str[i + len])
 		len++;
 	return (len);
 }
@@ -170,6 +164,7 @@ t_token	*encode_tokens(char *str)
 	int		i;
 	int		j;
 	t_token	*tokens;
+	char	*substring;
 
 	i = 0;
 	tokens = create_token("", 0);
@@ -178,11 +173,10 @@ t_token	*encode_tokens(char *str)
 		i += count_spaces(str, i);
 		if (str[i] == '\'' || str[i] == '\"')
 			j = len_between_quotes(str, i, str[i]);
-		else if (len_special_char(str, i))
-			j = len_special_char(str, i);
 		else
 			j = len_word(str, i);
-		ft_add_node_back(tokens, create_token(ft_substr(str, i, j), 0));
+		substring = ft_substr(str, i, j);
+		ft_add_node_back(tokens, create_token(substring, get_type(substring)));
 		i += j;
 	}
 	return (tokens);
