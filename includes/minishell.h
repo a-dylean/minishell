@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/10 16:06:39 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/10 16:20:07 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,10 @@ typedef struct s_command
 /* lexer */
 
 int valid_quotes(char *str);
-int get_tokens(char *str);
 t_token	*encode_tokens(char *str);
 
 
 /* parser */
-char ***get_commands(t_token *tokens);
 
 /* expander */
 

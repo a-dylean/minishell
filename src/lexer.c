@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/10 16:08:07 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/10 16:20:24 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,22 @@ t_token	*ft_get_last_node(t_token *head)
 	return (head);
 }
 
-void	ft_add_node_back(t_token *tokens, t_token *new_node)
+void	ft_add_node_back(t_token **tokens, t_token *new_node)
 {
 	t_token	*temp;
 
 	if (!new_node)
 		return ;
-	if (tokens && new_node)
+	if (*tokens && new_node)
 	{
-		temp = ft_get_last_node(tokens);
+		temp = ft_get_last_node(*tokens);
 		temp->next = new_node;
 		new_node->next = NULL;
 	}
 	else
 	{
-		tokens = new_node;
-		(tokens)->next = NULL;
+		*tokens = new_node;
+		(*tokens)->next = NULL;
 	}
 }
 
@@ -133,7 +133,7 @@ t_token	*encode_tokens(char *str)
 {
 	int		i;
 	int		j;
-	t_token	*tokens;
+	t_token	**tokens;
 	char	*substring;
 
 	i = 0;
@@ -143,7 +143,8 @@ t_token	*encode_tokens(char *str)
 		printf("Error: invalid quotes\n");
 		return (NULL);
 	}
-	tokens = create_token("", 0);
+	tokens = (t_token **)malloc(sizeof(t_token));
+	*tokens = NULL;
 	while (str[i])
 	{
 		i += count_spaces(str, i);
@@ -155,10 +156,10 @@ t_token	*encode_tokens(char *str)
 		ft_add_node_back(tokens, create_token(substring, get_type(substring)));
 		i += j;
 	}
-	while (tokens)
+	while (*tokens)
 	{
-		printf("type: %d, value: %s\n", tokens->type, tokens->value);
-		tokens = tokens->next;
+		printf("type: %d, value: %s\n", (*tokens)->type, (*tokens)->value);
+		tokens = &(*tokens)->next;
 	}
-	return (tokens);
+	return (*tokens);
 }
