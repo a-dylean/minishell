@@ -6,54 +6,43 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/09 16:15:23 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/11 11:51:34 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int valid_quotes(char *str)
+int	valid_quotes(char *str)
 {
-    int i;
-    int in_single_quote = 0;
-    int in_double_quote = 0;
-    int result;
+	int	i;
+	int	in_single_quote;
+	int	in_double_quote;
+	int	result;
 
-    i = 0;
-    while(str[i])
-    {
-        if (str[i] == '\'')
-            in_single_quote = !in_single_quote;
-        else if (str[i] == '\"')
-            in_double_quote = !in_double_quote;
-        i++;
-    }
-    result = !(in_single_quote || in_double_quote);
-    return result;
+	in_single_quote = 0;
+	in_double_quote = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == S_QUOTE)
+			in_single_quote = !in_single_quote;
+		else if (str[i] == D_QUOTE)
+			in_double_quote = !in_double_quote;
+		i++;
+	}
+	result = !(in_single_quote || in_double_quote);
+	return (result);
 }
 
-int get_tokens(char *str)
+t_token	*create_token(char *value, int type)
 {
-    int i;
-    int j;
-    char **tokens;
+	t_token	*token;
 
-    i = 0;
-    j = 0;
-    tokens = ft_split_charset(str, " \t\r\v\f\n");
-	encode_tokens(tokens);
-    return (0);
-}
-
-t_token	*create_token(char *value, int key)
-{
-	t_token *token;
-	
 	token = malloc(sizeof(t_token));
 	if (!token)
 		exit(EXIT_FAILURE);
 	token->value = value;
-	token->key = key;
+	token->type = type;
 	token->next = NULL;
 	return (token);
 }
@@ -67,94 +56,171 @@ t_token	*ft_get_last_node(t_token *head)
 	return (head);
 }
 
-void	ft_add_node_back(t_token *tokens, t_token *new_node)
+void	ft_add_node_back(t_token **tokens, t_token *new_node)
 {
 	t_token	*temp;
 
 	if (!new_node)
 		return ;
-	if (tokens && new_node)
+	if (*tokens && new_node)
 	{
-		temp = ft_get_last_node(tokens);
+		temp = ft_get_last_node(*tokens);
 		temp->next = new_node;
 		new_node->next = NULL;
 	}
 	else
 	{
-		tokens = new_node;
-		(tokens)->next = NULL;
+		*tokens = new_node;
+		(*tokens)->next = NULL;
 	}
 }
 
-int	check_special_char(char **str, int i, int j)
-{
-	if (str[i][j] == '|')
-		return (PIPE);
-	else if (str[i][j] == '<' && str[i][j + 1] != '<')
-		return (IN_DIR);
-	else if (str[i][j] == '>' && str[i][j + 1] != '>')
-		return (OUT_DIR);
-	else if (str[i][j] == '>' && str[i][j + 1] == '>')
-		return (APPEND);
-	else if (str[i][j] == '<' && str[i][j + 1] == '<')
-		return (DELIMITER);
-	else if (str[i][j] == '$')
-		return (DOLLAR);
-	else if (str[i][j] == '-')
-		return (FLAG);
-	else
-		return (CMD);
-}
-
-int	encode_tokens(char **str)
+int	get_type(char *str)
 {
 	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == '|')
+			return (PIPE);
+		else if (str[i] == '>')
+		{
+			count = i;
+			while (str[count] == '>')
+				count++;
+			if (count - i == 2)
+				return (GREATGREAT);
+			else if (count - i == 1)
+				return (GREAT);
+			else
+				return(-1);
+		}
+		else if (str[i] == '<')
+		{
+			count = i;
+			while (str[count] == '<')
+				count++;
+			if (count - i == 2)
+				return (LESSLESS);
+			else if (count - i == 1)
+				return (LESS);
+			else
+				return(-1);
+		}
+		else
+			return (WORD);
+		i++;
+	}
+	return (-1);
+}
+int	len_between_quotes(char *str, int i, char quote)
+{
+	int	len;
+
+	len = 1;
+	while (str[i + len] != quote)
+		len++;
+	len++;
+	return (len);
+}
+
+int	len_word(char *str, int i)
+{
+	int	len;
+
+	len = 1;
+	while (!ft_isspace(str[i + len]) && str[i + len])
+	{
+		if (str[i + len] != S_QUOTE && str[i + len] != D_QUOTE
+			&& !ft_strchr("|><", str[i + len]))
+			len++;
+		else
+			return (len);
+	}
+	return (len);
+}
+
+int	count_spaces(char *str, int i)
+{
+	int	len;
+
+	len = 0;
+	while (ft_isspace(str[i + len]) && str[i])
+		len++;
+	return (len);
+}
+
+int	check_tokens(char *str, int i)
+{
 	int	j;
-	int	quoted;
-	int	key;
-	char *value;
-	t_token	*tokens;
-	t_token *temp;
+
+	j = i;
+	while (str[i])
+	{
+		if (str[i] == '|' && str[i + 1] == '|')
+		{
+			printf("Double pipe error\n");
+			return(-1);
+		}
+		else if (str[i] == '|')
+			return (1);
+		else if (str[i] == '>')
+		{
+			while (str[j] == '>')
+				j++;
+			return (j - i);
+		}
+		else if (str[i] == '<')
+		{
+			while (str[j] == '<')
+				j++;
+			return (j - i);
+		}
+		else
+			return (0);
+	}
+	return (0);
+}
+
+t_token	*encode_tokens(char *str)
+{
+	int		i;
+	int		j;
+	t_token	**tokens;
+	char	*substring;
 
 	i = 0;
 	j = 0;
-	quoted = -1;
-	key = -1;
-	value = NULL;
-	tokens = create_token(str[i], check_special_char(str, i ,j));
-	while(str[++i])
+	str = ft_strtrim(str, " "); // used to avoid segfault when a line only contains spaces
+	if (!valid_quotes(str))
 	{
-		temp = create_token(str[i], check_special_char(str, i ,j));
-		ft_add_node_back(tokens, temp);
+		printf("Error: invalid quotes\n");
+		return (NULL);
 	}
-	// join commands into array of strings (everything that is before a pipe and delimiter)
-	// check for quotes after that
-	// char	**commands;
-	// i = 0;
-	// commands = ft_calloc(150, sizeof(char *));
-	// commands[i] = ft_calloc(150, sizeof(char));
-	// while (tokens) {
-    //     if (tokens->key != PIPE) {
-    //         strcpy(commands[i] + j , tokens->value);
-    //         printf("i: %d, string: %c\n", i, commands[i][j]);
-    //         j += strlen(tokens->value);
-    //         tokens = tokens->next;
-    //     } else {
-    //         commands[i][j] = '\0'; // Null-terminate the string
-    //         i++;
-    //         j = 0;
-    //         tokens = tokens->next;
-    //         if (tokens) {
-    //             commands[i] = ft_calloc(100, sizeof(char));
-    //         }
-    //     }
-    // }
-	// commands[i][j] = '\0';
-	
-	while(tokens)
+	tokens = (t_token **)malloc(sizeof(t_token));
+	*tokens = NULL;
+	while (str[i])
 	{
-		printf("key: %d, value: %s\n", tokens->key, tokens->value);
-		tokens = tokens->next;
+		i += count_spaces(str, i);
+		if (str[i] == S_QUOTE || str[i] == D_QUOTE)
+			j = len_between_quotes(str, i, str[i]);
+		else if (ft_strchr("|<>", str[i]))
+			j = check_tokens(str, i);
+		else
+			j = len_word(str, i);
+		if (j < 0)
+			return (NULL);
+		substring = ft_substr(str, i, j);
+		ft_add_node_back(tokens, create_token(substring, get_type(substring)));
+		i += j;
 	}
-	return (0);
+	while (*tokens)
+	{
+		printf("type: %d, value: %s\n", (*tokens)->type, (*tokens)->value);
+		tokens = &(*tokens)->next;
+	}
+	return (*tokens);
 }
