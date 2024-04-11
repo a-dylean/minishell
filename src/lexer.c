@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/11 14:19:36 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:56:11 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,43 @@ int	valid_quotes(char *str)
 	return (result);
 }
 
+int	pipe_type(char *str, int i, int count)
+{
+	count = i;
+	while (str[count] == '|')
+		count++;
+	if (count - i == 1)
+		return (PIPE);
+	else
+		return (-1);
+}
+
+int	great_type(char *str, int i, int count)
+{
+	count = i;
+	while (str[count] == '>')
+		count++;
+	if (count - i == 2)
+		return (GREATGREAT);
+	else if (count - i == 1)
+		return (GREAT);
+	else
+		return (-1);
+}
+
+int	less_type(char *str, int i, int count)
+{
+	count = i;
+	while (str[count] == '<')
+		count++;
+	if (count - i == 2)
+		return (LESSLESS);
+	else if (count - i == 1)
+		return (LESS);
+	else
+		return (-1);
+}
+
 int	get_type(char *str)
 {
 	int	i;
@@ -44,45 +81,18 @@ int	get_type(char *str)
 	while (str[i])
 	{
 		if (str[i] == '|')
-		{
-			count = i;
-			while (str[count] == '|')
-				count++;
-			if (count - i == 1)
-				return (PIPE);
-			else
-				return(-1);
-		}
+			return (pipe_type(str, i, count));
 		else if (str[i] == '>')
-		{
-			count = i;
-			while (str[count] == '>')
-				count++;
-			if (count - i == 2)
-				return (GREATGREAT);
-			else if (count - i == 1)
-				return (GREAT);
-			else
-				return(-1);
-		}
+			return (great_type(str, i, count));
 		else if (str[i] == '<')
-		{
-			count = i;
-			while (str[count] == '<')
-				count++;
-			if (count - i == 2)
-				return (LESSLESS);
-			else if (count - i == 1)
-				return (LESS);
-			else
-				return(-1);
-		}
+			return (less_type(str, i, count));
 		else
 			return (WORD);
 		i++;
 	}
 	return (-1);
 }
+
 int	len_between_quotes(char *str, int i, char quote)
 {
 	int	len;
