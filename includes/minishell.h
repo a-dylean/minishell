@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/11 14:15:35 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/11 16:21:33 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ t_token	*encode_tokens(char *str, t_token **tokens);
 
 
 /* parser */
+int	check_syntax(t_token *tokens);
 
 /* expander */
 
@@ -87,5 +88,9 @@ void	free_stack(t_token **tokens);
 
 /* free */
 int free_in_terminal(t_token **tokens, char *buffer);
+
+/* errors */
+int	syntax_error_in_token(char *token);
+int	undefined_behavior_error(char *str);
 
 #endif
