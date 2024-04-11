@@ -26,7 +26,7 @@ int count_tokens_before_pipe(t_token *tokens)
     return (count);
 }
 
-void remove_redirection_nodes(t_token *tokens)
+void remove_redir_from_tokens(t_token *tokens)
 {
     while (tokens)
     {
@@ -75,13 +75,14 @@ char	**get_cmd_from_tokens(t_token *tokens)
     int num_tokens;
     int i;
     t_token *temp;
-    
-    num_tokens = count_tokens_before_pipe(tokens);
-    char **array = malloc((num_tokens + 1) * sizeof(char *));
-    if (!array)
-        exit(EXIT_FAILURE);
+    char **array;
+
     i = 0;
     temp = tokens;
+    num_tokens = count_tokens_before_pipe(tokens);
+    array = malloc((num_tokens + 1) * sizeof(char *));
+    if (!array)
+        exit(EXIT_FAILURE);
     while (temp)
     {
         array[i] = ft_strdup(temp->value);
@@ -89,12 +90,6 @@ char	**get_cmd_from_tokens(t_token *tokens)
         i++;
     }
     array[i] = NULL;
-    // i = 0;
-	// while (array[i])
-	// {
-    //     printf("cmd[%d]: %s\n", i, array[i]);
-	//     i++;
-	// }
 	return (array);
 }
 // function that adds redirections (array of tokens) to the command struct
@@ -107,7 +102,7 @@ void	handle_redirections(t_token *tokens, t_command *command)
     command->redirections = temp;
     command->redirections->next = temp->next;
     command->redirections->next->next = NULL;
-    remove_redirection_nodes(tokens);
+    remove_redir_from_tokens(tokens);
 }
 
 t_command   *get_new_command(t_token *tokens)
@@ -124,7 +119,6 @@ t_command   *get_new_command(t_token *tokens)
 		temp = temp->next;
 	}
     command->cmd_name = get_cmd_from_tokens(tokens);
-    // printf("cmd_name: %s\n", command->cmd_name[0]);
     return (command);
 }
 
@@ -142,7 +136,6 @@ int	parser(t_token *tokens)
 		{
             add_command_back(commands, get_new_command(tokens));
             remove_cmd_from_tokens(&tokens);
-			// delete previous token from lexer and create a new command
 		}
 		temp = temp->next;
 	}

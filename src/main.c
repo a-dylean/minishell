@@ -17,7 +17,7 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
 	//ft_terminal();
-    tokens = encode_tokens("cat -e << file | ls -l | echo hello > file |");
+    tokens = encode_tokens("cat -e << file | ls -l | echo hello > file");
     parser(tokens);
     return (0);
 }
