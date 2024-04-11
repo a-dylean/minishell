@@ -69,7 +69,7 @@ t_command	*init_command(void)
 	new_command->env = NULL;
 	return (new_command);
 }
-
+// function that returns an array of strings (command) from the tokens list
 char	**get_cmd_from_tokens(t_token *tokens)
 {
     int num_tokens;
@@ -104,7 +104,7 @@ void	handle_redirections(t_token *tokens, t_command *command)
     command->redirections->next->next = NULL;
     remove_redir_from_tokens(tokens);
 }
-
+// function that creates a new command struct and adds redirections (if exists) and command arr to it
 t_command   *get_new_command(t_token *tokens)
 {
     t_token *temp;
