@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/11 11:51:34 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:19:36 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,47 +34,6 @@ int	valid_quotes(char *str)
 	return (result);
 }
 
-t_token	*create_token(char *value, int type)
-{
-	t_token	*token;
-
-	token = malloc(sizeof(t_token));
-	if (!token)
-		exit(EXIT_FAILURE);
-	token->value = value;
-	token->type = type;
-	token->next = NULL;
-	return (token);
-}
-
-t_token	*ft_get_last_node(t_token *head)
-{
-	if (!head)
-		return (NULL);
-	while (head->next)
-		head = head->next;
-	return (head);
-}
-
-void	ft_add_node_back(t_token **tokens, t_token *new_node)
-{
-	t_token	*temp;
-
-	if (!new_node)
-		return ;
-	if (*tokens && new_node)
-	{
-		temp = ft_get_last_node(*tokens);
-		temp->next = new_node;
-		new_node->next = NULL;
-	}
-	else
-	{
-		*tokens = new_node;
-		(*tokens)->next = NULL;
-	}
-}
-
 int	get_type(char *str)
 {
 	int	i;
@@ -85,7 +44,15 @@ int	get_type(char *str)
 	while (str[i])
 	{
 		if (str[i] == '|')
-			return (PIPE);
+		{
+			count = i;
+			while (str[count] == '|')
+				count++;
+			if (count - i == 1)
+				return (PIPE);
+			else
+				return(-1);
+		}
 		else if (str[i] == '>')
 		{
 			count = i;
@@ -158,50 +125,35 @@ int	check_tokens(char *str, int i)
 	int	j;
 
 	j = i;
-	while (str[i])
+	if (str[i] == '|')
 	{
-		if (str[i] == '|' && str[i + 1] == '|')
-		{
-			printf("Double pipe error\n");
-			return(-1);
-		}
-		else if (str[i] == '|')
-			return (1);
-		else if (str[i] == '>')
-		{
-			while (str[j] == '>')
-				j++;
-			return (j - i);
-		}
-		else if (str[i] == '<')
-		{
-			while (str[j] == '<')
-				j++;
-			return (j - i);
-		}
-		else
-			return (0);
+		while (str[j] == '|')
+			j++;
+		return (j - i);
+	}
+	else if (str[i] == '>')
+	{
+		while (str[j] == '>')
+			j++;
+		return (j - i);
+	}
+	else if (str[i] == '<')
+	{
+		while (str[j] == '<')
+			j++;
+		return (j - i);
 	}
 	return (0);
 }
 
-t_token	*encode_tokens(char *str)
+t_token	*encode_tokens(char *str, t_token **tokens)
 {
 	int		i;
 	int		j;
-	t_token	**tokens;
 	char	*substring;
 
 	i = 0;
 	j = 0;
-	str = ft_strtrim(str, " "); // used to avoid segfault when a line only contains spaces
-	if (!valid_quotes(str))
-	{
-		printf("Error: invalid quotes\n");
-		return (NULL);
-	}
-	tokens = (t_token **)malloc(sizeof(t_token));
-	*tokens = NULL;
 	while (str[i])
 	{
 		i += count_spaces(str, i);
@@ -215,6 +167,8 @@ t_token	*encode_tokens(char *str)
 			return (NULL);
 		substring = ft_substr(str, i, j);
 		ft_add_node_back(tokens, create_token(substring, get_type(substring)));
+		if (substring)
+			free(substring);
 		i += j;
 	}
 	while (*tokens)
