@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   terminal.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/11 10:09:30 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:23:37 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_terminal()
 	{
 		if (buffer[0] != '\0')
 			add_history(buffer);
-		encode_tokens(buffer);
+		//encode_tokens(buffer);
 		free(buffer);
 	}
 	rl_clear_history();

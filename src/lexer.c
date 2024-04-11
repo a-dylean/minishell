@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/11 11:51:34 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/11 16:10:26 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,13 @@ int	valid_quotes(char *str)
 
 t_token	*create_token(char *value, int type)
 {
-	t_token	*token;
+	t_token		*token;
+	static int	id = 0;
 
 	token = malloc(sizeof(t_token));
 	if (!token)
 		exit(EXIT_FAILURE);
+	token->id = id++;
 	token->value = value;
 	token->type = type;
 	token->next = NULL;
@@ -96,7 +98,7 @@ int	get_type(char *str)
 			else if (count - i == 1)
 				return (GREAT);
 			else
-				return(-1);
+				return (-1);
 		}
 		else if (str[i] == '<')
 		{
@@ -108,7 +110,7 @@ int	get_type(char *str)
 			else if (count - i == 1)
 				return (LESS);
 			else
-				return(-1);
+				return (-1);
 		}
 		else
 			return (WORD);
@@ -163,7 +165,7 @@ int	check_tokens(char *str, int i)
 		if (str[i] == '|' && str[i + 1] == '|')
 		{
 			printf("Double pipe error\n");
-			return(-1);
+			return (-1);
 		}
 		else if (str[i] == '|')
 			return (1);
@@ -194,7 +196,8 @@ t_token	*encode_tokens(char *str)
 
 	i = 0;
 	j = 0;
-	str = ft_strtrim(str, " "); // used to avoid segfault when a line only contains spaces
+	str = ft_strtrim(str, " ");
+		// used to avoid segfault when a line only contains spaces
 	if (!valid_quotes(str))
 	{
 		printf("Error: invalid quotes\n");
@@ -216,11 +219,6 @@ t_token	*encode_tokens(char *str)
 		substring = ft_substr(str, i, j);
 		ft_add_node_back(tokens, create_token(substring, get_type(substring)));
 		i += j;
-	}
-	while (*tokens)
-	{
-		printf("type: %d, value: %s\n", (*tokens)->type, (*tokens)->value);
-		tokens = &(*tokens)->next;
 	}
 	return (*tokens);
 }

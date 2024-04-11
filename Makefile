@@ -1,11 +1,12 @@
 NAME = minishell
 
-CC = cc
+CC = cc 
+# for debugging -g
 CFLAGS = -Wall -Wextra -Werror
 
 INCLUDES = -I includes -I libft
 
-SRC = src/main.c src/terminal.c src/lexer.c
+SRC = src/main.c src/terminal.c src/lexer.c src/parser.c src/parser_utils.c
 
 OBJ_DIR = obj
 OBJ := $(patsubst src/%.c,obj/%.o,$(SRC))
