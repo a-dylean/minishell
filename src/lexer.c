@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/10 17:23:12 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/11 11:51:34 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,20 +78,38 @@ void	ft_add_node_back(t_token **tokens, t_token *new_node)
 int	get_type(char *str)
 {
 	int	i;
+	int	count;
 
 	i = 0;
+	count = 0;
 	while (str[i])
 	{
 		if (str[i] == '|')
 			return (PIPE);
-		else if (str[i] == '>' && str[i + 1] == '>')
-			return (GREATGREAT);
-		else if (str[i] == '<' && str[i + 1] == '<')
-			return (LESSLESS);
-		else if (str[i] == '<')
-			return (LESS);
 		else if (str[i] == '>')
-			return (GREAT);
+		{
+			count = i;
+			while (str[count] == '>')
+				count++;
+			if (count - i == 2)
+				return (GREATGREAT);
+			else if (count - i == 1)
+				return (GREAT);
+			else
+				return(-1);
+		}
+		else if (str[i] == '<')
+		{
+			count = i;
+			while (str[count] == '<')
+				count++;
+			if (count - i == 2)
+				return (LESSLESS);
+			else if (count - i == 1)
+				return (LESS);
+			else
+				return(-1);
+		}
 		else
 			return (WORD);
 		i++;
@@ -137,6 +155,9 @@ int	count_spaces(char *str, int i)
 
 int	check_tokens(char *str, int i)
 {
+	int	j;
+
+	j = i;
 	while (str[i])
 	{
 		if (str[i] == '|' && str[i + 1] == '|')
@@ -146,19 +167,24 @@ int	check_tokens(char *str, int i)
 		}
 		else if (str[i] == '|')
 			return (1);
-		else if (str[i] == '>' && str[i + 1] == '>')
-			return (2);
-		else if (str[i] == '<' && str[i + 1] == '<')
-			return (2);
-		else if (str[i] == '<')
-			return (1);
 		else if (str[i] == '>')
-			return (1);
+		{
+			while (str[j] == '>')
+				j++;
+			return (j - i);
+		}
+		else if (str[i] == '<')
+		{
+			while (str[j] == '<')
+				j++;
+			return (j - i);
+		}
 		else
 			return (0);
 	}
 	return (0);
 }
+
 t_token	*encode_tokens(char *str)
 {
 	int		i;
@@ -168,6 +194,7 @@ t_token	*encode_tokens(char *str)
 
 	i = 0;
 	j = 0;
+	str = ft_strtrim(str, " "); // used to avoid segfault when a line only contains spaces
 	if (!valid_quotes(str))
 	{
 		printf("Error: invalid quotes\n");

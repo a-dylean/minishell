@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/10 16:20:07 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/11 12:04:06 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,10 @@ typedef struct s_token
 typedef struct s_command
 {
 	char	**command;
-    char	*outfile_name;
-	char	*infile_name;
+    char	*out;
+	char	*in;
+	char	*delimiter;
+	char	**env;	
 	// add delimiter and append data if needed
 	// add last or first command data if needed by pipex
 }   t_command;
