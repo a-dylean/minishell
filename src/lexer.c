@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/11 11:51:34 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/12 11:15:12 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,45 +34,41 @@ int	valid_quotes(char *str)
 	return (result);
 }
 
-t_token	*create_token(char *value, int type)
+int	pipe_type(char *str, int i, int count)
 {
-	t_token	*token;
-
-	token = malloc(sizeof(t_token));
-	if (!token)
-		exit(EXIT_FAILURE);
-	token->value = value;
-	token->type = type;
-	token->next = NULL;
-	return (token);
-}
-
-t_token	*ft_get_last_node(t_token *head)
-{
-	if (!head)
-		return (NULL);
-	while (head->next)
-		head = head->next;
-	return (head);
-}
-
-void	ft_add_node_back(t_token **tokens, t_token *new_node)
-{
-	t_token	*temp;
-
-	if (!new_node)
-		return ;
-	if (*tokens && new_node)
-	{
-		temp = ft_get_last_node(*tokens);
-		temp->next = new_node;
-		new_node->next = NULL;
-	}
+	count = i;
+	while (str[count] == '|')
+		count++;
+	if (count - i == 1)
+		return (PIPE);
 	else
-	{
-		*tokens = new_node;
-		(*tokens)->next = NULL;
-	}
+		return (-1);
+}
+
+int	great_type(char *str, int i, int count)
+{
+	count = i;
+	while (str[count] == '>')
+		count++;
+	if (count - i == 2)
+		return (GREATGREAT);
+	else if (count - i == 1)
+		return (GREAT);
+	else
+		return (-1);
+}
+
+int	less_type(char *str, int i, int count)
+{
+	count = i;
+	while (str[count] == '<')
+		count++;
+	if (count - i == 2)
+		return (LESSLESS);
+	else if (count - i == 1)
+		return (LESS);
+	else
+		return (-1);
 }
 
 int	get_type(char *str)
@@ -85,37 +81,18 @@ int	get_type(char *str)
 	while (str[i])
 	{
 		if (str[i] == '|')
-			return (PIPE);
+			return (pipe_type(str, i, count));
 		else if (str[i] == '>')
-		{
-			count = i;
-			while (str[count] == '>')
-				count++;
-			if (count - i == 2)
-				return (GREATGREAT);
-			else if (count - i == 1)
-				return (GREAT);
-			else
-				return(-1);
-		}
+			return (great_type(str, i, count));
 		else if (str[i] == '<')
-		{
-			count = i;
-			while (str[count] == '<')
-				count++;
-			if (count - i == 2)
-				return (LESSLESS);
-			else if (count - i == 1)
-				return (LESS);
-			else
-				return(-1);
-		}
+			return (less_type(str, i, count));
 		else
 			return (WORD);
 		i++;
 	}
 	return (-1);
 }
+
 int	len_between_quotes(char *str, int i, char quote)
 {
 	int	len;
@@ -153,68 +130,43 @@ int	count_spaces(char *str, int i)
 	return (len);
 }
 
-int	check_tokens(char *str, int i)
+int	check_tokens(char *str, int i, char c)
 {
 	int	j;
 
 	j = i;
-	while (str[i])
+	if (str[i] == c)
 	{
-		if (str[i] == '|' && str[i + 1] == '|')
-		{
-			printf("Double pipe error\n");
-			return(-1);
-		}
-		else if (str[i] == '|')
-			return (1);
-		else if (str[i] == '>')
-		{
-			while (str[j] == '>')
-				j++;
-			return (j - i);
-		}
-		else if (str[i] == '<')
-		{
-			while (str[j] == '<')
-				j++;
-			return (j - i);
-		}
-		else
-			return (0);
+		while (str[j] == c)
+			j++;
+		return (j - i);
 	}
 	return (0);
 }
 
-t_token	*encode_tokens(char *str)
+t_token	*encode_tokens(char *str, t_token **tokens)
 {
 	int		i;
 	int		j;
-	t_token	**tokens;
 	char	*substring;
 
 	i = 0;
 	j = 0;
-	str = ft_strtrim(str, " "); // used to avoid segfault when a line only contains spaces
-	if (!valid_quotes(str))
-	{
-		printf("Error: invalid quotes\n");
-		return (NULL);
-	}
-	tokens = (t_token **)malloc(sizeof(t_token));
-	*tokens = NULL;
 	while (str[i])
 	{
 		i += count_spaces(str, i);
 		if (str[i] == S_QUOTE || str[i] == D_QUOTE)
 			j = len_between_quotes(str, i, str[i]);
 		else if (ft_strchr("|<>", str[i]))
-			j = check_tokens(str, i);
+			j = check_tokens(str, i, str[i]);
 		else
 			j = len_word(str, i);
 		if (j < 0)
 			return (NULL);
 		substring = ft_substr(str, i, j);
 		ft_add_node_back(tokens, create_token(substring, get_type(substring)));
+		if (substring)
+			free(substring);
 		i += j;
 	}
 	while (*tokens)

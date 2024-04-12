@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/11 12:04:06 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:15:35 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@
 // 	D_QUOTE,
 // 	UNQUOTE,
 // }	t_quotes;
+
+typedef struct s_total
+{
+	struct s_token	*tokens;
+}	t_total;
 
 typedef enum s_type
 {
@@ -64,7 +69,7 @@ typedef struct s_command
 /* lexer */
 
 int valid_quotes(char *str);
-t_token	*encode_tokens(char *str);
+t_token	*encode_tokens(char *str, t_token **tokens);
 
 
 /* parser */
@@ -72,5 +77,15 @@ t_token	*encode_tokens(char *str);
 /* expander */
 
 /* executer */
-int	ft_terminal();
+int	ft_terminal(t_token **tokens);
+
+/* linked lists*/
+t_token	*create_token(char *value, int type);
+t_token	*ft_get_last_node(t_token *head);
+void	ft_add_node_back(t_token **tokens, t_token *new_node);
+void	free_stack(t_token **tokens);
+
+/* free */
+int free_in_terminal(t_token **tokens, char *buffer);
+
 #endif
