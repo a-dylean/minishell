@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/11 14:56:11 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/12 11:15:12 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,26 +130,14 @@ int	count_spaces(char *str, int i)
 	return (len);
 }
 
-int	check_tokens(char *str, int i)
+int	check_tokens(char *str, int i, char c)
 {
 	int	j;
 
 	j = i;
-	if (str[i] == '|')
+	if (str[i] == c)
 	{
-		while (str[j] == '|')
-			j++;
-		return (j - i);
-	}
-	else if (str[i] == '>')
-	{
-		while (str[j] == '>')
-			j++;
-		return (j - i);
-	}
-	else if (str[i] == '<')
-	{
-		while (str[j] == '<')
+		while (str[j] == c)
 			j++;
 		return (j - i);
 	}
@@ -170,7 +158,7 @@ t_token	*encode_tokens(char *str, t_token **tokens)
 		if (str[i] == S_QUOTE || str[i] == D_QUOTE)
 			j = len_between_quotes(str, i, str[i]);
 		else if (ft_strchr("|<>", str[i]))
-			j = check_tokens(str, i);
+			j = check_tokens(str, i, str[i]);
 		else
 			j = len_word(str, i);
 		if (j < 0)
