@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:05:44 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/12 13:25:11 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/12 16:32:35 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@ int main(int argc, char **argv)
 	if (!tokens)
 		return (1);
 	*tokens = NULL;
-	ft_terminal(tokens);
-	if (tokens)
-		free(tokens);
+	// ft_terminal(tokens);
+	// if (tokens)
+	// 	free(tokens);
+	*tokens = encode_tokens("ls -l -h hfjg << file1 | cat -e > file5 |", tokens);
+	parser(*tokens);
     return (0);
 }

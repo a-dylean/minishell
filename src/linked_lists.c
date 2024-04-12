@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_lists.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/12 12:49:45 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/12 14:32:57 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 t_token	*create_token(char *value, int type)
 {
 	t_token	*token;
+	static int id = 0;
 
 	token = malloc(sizeof(t_token));
 	if (!token)
 		exit(EXIT_FAILURE);
+	token->id = id++;
 	token->value = ft_strdup(value);
 	token->type = type;
 	token->next = NULL;

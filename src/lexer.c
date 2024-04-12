@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/12 13:26:58 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/12 14:45:09 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ int	pipe_type(char *str, int i, int count)
 	while (str[count] == '|')
 		count++;
 	if (count - i == 2)
-		return (GREATGREAT);
+		return (PIPE);
 	else if (count - i == 1)
-		return (GREAT);
+		return (PIPE);
 	else
 		return (-1);
 }
