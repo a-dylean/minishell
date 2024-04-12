@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/11 16:21:33 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/12 12:41:44 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_token
     char    *value;
     int		type;
 	struct s_token	*next;
+	struct s_token	*prev;
 }   t_token;
 
 typedef struct s_command
@@ -82,8 +83,8 @@ int	ft_terminal(t_token **tokens);
 
 /* linked lists*/
 t_token	*create_token(char *value, int type);
-t_token	*ft_get_last_node(t_token *head);
-void	ft_add_node_back(t_token **tokens, t_token *new_node);
+t_token	*get_last_token(t_token *head);
+void	add_token_back(t_token **tokens, t_token *new_node);
 void	free_stack(t_token **tokens);
 
 /* free */

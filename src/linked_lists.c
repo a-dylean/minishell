@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/11 14:22:35 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/12 12:49:45 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,34 +22,25 @@ t_token	*create_token(char *value, int type)
 	token->value = ft_strdup(value);
 	token->type = type;
 	token->next = NULL;
+	token->prev = NULL;
 	return (token);
 }
 
-t_token	*ft_get_last_node(t_token *head)
+void	add_token_back(t_token **tokens, t_token *new_node)
 {
-	if (!head)
-		return (NULL);
-	while (head->next)
-		head = head->next;
-	return (head);
-}
-
-void	ft_add_node_back(t_token **tokens, t_token *new_node)
-{
-	t_token	*temp;
+	t_token *current;
 
 	if (!new_node)
 		return ;
-	if (*tokens && new_node)
-	{
-		temp = ft_get_last_node(*tokens);
-		temp->next = new_node;
-		new_node->next = NULL;
-	}
+	if (*tokens == NULL)
+		*tokens = new_node;
 	else
 	{
-		*tokens = new_node;
-		(*tokens)->next = NULL;
+		current = *tokens;
+		while (current->next)
+			current = current->next;
+		current->next = new_node;
+		new_node->prev = current;
 	}
 }
 
