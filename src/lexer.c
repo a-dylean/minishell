@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/12 11:15:12 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/12 12:58:31 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,15 +164,10 @@ t_token	*encode_tokens(char *str, t_token **tokens)
 		if (j < 0)
 			return (NULL);
 		substring = ft_substr(str, i, j);
-		ft_add_node_back(tokens, create_token(substring, get_type(substring)));
+		add_token_back(tokens, create_token(substring, get_type(substring)));
 		if (substring)
 			free(substring);
 		i += j;
-	}
-	while (*tokens)
-	{
-		printf("type: %d, value: %s\n", (*tokens)->type, (*tokens)->value);
-		tokens = &(*tokens)->next;
 	}
 	return (*tokens);
 }
