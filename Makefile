@@ -6,7 +6,8 @@ CFLAGS = -Wall -Wextra -Werror
 
 INCLUDES = -I includes -I libft
 
-SRC = src/main.c src/terminal.c src/lexer.c src/linked_lists.c src/errors.c src/parser_errors.c src/parser.c src/parser_utils.c
+SRC = src/main.c src/terminal.c src/lexer.c src/linked_lists.c src/errors.c src/parser_errors.c \
+	  src/parser.c src/parser_utils.c
 
 OBJ_DIR = obj
 OBJ := $(patsubst src/%.c,obj/%.o,$(SRC))

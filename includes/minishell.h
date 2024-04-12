@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/12 16:18:43 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/12 18:21:09 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,11 @@ typedef struct s_command
 
 /* lexer */
 
-int valid_quotes(char *str);
-t_token	*encode_tokens(char *str, t_token **tokens);
-
+int						valid_quotes(char *str);
+t_token					*encode_tokens(char *str, t_token **tokens);
 
 /* parser */
-int	check_syntax(t_token *tokens);
+int						check_syntax(t_token *tokens);
 int						parser(t_token *tokens);
 t_command				*create_command(char **command, char *out, char *in,
 							char *delimiter, char **env);
@@ -77,21 +76,22 @@ t_command				*create_command(char **command, char *out, char *in,
 /* expander */
 
 /* executer */
-int	ft_terminal(t_token **tokens);
+int						ft_terminal(t_token **tokens);
 
 /* linked lists*/
-t_command	*get_last_command(t_command *head);
-void	add_command_back(t_command **commands, t_command *new_node);
-t_token	*create_token(char *value, int type);
-t_token	*get_last_token(t_token *head);
-void	add_token_back(t_token **tokens, t_token *new_node);
-void	free_stack(t_token **tokens);
+t_command				*get_last_command(t_command *head);
+void					add_command_back(t_command **commands,
+							t_command *new_node);
+t_token					*create_token(char *value, int type);
+t_token					*get_last_token(t_token *head);
+void					add_token_back(t_token **tokens, t_token *new_node);
+void					free_stack(t_token **tokens);
 
 /* free */
-int free_in_terminal(t_token **tokens, char *buffer);
+int						free_in_terminal(t_token **tokens, char *buffer);
 
 /* errors */
-int	syntax_error_in_token(char *token);
-int	undefined_behavior_error(char *str);
+int						syntax_error_in_token(char *token);
+int						undefined_behavior_error(char *str);
 
 #endif

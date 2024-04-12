@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/12 16:35:19 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/12 18:23:29 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	count_tokens_before_pipe(t_token *tokens)
 	}
 	return (count);
 }
-t_token	*ft_lexerclear_one(t_token **lst)
+t_token	*clear_one_token(t_token **lst)
 {
 	if ((*lst)->value)
 	{
@@ -38,13 +38,13 @@ t_token	*ft_lexerclear_one(t_token **lst)
 	return (NULL);
 }
 
-void	ft_lexerdel_first(t_token **lst)
+void	delete_first_token(t_token **lst)
 {
 	t_token	*node;
 
 	node = *lst;
 	*lst = node->next;
-	ft_lexerclear_one(&node);
+	clear_one_token(&node);
 	if (*lst)
 		(*lst)->prev = NULL;
 }
@@ -59,7 +59,7 @@ void	remove_redir_from_tokens(t_token **tokens, int id)
 	node = start;
 	if ((*tokens)->id == id)
 	{
-		ft_lexerdel_first(tokens);
+		delete_first_token(tokens);
 		return ;
 	}
 	while (node && node->id != id)
@@ -73,7 +73,7 @@ void	remove_redir_from_tokens(t_token **tokens, int id)
 		prev->next = NULL;
 	if (prev->next)
 		prev->next->prev = prev;
-	ft_lexerclear_one(&node);
+	clear_one_token(&node);
 	*tokens = start;
 }
 
@@ -188,13 +188,10 @@ void	handle_redirections(t_token *tokens, t_command *command)
 	// }
 }
 // function that creates a new command struct and adds redirections (if exists) and command arr to it
-
 t_command	*get_new_command(t_token *tokens)
 {
-	t_token		*temp;
 	t_command	*command;
 	command = init_command();
-	temp = tokens;
 	handle_redirections(tokens, command);
 	command->cmd_name = get_cmd_from_tokens(tokens);
 	return (command);
@@ -221,9 +218,9 @@ int	parser(t_token *tokens)
 	while (*commands)
 	{
 		printf("Command: %s\n", (*commands)->cmd_name[0]);
-		printf("Command: %s\n", (*commands)->cmd_name[1]);
-		printf("Command: %s\n", (*commands)->cmd_name[2]);
-		printf("Command: %s\n", (*commands)->cmd_name[3]);
+		// printf("Command: %s\n", (*commands)->cmd_name[1]);
+		// printf("Command: %s\n", (*commands)->cmd_name[2]);
+		// printf("Command: %s\n", (*commands)->cmd_name[3]);
 		printf("Redir val: %s\n", (*commands)->redirections->value);
 		printf("Redir type: %d\n", (*commands)->redirections->type);
 		printf("Redir next val: %s\n", (*commands)->redirections->next->value);
