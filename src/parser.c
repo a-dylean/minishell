@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/11 19:24:44 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/12 14:18:51 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ void	handle_redirections(t_token *tokens, t_command *command)
     remove_redir_from_tokens(tokens);
 }
 // function that creates a new command struct and adds redirections (if exists) and command arr to it
+
 t_command   *get_new_command(t_token *tokens)
 {
     t_token *temp;
