@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/12 12:58:31 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/12 13:26:58 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,10 @@ int	pipe_type(char *str, int i, int count)
 	count = i;
 	while (str[count] == '|')
 		count++;
-	if (count - i == 1)
-		return (PIPE);
+	if (count - i == 2)
+		return (GREATGREAT);
+	else if (count - i == 1)
+		return (GREAT);
 	else
 		return (-1);
 }
