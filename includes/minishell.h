@@ -74,6 +74,7 @@ t_token	*encode_tokens(char *str, t_token **tokens);
 
 
 /* parser */
+int	check_syntax(t_token *tokens);
 
 /* expander */
 
@@ -88,5 +89,9 @@ void	free_stack(t_token **tokens);
 
 /* free */
 int free_in_terminal(t_token **tokens, char *buffer);
+
+/* errors */
+int	syntax_error_in_token(char *token);
+int	undefined_behavior_error(char *str);
 
 #endif
