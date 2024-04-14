@@ -162,61 +162,30 @@ char	**get_cmd_from_tokens(t_token *tokens)
 void	handle_redirections(t_token *tokens, t_command *command)
 {
 	t_token	*temp;
-	// t_token	*current;
+	t_token **redirections;
 
+	if (!tokens)
+	{
+		printf("No tokens\n");
+		return ;
+	}
+	redirections = (t_token **)malloc(sizeof(t_token));
+	if (!redirections)
+		exit(EXIT_FAILURE);
+	*redirections = NULL;
 	temp = tokens;
 	while (temp)
 	{
 		if (temp->type >= LESS && temp->type <= LESSLESS)
 		{
-			command->redirections = malloc(sizeof(t_token));
-			if (!command->redirections)
-				exit(EXIT_FAILURE);
-			int id1 = temp->id;
-			// int id2 = temp->next->id;	
-			command->redirections->id = temp->id;
-			command->redirections->value = ft_strdup(temp->value);
-			command->redirections->type = temp->type;
-			command->redirections->prev = NULL;
-			command->redirections->next = temp->next;
-			//change to add to the back of redirections list
-			// command->redirections->next->id = id2;
-			// command->redirections->next->value = ft_strdup(temp->next->value);
-			// command->redirections->next->type = temp->next->type;
-			// command->redirections->next->prev = command->redirections;
-			// command->redirections->next->next = NULL;
-			tokens = remove_token_by_id(tokens, id1);
-			// tokens = remove_token_by_id(tokens, id2);
+			add_token_back(redirections, create_token(temp->value, temp->type));
+			add_token_back(redirections, create_token(temp->next->value, temp->next->type));
+			tokens = remove_token_by_id(tokens, temp->id);
+			tokens = remove_token_by_id(tokens, temp->next->id);
 		}
 		temp = temp->next;
 	}
-	// current = command->redirections;
-	// while (current)
-	// {
-	// 	printf("Current value: %s\n", current->value);
-	// 	if (current->prev)
-	// 	{
-	// 		printf("Prev value: %s\n", current->prev->value);
-	// 	}
-	// 	else
-	// 	{
-	// 		printf("Prev is NULL\n");
-	// 	}
-	// 	if (current->next)
-	// 	{
-	// 		printf("Next value: %s\n", current->next->value);
-	// 	}
-	// 	else
-	// 	{
-	// 		printf("Next is NULL\n");
-	// 	}
-	// 	current = current->next;	
-	// }
-	// while (tokens)
-	// {
-	// 	printf("tokens: %s\n", tokens->value);
-	// 	tokens = tokens->next;
-	// }
+	command->redirections = *redirections;
 }
 // function that creates a new command struct and adds redirections (if exists) and command arr to it
 t_command	*get_new_command(t_token *tokens)
@@ -224,8 +193,25 @@ t_command	*get_new_command(t_token *tokens)
 	t_command	*command;
 	command = init_command();
 	handle_redirections(tokens, command);
+	t_token *temp = tokens;
+	// while(temp)
+	// {
+	// 	printf("Token: %s\n", temp->value);
+	// 	temp = temp->next;
+	// }
 	command->cmd_name = get_cmd_from_tokens(tokens);
 	return (command);
+}
+int no_pipe_in_list(t_token *tokens)
+{
+	t_token *temp = tokens;
+	while (temp)
+	{
+		if (temp->type == PIPE)
+			return (0);
+		temp = temp->next;
+	}
+	return (1);
 }
 
 int	parser(t_token *tokens)
@@ -238,12 +224,11 @@ int	parser(t_token *tokens)
 	*commands = NULL;
 	while (temp)
 	{
-		if (temp->type == PIPE)
+		if (temp->type == PIPE || no_pipe_in_list(temp))
 		{
-			// get_new_command(tokens);
 			add_command_back(commands, get_new_command(tokens));
 			tokens = remove_cmd_from_tokens(tokens, temp->id);
-			temp = tokens;
+			temp = tokens;	
 		}
 		if (temp)
 			temp = temp->next;

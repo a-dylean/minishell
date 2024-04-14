@@ -166,7 +166,8 @@ t_token	*encode_tokens(char *str, t_token **tokens)
 		if (j < 0)
 			return (NULL);
 		substring = ft_substr(str, i, j);
-		add_token_back(tokens, create_token(substring, get_type(substring)));
+		if (substring != NULL)
+			add_token_back(tokens, create_token(substring, get_type(substring)));
 		if (substring)
 			free(substring);
 		i += j;
