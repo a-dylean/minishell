@@ -12,6 +12,34 @@
 
 #include "../includes/minishell.h"
 
+t_token *remove_token_by_id(t_token *tokens, int id) {
+    t_token *temp;
+    if(tokens == NULL) {
+        return NULL;
+    }
+
+    if(tokens->id == id) {
+        temp = tokens->next;
+        free(tokens);
+        return temp;
+    }
+
+    t_token *current = tokens;
+    while(current->next != NULL) {
+        if(current->next->id == id) {
+            temp = current->next->next;
+            free(current->next);
+            current->next = temp;
+            if(temp != NULL) {
+                temp->prev = current;
+            }
+            break;
+        }
+        current = current->next;
+    }
+    return tokens;
+}
+
 int	count_tokens_before_pipe(t_token *tokens)
 {
 	int		count;
@@ -77,19 +105,19 @@ void	remove_redir_from_tokens(t_token **tokens, int id)
 	*tokens = start;
 }
 
-void	remove_cmd_from_tokens(t_token **tokens)
+t_token *remove_cmd_from_tokens(t_token *tokens, int id)
 {
-	t_token	*temp;
-	int		num_of_nodes;
-
-	num_of_nodes = count_tokens_before_pipe(*tokens);
-	while (num_of_nodes > 0 && *tokens)
-	{
-		temp = (*tokens)->next;
-		free(*tokens);
-		*tokens = temp;
-		num_of_nodes--;
-	}
+    t_token *temp;
+    t_token *head = tokens;
+    while (tokens && tokens->id != id)
+    {
+        temp = tokens;
+        tokens = tokens->next;
+        free(temp);
+    }
+    if (tokens == NULL) 
+        return head;
+    return tokens;
 }
 
 t_command	*init_command(void)
@@ -144,18 +172,21 @@ void	handle_redirections(t_token *tokens, t_command *command)
 			command->redirections = malloc(sizeof(t_token));
 			if (!command->redirections)
 				exit(EXIT_FAILURE);
+			int id1 = temp->id;
+			// int id2 = temp->next->id;	
 			command->redirections->id = temp->id;
 			command->redirections->value = ft_strdup(temp->value);
 			command->redirections->type = temp->type;
 			command->redirections->prev = NULL;
 			command->redirections->next = temp->next;
-			command->redirections->next->id = temp->next->id;
-			command->redirections->next->value = ft_strdup(temp->next->value);
-			command->redirections->next->type = temp->next->type;
-			command->redirections->next->prev = command->redirections;
-			command->redirections->next->next = NULL;
-			// remove_redir_from_tokens(&tokens, temp->id);
-			// remove_redir_from_tokens(&tokens, temp->next->id);
+			//change to add to the back of redirections list
+			// command->redirections->next->id = id2;
+			// command->redirections->next->value = ft_strdup(temp->next->value);
+			// command->redirections->next->type = temp->next->type;
+			// command->redirections->next->prev = command->redirections;
+			// command->redirections->next->next = NULL;
+			tokens = remove_token_by_id(tokens, id1);
+			// tokens = remove_token_by_id(tokens, id2);
 		}
 		temp = temp->next;
 	}
@@ -211,14 +242,16 @@ int	parser(t_token *tokens)
 		{
 			// get_new_command(tokens);
 			add_command_back(commands, get_new_command(tokens));
-			// remove_cmd_from_tokens(&tokens);
+			tokens = remove_cmd_from_tokens(tokens, temp->id);
+			temp = tokens;
 		}
-		temp = temp->next;
+		if (temp)
+			temp = temp->next;
 	}
 	while (*commands)
 	{
 		printf("Command: %s\n", (*commands)->cmd_name[0]);
-		// printf("Command: %s\n", (*commands)->cmd_name[1]);
+		printf("Command: %s\n", (*commands)->cmd_name[1]);
 		// printf("Command: %s\n", (*commands)->cmd_name[2]);
 		// printf("Command: %s\n", (*commands)->cmd_name[3]);
 		printf("Redir val: %s\n", (*commands)->redirections->value);

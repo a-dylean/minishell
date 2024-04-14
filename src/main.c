@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 	// ft_terminal(tokens);
 	// if (tokens)
 	// 	free(tokens);
-	*tokens = encode_tokens("ls -l -h hfjg << file1 | cat -e > file5 |", tokens);
+	*tokens = encode_tokens("ls -l -h hfjg << file1 | cat  > hello |", tokens);
 	parser(*tokens);
     return (0);
 }
