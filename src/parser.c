@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/12 18:23:29 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/15 12:07:52 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,11 @@ t_token *remove_token_by_id(t_token *tokens, int id) {
     if(tokens == NULL) {
         return NULL;
     }
-
     if(tokens->id == id) {
         temp = tokens->next;
         free(tokens);
         return temp;
     }
-
     t_token *current = tokens;
     while(current->next != NULL) {
         if(current->next->id == id) {
@@ -47,6 +45,8 @@ int	count_tokens_before_pipe(t_token *tokens)
 
 	count = 0;
 	temp = tokens;
+	if (temp->type == PIPE)
+		temp = temp->next;
 	while (temp && temp->type != PIPE)
 	{
 		count++;
@@ -115,8 +115,18 @@ t_token *remove_cmd_from_tokens(t_token *tokens, int id)
         tokens = tokens->next;
         free(temp);
     }
+	if (no_pipe_in_list(tokens))
+	{
+		if (tokens && tokens->id == id)
+		{
+			temp = tokens;
+			tokens = tokens->next;
+			free(temp);
+		}
+	}
+	
     if (tokens == NULL) 
-        return head;
+		return head;		
     return tokens;
 }
 
@@ -148,9 +158,11 @@ char	**get_cmd_from_tokens(t_token *tokens)
 	array = malloc((num_tokens + 1) * sizeof(char *));
 	if (!array)
 		exit(EXIT_FAILURE);
-	while (temp)
+	if (temp->type == PIPE)
+		temp = temp->next;
+	while (i < num_tokens && temp)
 	{
-		array[i] = ft_strdup(temp->value);
+		array[i] = temp->value ? ft_strdup(temp->value) : NULL;
 		temp = temp->next;
 		i++;
 	}
@@ -163,6 +175,7 @@ void	handle_redirections(t_token *tokens, t_command *command)
 {
 	t_token	*temp;
 	t_token **redirections;
+	t_token *next;
 
 	if (!tokens)
 	{
@@ -179,9 +192,15 @@ void	handle_redirections(t_token *tokens, t_command *command)
 		if (temp->type >= LESS && temp->type <= LESSLESS)
 		{
 			add_token_back(redirections, create_token(temp->value, temp->type));
-			add_token_back(redirections, create_token(temp->next->value, temp->next->type));
+			next = temp->next ? temp->next->next : NULL;
+			if (temp->next)
+			{
+				add_token_back(redirections, create_token(temp->next->value, temp->next->type));
+				tokens = remove_token_by_id(tokens, temp->next->id);
+			}
 			tokens = remove_token_by_id(tokens, temp->id);
-			tokens = remove_token_by_id(tokens, temp->next->id);
+			temp = next;
+			break ;
 		}
 		temp = temp->next;
 	}
@@ -193,7 +212,7 @@ t_command	*get_new_command(t_token *tokens)
 	t_command	*command;
 	command = init_command();
 	handle_redirections(tokens, command);
-	t_token *temp = tokens;
+	// t_token *temp = tokens;
 	// while(temp)
 	// {
 	// 	printf("Token: %s\n", temp->value);
@@ -214,36 +233,60 @@ int no_pipe_in_list(t_token *tokens)
 	return (1);
 }
 
+void print_commands(t_command *commands)
+{
+    t_command *current_command = commands;
+    int i;
+
+    while (current_command)
+    {
+        printf("Command: ");
+        if (current_command->cmd_name)
+        {
+            for (i = 0; current_command->cmd_name[i]; i++)
+            {
+                printf("%s ", current_command->cmd_name[i]);
+            }
+            printf("\n");
+        }
+
+        t_token *current_redirection = current_command->redirections;
+        while (current_redirection)
+        {
+            printf("Redir val: %s\n", current_redirection->value);
+            printf("Redir type: %d\n", current_redirection->type);
+            current_redirection = current_redirection->next;
+        }
+
+        current_command = current_command->next;
+    }
+}
+
 int	parser(t_token *tokens)
 {
 	t_command	**commands;
 	t_token		*temp;
-    
     temp = tokens;
     commands = (t_command **)malloc(sizeof(t_command));
 	*commands = NULL;
 	while (temp)
-	{
-		if (temp->type == PIPE || no_pipe_in_list(temp))
+	{	
+		if (temp->type == PIPE)
 		{
 			add_command_back(commands, get_new_command(tokens));
+			printf("temp->value: %s\n", temp->value);
 			tokens = remove_cmd_from_tokens(tokens, temp->id);
-			temp = tokens;	
+			temp = tokens;
+		}
+		else if (no_pipe_in_list(temp))
+		{
+			add_command_back(commands, get_new_command(tokens));
+			free_stack(&tokens);
+			break ;
 		}
 		if (temp)
 			temp = temp->next;
 	}
-	while (*commands)
-	{
-		printf("Command: %s\n", (*commands)->cmd_name[0]);
-		printf("Command: %s\n", (*commands)->cmd_name[1]);
-		// printf("Command: %s\n", (*commands)->cmd_name[2]);
-		// printf("Command: %s\n", (*commands)->cmd_name[3]);
-		printf("Redir val: %s\n", (*commands)->redirections->value);
-		printf("Redir type: %d\n", (*commands)->redirections->type);
-		printf("Redir next val: %s\n", (*commands)->redirections->next->value);
-		printf("Redir next type: %d\n", (*commands)->redirections->next->type);
-		*commands = (*commands)->next;
-	}	
+	print_commands(*commands);
 	return (0);
 }

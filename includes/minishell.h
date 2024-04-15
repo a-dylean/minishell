@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/12 18:21:09 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/15 12:02:00 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int						check_syntax(t_token *tokens);
 int						parser(t_token *tokens);
 t_command				*create_command(char **command, char *out, char *in,
 							char *delimiter, char **env);
+int no_pipe_in_list(t_token *tokens);
 
 /* expander */
 
