@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 12:14:29 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/15 12:38:11 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ int	check_tokens(char *str, int i, char c)
 	return (0);
 }
 
-t_token	*encode_tokens(char *str, t_token **tokens)
+int	*encode_tokens(char *str, t_token **tokens)
 {
 	int		i;
 	int		j;
@@ -172,5 +172,5 @@ t_token	*encode_tokens(char *str, t_token **tokens)
 			free(substring);
 		i += j;
 	}
-	return (*tokens);
+	return (EXIT_SUCCESS);
 }

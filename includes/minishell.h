@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 13:04:39 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/15 14:03:24 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,9 @@ typedef struct s_command
 /* lexer */
 
 int						valid_quotes(char *str);
-t_token					*encode_tokens(char *str, t_token **tokens);
+int	*encode_tokens(char *str, t_token **tokens);
+
+/* parser */
 int						check_syntax(t_token *tokens);
 
 /* parser */
@@ -83,7 +85,7 @@ void					handle_redirections(t_token *tokens,
 /* expander */
 
 /* executer */
-int						ft_terminal(t_token **tokens);
+int						ft_terminal();
 
 /* linked lists*/
 t_command				*init_command(void);

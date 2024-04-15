@@ -6,19 +6,24 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/15 12:16:14 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/15 12:40:11 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_terminal(t_token **tokens)
+int	ft_terminal()
 {
 	char	*buffer;
+	t_token	**tokens;
 
 	buffer = NULL;
 	while ((buffer = readline("minishell$> ")) != NULL)
 	{
+		tokens = (t_token **)malloc(sizeof(t_token));
+		if (!tokens)
+			return (1);
+		*tokens = NULL;
 		buffer = ft_strtrim(buffer, " ");
 		if (!valid_quotes(buffer))
 		{
@@ -34,8 +39,8 @@ int	ft_terminal(t_token **tokens)
 		if (buffer[0] != '\0')
 			add_history(buffer);
 		encode_tokens(buffer, tokens);
-		check_syntax(*tokens);
-		parser(*tokens);
+		if (!check_syntax(*tokens))
+			parser(*tokens);
 		free_in_terminal(tokens, buffer);
 	}
 	rl_clear_history();
