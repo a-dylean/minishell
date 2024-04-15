@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 12:02:00 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/15 12:10:16 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,9 @@ int						free_in_terminal(t_token **tokens, char *buffer);
 /* errors */
 int						syntax_error_in_token(char *token);
 int						undefined_behavior_error(char *str);
+
+/* tests */
+void print_commands(t_command *commands);
+void test_list(t_token *tokens);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 12:07:52 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/15 12:11:29 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,56 +53,6 @@ int	count_tokens_before_pipe(t_token *tokens)
 		temp = temp->next;
 	}
 	return (count);
-}
-t_token	*clear_one_token(t_token **lst)
-{
-	if ((*lst)->value)
-	{
-		free((*lst)->value);
-		(*lst)->value = NULL;
-	}
-	free(*lst);
-	lst = NULL;
-	return (NULL);
-}
-
-void	delete_first_token(t_token **lst)
-{
-	t_token	*node;
-
-	node = *lst;
-	*lst = node->next;
-	clear_one_token(&node);
-	if (*lst)
-		(*lst)->prev = NULL;
-}
-
-void	remove_redir_from_tokens(t_token **tokens, int id)
-{
-	t_token	*node;
-	t_token	*prev;
-	t_token	*start;
-
-	start = *tokens;
-	node = start;
-	if ((*tokens)->id == id)
-	{
-		delete_first_token(tokens);
-		return ;
-	}
-	while (node && node->id != id)
-	{
-		prev = node;
-		node = node->next;
-	}
-	if (node)
-		prev->next = node->next;
-	else
-		prev->next = NULL;
-	if (prev->next)
-		prev->next->prev = prev;
-	clear_one_token(&node);
-	*tokens = start;
 }
 
 t_token *remove_cmd_from_tokens(t_token *tokens, int id)
@@ -233,35 +183,6 @@ int no_pipe_in_list(t_token *tokens)
 	return (1);
 }
 
-void print_commands(t_command *commands)
-{
-    t_command *current_command = commands;
-    int i;
-
-    while (current_command)
-    {
-        printf("Command: ");
-        if (current_command->cmd_name)
-        {
-            for (i = 0; current_command->cmd_name[i]; i++)
-            {
-                printf("%s ", current_command->cmd_name[i]);
-            }
-            printf("\n");
-        }
-
-        t_token *current_redirection = current_command->redirections;
-        while (current_redirection)
-        {
-            printf("Redir val: %s\n", current_redirection->value);
-            printf("Redir type: %d\n", current_redirection->type);
-            current_redirection = current_redirection->next;
-        }
-
-        current_command = current_command->next;
-    }
-}
-
 int	parser(t_token *tokens)
 {
 	t_command	**commands;
@@ -274,7 +195,6 @@ int	parser(t_token *tokens)
 		if (temp->type == PIPE)
 		{
 			add_command_back(commands, get_new_command(tokens));
-			printf("temp->value: %s\n", temp->value);
 			tokens = remove_cmd_from_tokens(tokens, temp->id);
 			temp = tokens;
 		}
