@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 12:11:29 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/15 12:14:59 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,10 +128,7 @@ void	handle_redirections(t_token *tokens, t_command *command)
 	t_token *next;
 
 	if (!tokens)
-	{
-		printf("No tokens\n");
 		return ;
-	}
 	redirections = (t_token **)malloc(sizeof(t_token));
 	if (!redirections)
 		exit(EXIT_FAILURE);
@@ -162,12 +159,6 @@ t_command	*get_new_command(t_token *tokens)
 	t_command	*command;
 	command = init_command();
 	handle_redirections(tokens, command);
-	// t_token *temp = tokens;
-	// while(temp)
-	// {
-	// 	printf("Token: %s\n", temp->value);
-	// 	temp = temp->next;
-	// }
 	command->cmd_name = get_cmd_from_tokens(tokens);
 	return (command);
 }
