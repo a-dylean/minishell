@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 10:55:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/10 12:20:59 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:17:02 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 char	*ft_strncpy(char *dst, const char *src, size_t size);
 int		ft_isspace(int c);
-
+char	*ft_capitalize(char *str);
 /*GNL*/
 char	*get_remaining(char *stash);
 char	*exrtact_line(char *stash);

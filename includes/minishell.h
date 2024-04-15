@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 14:03:24 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/15 16:28:24 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_token
 typedef struct s_info
 {
 	struct t_command	*commands;
+	char				**env;
 }						t_info;
 
 typedef struct s_command
@@ -55,7 +56,6 @@ typedef struct s_command
 	char				*out;
 	char				*in;
 	char				*delimiter;
-	char				**env;
 	t_token				*redirections;
 	struct s_command	*next;
 	// add delimiter and append data if needed
@@ -65,7 +65,7 @@ typedef struct s_command
 /* lexer */
 
 int						valid_quotes(char *str);
-int	*encode_tokens(char *str, t_token **tokens);
+int						*encode_tokens(char *str, t_token **tokens);
 
 /* parser */
 int						check_syntax(t_token *tokens);
@@ -83,9 +83,12 @@ void					handle_redirections(t_token *tokens,
 							t_command *command);
 
 /* expander */
+int						expander(t_command *commands);
+void					expand_command(t_command *command);
+void					expand_redirection(t_token *redirection);
 
 /* executer */
-int						ft_terminal();
+int						ft_terminal(void);
 
 /* linked lists*/
 t_command				*init_command(void);
