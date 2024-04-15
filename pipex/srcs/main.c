@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:18:11 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/09 10:07:33 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:29:20 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	exec(char *cmd, t_struct *pipex, int is_last)
 	exit(pipex->exit_code_child);
 }
 
-int	pipex(int ac, char **av, char **ev)
+int	main(int ac, char **av, char **ev)
 {
 	t_struct	pipex;
 

@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:10:39 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/08 13:45:04 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/15 15:32:49 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	ft_cd(char *path)
 
 int	ft_pwd()
 {
-	char	cwd[4096]; // = PATH_AMX on the system (getconf -a PATH_MAX)
+	char	cwd[4096]; // = PATH_MAX on the system (getconf -a PATH_MAX)
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		perror("getcwd()");
