@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 12:10:16 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/15 12:37:13 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_command
 /* lexer */
 
 int						valid_quotes(char *str);
-t_token					*encode_tokens(char *str, t_token **tokens);
+int	*encode_tokens(char *str, t_token **tokens);
 
 /* parser */
 int						check_syntax(t_token *tokens);
@@ -77,7 +77,7 @@ int no_pipe_in_list(t_token *tokens);
 /* expander */
 
 /* executer */
-int						ft_terminal(t_token **tokens);
+int						ft_terminal();
 
 /* linked lists*/
 t_command				*get_last_command(t_command *head);
