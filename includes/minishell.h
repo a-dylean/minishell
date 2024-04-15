@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 12:10:16 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/15 13:04:39 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,19 @@ typedef struct s_command
 
 int						valid_quotes(char *str);
 t_token					*encode_tokens(char *str, t_token **tokens);
+int						check_syntax(t_token *tokens);
 
 /* parser */
-int						check_syntax(t_token *tokens);
 int						parser(t_token *tokens);
-t_command				*create_command(char **command, char *out, char *in,
-							char *delimiter, char **env);
-int no_pipe_in_list(t_token *tokens);
+t_token					*remove_token_by_id(t_token *tokens, int id);
+int						count_tokens_before_pipe(t_token *tokens);
+int						no_pipe_in_list(t_token *tokens);
+t_token					**init_redirections(void);
+void					handle_redirection_token(t_token *temp,
+							t_token **redirections, t_token **next,
+							t_token **tokens);
+void					handle_redirections(t_token *tokens,
+							t_command *command);
 
 /* expander */
 
@@ -80,6 +86,7 @@ int no_pipe_in_list(t_token *tokens);
 int						ft_terminal(t_token **tokens);
 
 /* linked lists*/
+t_command				*init_command(void);
 t_command				*get_last_command(t_command *head);
 void					add_command_back(t_command **commands,
 							t_command *new_node);
@@ -96,7 +103,7 @@ int						syntax_error_in_token(char *token);
 int						undefined_behavior_error(char *str);
 
 /* tests */
-void print_commands(t_command *commands);
-void test_list(t_token *tokens);
+void					print_commands(t_command *commands);
+void					test_list(t_token *tokens);
 
 #endif
