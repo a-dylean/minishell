@@ -22,3 +22,32 @@ void test_list(t_token *tokens) {
         current = current->next;
     }
 }
+
+void print_commands(t_command *commands)
+{
+    t_command *current_command = commands;
+    int i;
+
+    while (current_command)
+    {
+        printf("Command: ");
+        if (current_command->cmd_name)
+        {
+            for (i = 0; current_command->cmd_name[i]; i++)
+            {
+                printf("%s ", current_command->cmd_name[i]);
+            }
+            printf("\n");
+        }
+
+        t_token *current_redirection = current_command->redirections;
+        while (current_redirection)
+        {
+            printf("Redir val: %s\n", current_redirection->value);
+            printf("Redir type: %d\n", current_redirection->type);
+            current_redirection = current_redirection->next;
+        }
+
+        current_command = current_command->next;
+    }
+}

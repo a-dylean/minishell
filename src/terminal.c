@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/12 13:23:29 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/15 12:16:14 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	ft_terminal(t_token **tokens)
 			add_history(buffer);
 		encode_tokens(buffer, tokens);
 		check_syntax(*tokens);
+		parser(*tokens);
 		free_in_terminal(tokens, buffer);
 	}
 	rl_clear_history();
