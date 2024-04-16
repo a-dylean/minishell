@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/16 17:31:25 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/16 19:38:14 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void					handle_redirections(t_token *tokens,
 /* expander */
 int						expander(t_token *tokens);
 char					*perform_expansion(char *token);
-int						has_dollar(char *str);
+int						expansion_needed(char *str);
 /* executer */
 int						ft_terminal(void);
 
@@ -106,12 +106,13 @@ int						free_in_terminal(t_token **tokens, char *buffer);
 int						syntax_error_in_token(char *token);
 int						undefined_behavior_error(char *str);
 
-/* tests */
-void					print_commands(t_command *commands);
-void					test_list(t_token *tokens);
-
 /* utils */
 char					**init_array(int size);
 void					free_array(char **arr);
+int						str_is_empty_or_space_only(const char *str);
+char					*join_strings_with_spaces(char **strings);
 
+/* tests */
+void					print_commands(t_command *commands);
+void					test_list(t_token *tokens);
 #endif

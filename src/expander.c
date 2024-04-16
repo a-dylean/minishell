@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/16 19:29:36 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/16 19:47:02 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,30 +19,35 @@ int	expander(t_token *tokens)
 	temp = tokens;
 	while (temp != NULL)
 	{
-		if (has_dollar(temp->value))
+		if (expansion_needed(temp->value))
 			temp->value = perform_expansion(temp->value);
 		temp = temp->next;
 	}
 	return (0);
 }
 
-int	has_dollar(char *str)
-{
-    int	i;
+/* function that checks if there's a dollar sign in the string
+and if other conditions are met for expansion (needs to
+to be updated to include more cases with quotes (')) */
 
-    i = 0;
-    if (str == NULL)
-        return (0);
-    while (str[i])
-    {
-        if ((str[i] == '$' && str[i + 1] != ' ' && str[i + 1] != '\0')
-            || (i > 0 && str[i] == '$' && str[i - 1] == ' ') 
-            || (i > 0 && str[i] == '$' && str[i - 1] == '"'))
-            return (1);
-        i++;
-    }
-    return (0);
+int	expansion_needed(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str == NULL)
+		return (0);
+	while (str[i])
+	{
+		if ((str[i] == '$' && str[i + 1] != ' ' && str[i + 1] != '\0') || (i > 0
+				&& str[i] == '$' && str[i - 1] == ' ') || (i > 0
+				&& str[i] == '$' && str[i - 1] == '"'))
+			return (1);
+		i++;
+	}
+	return (0);
 }
+/* function that extracts value of env from string */
 
 char	*get_env_from_str(char *str)
 {
@@ -66,49 +71,8 @@ char	*get_env_from_str(char *str)
 	free(temp);
 	return (NULL);
 }
-
-int	str_is_empty_or_space_only(const char *str)
-{
-	int i;
-	
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] != ' ')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-char	*join_strings_with_spaces(char **strings)
-{
-	char	*joined_string;
-	int		i;
-	char	*temp;
-	
-	joined_string = NULL;
-	i = 0;
-	while (strings[i] && str_is_empty_or_space_only(strings[i]))
-		i++;
-	if (strings[i] == NULL)
-		joined_string = ft_strdup(" ");
-	else
-		joined_string = ft_strdup(strings[i]);
-	i++;
-	while (strings[i])
-	{
-		if (!str_is_empty_or_space_only(strings[i]))
-		{
-			temp = ft_strjoin(joined_string, " ");
-			free(joined_string);
-			joined_string = ft_strjoin(temp, strings[i]);
-			free(temp);
-		}
-		i++;
-	}
-	return (joined_string);
-}
+/* function that split token string by spaces, checks if a token in string 
+is subject to expansion, if so, replaces it with env var and then joins tokens back */
 
 char	*perform_expansion(char *token)
 {
@@ -122,7 +86,7 @@ char	*perform_expansion(char *token)
 	split_token = ft_split(token, ' ');
 	while (split_token[++i])
 	{
-		if (has_dollar(split_token[i]))
+		if (expansion_needed(split_token[i]))
 		{
 			env_var = get_env_from_str(split_token[i]);
 			env_value = getenv(env_var);
