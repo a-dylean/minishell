@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redirections_ops.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:55:53 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 13:02:17 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/16 10:30:55 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ void	handle_redirections(t_token *tokens, t_command *command)
 
 	redirections = init_redirections();
 	temp = tokens;
-	while (temp)
+	if (temp->type == PIPE)
+		temp = temp->next;
+	while (temp && temp->type != PIPE)
 	{
 		if (temp->type >= LESS && temp->type <= LESSLESS)
 		{

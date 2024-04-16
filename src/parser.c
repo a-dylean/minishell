@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/16 08:29:39 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/16 10:39:53 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,13 @@ int	parser(t_token *tokens)
 	{
 		if (no_pipe_in_list(temp))
 		{
-			// if (temp->type == WORD)
-			// {
+			if (temp->type == WORD)
+			{
 				add_command_back(commands, get_new_command(tokens, 0));
 				free_stack(&tokens);
-			// }
-			// else
-			// 	add_command_back(commands, get_new_command(tokens, 1));
+			}
+			else
+				add_command_back(commands, get_new_command(tokens, 1));
 			break ;
 		}
 		else if (temp->type == PIPE)
