@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_tokens_ops.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:52:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 13:02:44 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/16 08:17:58 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ t_token	*remove_token_by_id(t_token *tokens, int id)
 	if (tokens->id == id)
 	{
 		temp = tokens->next;
+		if (temp != NULL)
+			temp->prev = NULL;
 		free(tokens);
 		return (temp);
 	}
@@ -31,10 +33,10 @@ t_token	*remove_token_by_id(t_token *tokens, int id)
 		if (current->next->id == id)
 		{
 			temp = current->next->next;
-			free(current->next);
-			current->next = temp;
 			if (temp != NULL)
 				temp->prev = current;
+			free(current->next);
+			current->next = temp;
 			break ;
 		}
 		current = current->next;

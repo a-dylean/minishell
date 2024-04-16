@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 15:55:43 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/16 08:29:39 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,14 @@ char	**get_cmd_from_tokens(t_token *tokens)
 
 // function that creates a new command struct and adds redirections (if exists) 
 // and command arr to it
-t_command	*get_new_command(t_token *tokens)
+t_command	*get_new_command(t_token *tokens, int flag)
 {
 	t_command	*command;
 
 	command = init_command();
 	handle_redirections(tokens, command);
-	command->cmd_name = get_cmd_from_tokens(tokens);
+	if (flag == 0)
+		command->cmd_name = get_cmd_from_tokens(tokens);
 	return (command);
 }
 
@@ -89,17 +90,22 @@ int	parser(t_token *tokens)
 	*commands = NULL;
 	while (temp)
 	{
-		if (temp->type == PIPE)
+		if (no_pipe_in_list(temp))
 		{
-			add_command_back(commands, get_new_command(tokens));
+			// if (temp->type == WORD)
+			// {
+				add_command_back(commands, get_new_command(tokens, 0));
+				free_stack(&tokens);
+			// }
+			// else
+			// 	add_command_back(commands, get_new_command(tokens, 1));
+			break ;
+		}
+		else if (temp->type == PIPE)
+		{
+			add_command_back(commands, get_new_command(tokens, 0));
 			tokens = remove_cmd_from_tokens(tokens, temp->id);
 			temp = tokens;
-		}
-		else if (no_pipe_in_list(temp))
-		{
-			add_command_back(commands, get_new_command(tokens));
-			free_stack(&tokens);
-			break ;
 		}
 		if (temp)
 			temp = temp->next;
