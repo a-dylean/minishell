@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 16:06:58 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/16 17:30:38 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,43 +39,41 @@ t_token	*remove_cmd_from_tokens(t_token *tokens, int id)
 }
 
 // function that returns an array of strings (command) from the tokens list
-char	**get_cmd_from_tokens(t_token *tokens)
+char	**get_cmd_from_tokens(t_token *tokens, int num_tokens)
 {
-	int		num_tokens;
 	int		i;
 	t_token	*temp;
 	char	**array;
 
-	i = 0;
+	i = -1;
 	temp = tokens;
-	num_tokens = count_tokens_before_pipe(tokens);
-	array = malloc((num_tokens + 1) * sizeof(char *));
-	if (!array)
-		exit(EXIT_FAILURE);
+	array = init_array(num_tokens);
 	if (temp->type == PIPE)
 		temp = temp->next;
-	while (i < num_tokens && temp)
+	while (++i < num_tokens && temp)
 	{
 		if (temp->value)
 			array[i] = ft_strdup(temp->value);
 		else
 			array[i] = NULL;
 		temp = temp->next;
-		i++;
 	}
 	array[i] = NULL;
 	return (array);
 }
 
-// function that creates a new command struct and adds redirections (if exists) 
+// function that creates a new command struct and adds redirections (if exists)
 // and command arr to it
 t_command	*get_new_command(t_token *tokens)
 {
 	t_command	*command;
+	int			num_tokens;
 
 	command = init_command();
+	num_tokens = count_tokens_before_pipe(tokens);
+	expander(tokens);
 	handle_redirections(tokens, command);
-	command->cmd_name = get_cmd_from_tokens(tokens);
+	command->cmd_name = get_cmd_from_tokens(tokens, num_tokens);
 	return (command);
 }
 
@@ -104,7 +102,7 @@ int	parser(t_token *tokens)
 		if (temp)
 			temp = temp->next;
 	}
-	expander(*commands);
+	// remove single & double quotes here ??
 	print_commands(*commands);
 	return (0);
 }

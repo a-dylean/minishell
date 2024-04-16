@@ -6,30 +6,22 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 16:26:08 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/16 17:32:55 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	expander(t_command *commands)
+int	expander(t_token *tokens)
 {
-	t_command	*temp;
-	t_token		*temp_token;
+	t_token	*temp;
 
-	// expand commands
-	temp = commands;
-	while (temp)
+	temp = tokens;
+	while (temp != NULL)
 	{
-		expand_command(temp);
+		if (has_dollar(temp->value))
+			temp->value = perform_expansion(temp->value);
 		temp = temp->next;
-	}
-	// expand redirections
-	temp_token = commands->redirections;
-	while (temp_token)
-	{
-		expand_redirection(temp_token);
-		temp_token = temp_token->next;
 	}
 	return (0);
 }
@@ -39,47 +31,85 @@ int	has_dollar(char *str)
 	int	i;
 
 	i = 0;
-	if (str[0] == '$')
-		return (1);
-	i++;
+	while (str[i])
+	{
+		if (str[0] == '$' || (str[i] == '$' && str[i - 1] == ' ')
+			|| (str[i] == '$' && str[i - 1] == '"'))
+			return (1);
+		i++;
+	}
 	return (0);
 }
 
-void	expand_command(t_command *command)
+char	*get_env_from_str(char *str)
 {
-	int i;
-	char *env_var;
+	int		i;
+	int		j;
+	char	*env_var;
+	char	*temp;
 
 	i = 0;
-	while (command->cmd_name[i])
+	while (str[i] && str[i] != '$')
+		i++;
+	j = i + 1;
+	while (str[j] && (ft_isalnum(str[j]) || str[j] == '_'))
+		j++;
+	temp = ft_substr(str, i + 1, j - i - 1);
+	if (!temp)
+		return (NULL);
+	env_var = ft_strtrim(temp, "$\"");
+	free(temp);
+	if (env_var)
+		return (env_var);
+	return (NULL);
+}
+
+char	*join_strings_with_spaces(char **strings)
+{
+	char	*joined_string;
+	int		i;
+	char	*temp;
+
+	joined_string = ft_strdup(strings[0]);
+	i = 1;
+	while (strings[i])
 	{
-		if (has_dollar(command->cmd_name[i]))
-		{
-			env_var = ft_strtrim(command->cmd_name[i], "$");
-			if (env_var)
-			{
-				free(command->cmd_name[i]);
-				command->cmd_name[i] = ft_strdup(getenv(env_var));
-			}	
-			else
-				command->cmd_name[i] = NULL;
-		}
+		temp = ft_strjoin(joined_string, " ");
+		free(joined_string);
+		joined_string = ft_strjoin(temp, strings[i]);
+		free(temp);
 		i++;
 	}
+	return (joined_string);
 }
-void expand_redirection(t_token *redirection)
-{
-	char *env_var;
 
-	if (has_dollar(redirection->value))
+char	*perform_expansion(char *token)
+{
+	char	**split_token;
+	char	*expanded_token;
+	char	*env_var;
+	char	*env_value;
+	int		i;
+
+	i = -1;
+	split_token = ft_split(token, ' ');
+	while (split_token[++i])
 	{
-		env_var = ft_strtrim(redirection->value, "$");
-		if (env_var)
+		if (has_dollar(split_token[i]))
 		{
-			free(redirection->value);
-			redirection->value = ft_strdup(getenv(env_var));
+			env_var = get_env_from_str(split_token[i]);
+			env_value = getenv(env_var);
+			free(split_token[i]);
+			split_token[i] = NULL;
+			if (env_value)
+				split_token[i] = ft_strdup(env_value);
+			free(env_var);
 		}
-		else
-			redirection->value = NULL;
 	}
+	expanded_token = join_strings_with_spaces(split_token);
+	free_array(split_token);
+	free(token);
+	token = ft_strdup(expanded_token);
+	free(expanded_token);
+	return (token);
 }

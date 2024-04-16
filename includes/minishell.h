@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 16:28:24 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/16 17:31:25 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,9 @@ void					handle_redirections(t_token *tokens,
 							t_command *command);
 
 /* expander */
-int						expander(t_command *commands);
-void					expand_command(t_command *command);
-void					expand_redirection(t_token *redirection);
-
+int						expander(t_token *tokens);
+char					*perform_expansion(char *token);
+int						has_dollar(char *str);
 /* executer */
 int						ft_terminal(void);
 
@@ -110,5 +109,9 @@ int						undefined_behavior_error(char *str);
 /* tests */
 void					print_commands(t_command *commands);
 void					test_list(t_token *tokens);
+
+/* utils */
+char					**init_array(int size);
+void					free_array(char **arr);
 
 #endif
