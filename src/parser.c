@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/17 14:48:28 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:40:53 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,16 @@ t_command	*get_new_command(t_token *tokens)
 	return (command);
 }
 
+t_command	*get_new_command_bis(t_token *tokens)
+{
+	t_command	*command;
+
+	command = init_command();
+	handle_redirections(tokens, command);
+	// command->cmd_name = get_cmd_from_tokens(tokens);
+	return (command);
+}
+
 int	len_stack(t_token *stack)
 {
 	t_token	*current;
@@ -94,6 +104,22 @@ int	len_stack(t_token *stack)
 	return (i);
 }
 
+void	assign_type_redirections(t_token *tokens)
+{
+	while (tokens)
+	{
+		if (tokens->type == GREAT && (tokens->next && tokens->next->type == WORD))
+			tokens->next->type = FILENAME;
+		else if (tokens->type == LESS && (tokens->prev && tokens->prev->type == WORD))
+			tokens->prev->type = FILENAME;
+		else if (tokens->type == LESSLESS && (tokens->next && tokens->next->type == WORD))
+			tokens->next->type = DELIMITER;
+		else if (tokens->type == GREATGREAT && (tokens->next && tokens->next->type == WORD))
+			tokens->next->type = FILENAME;
+		tokens = tokens->next;
+	}
+}
+
 int	parser(t_token *tokens)
 {
 	t_command	**commands;
@@ -102,6 +128,7 @@ int	parser(t_token *tokens)
 	temp = tokens;
 	commands = (t_command **)malloc(sizeof(t_command));
 	*commands = NULL;
+	assign_type_redirections(tokens);
 	while (temp)
 	{
 		if (temp->type == PIPE || (no_pipe_in_list(temp) == 1 && temp->type == WORD))
@@ -110,18 +137,15 @@ int	parser(t_token *tokens)
 			tokens = remove_cmd_from_tokens(tokens, count_tokens_before_pipe(tokens));
 			temp = tokens;
 		}
-		else
+		else if (no_pipe_in_list(temp) == 1)
+		{
+			// have another function that handles the redirections before the command name
+			add_command_back(commands, get_new_command_bis(tokens));
+		}
+		if (temp)
 			temp = temp->next;
-		// if (temp->type == PIPE || (no_pipe_in_list(temp) && temp->type == WORD))
-		// {
-		// 	add_command_back(commands, get_new_command(tokens));
-		// 	tokens = remove_cmd_from_tokens(tokens, count_tokens_before_pipe(tokens));
-		// 	temp = tokens;
-		// }
-		// else
-		// 	add_command_back(commands, get_new_command(tokens));
-		// if (temp)
-		// 	temp = temp->next;
+		printf("Current type: %d Current value: %s\n", temp->type, temp->value);
+		temp = temp->next;
 	}
 	print_commands(*commands);
 	return (0);

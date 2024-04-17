@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 14:03:24 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:36:36 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ typedef enum s_type
 	GREAT,
 	GREATGREAT,
 	LESSLESS,
+	FILENAME,
+	DELIMITER,
 }						t_type;
 
 typedef struct s_token

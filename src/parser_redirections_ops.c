@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:55:53 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/17 14:27:20 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/17 15:52:47 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,10 @@ void	handle_redirections(t_token *tokens, t_command *command)
 			temp = temp->next;
 	}
 	command->redirections = *redirections;
-	free(redirections);
+	//free(redirections);
 }
+
+
 
 void	handle_redirection_token(t_token *temp, t_token **redirections,
 		t_token **next, t_token **tokens)
