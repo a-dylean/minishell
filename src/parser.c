@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/17 14:25:41 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/17 14:48:28 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ t_token	*remove_cmd_from_tokens(t_token *tokens, int id)
 	}
 	if (tokens == NULL)
 		return (NULL);
-	printf("tokens->value: %s\n", tokens->value);
 	return (tokens);
 }
 
@@ -65,12 +64,6 @@ char	**get_cmd_from_tokens(t_token *tokens)
 		i++;
 	}
 	array[i] = NULL;
-	i = 0;
-	while (array[i])
-	{
-		printf("array[%d]: %s\n", i, array[i]);
-		i++;
-	}
 	return (array);
 }
 
@@ -111,16 +104,24 @@ int	parser(t_token *tokens)
 	*commands = NULL;
 	while (temp)
 	{
-		if (temp->type == PIPE || (no_pipe_in_list(temp) && temp->type == WORD))
+		if (temp->type == PIPE || (no_pipe_in_list(temp) == 1 && temp->type == WORD))
 		{
 			add_command_back(commands, get_new_command(tokens));
 			tokens = remove_cmd_from_tokens(tokens, count_tokens_before_pipe(tokens));
 			temp = tokens;
 		}
 		else
-			add_command_back(commands, get_new_command(tokens));
-		if (temp)
 			temp = temp->next;
+		// if (temp->type == PIPE || (no_pipe_in_list(temp) && temp->type == WORD))
+		// {
+		// 	add_command_back(commands, get_new_command(tokens));
+		// 	tokens = remove_cmd_from_tokens(tokens, count_tokens_before_pipe(tokens));
+		// 	temp = tokens;
+		// }
+		// else
+		// 	add_command_back(commands, get_new_command(tokens));
+		// if (temp)
+		// 	temp = temp->next;
 	}
 	print_commands(*commands);
 	return (0);
