@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/17 12:25:47 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/17 14:25:41 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,18 @@
 t_token	*remove_cmd_from_tokens(t_token *tokens, int id)
 {
 	t_token	*temp;
+	int	i = 0;
 
-	while (tokens && tokens->id != id)
+	while (tokens && i != id)
 	{
 		temp = tokens;
 		tokens = tokens->next;
 		free(temp);
+		i++;
 	}
 	if (tokens && no_pipe_in_list(tokens))
 	{
-		if (tokens->id == id)
+		if (i == id)
 		{
 			temp = tokens;
 			tokens = tokens->next;
@@ -33,39 +35,9 @@ t_token	*remove_cmd_from_tokens(t_token *tokens, int id)
 	}
 	if (tokens == NULL)
 		return (NULL);
+	printf("tokens->value: %s\n", tokens->value);
 	return (tokens);
 }
-
-// t_token *remove_cmd_from_tokens(t_token *tokens, int id)
-// {
-//     t_token *temp = tokens;
-//     t_token *prev = NULL;
-//     t_token *head = tokens;
-
-//     while (temp && temp->id != id)
-//     {
-//         prev = temp;
-//         temp = temp->next;
-//     }
-
-//     if (temp && no_pipe_in_list(tokens))
-//     {
-//         if (temp->id == id)
-//         {
-//             if (prev)
-//             {
-//                 prev->next = temp->next;
-//             }
-//             else
-//             {
-//                 head = temp->next;
-//             }
-//             free(temp);
-//         }
-//     }
-// 	printf("remove_cmd_from_tokens\n");
-//     return head;
-// }
 
 // function that returns an array of strings (command) from the tokens list
 char	**get_cmd_from_tokens(t_token *tokens)
@@ -93,6 +65,12 @@ char	**get_cmd_from_tokens(t_token *tokens)
 		i++;
 	}
 	array[i] = NULL;
+	i = 0;
+	while (array[i])
+	{
+		printf("array[%d]: %s\n", i, array[i]);
+		i++;
+	}
 	return (array);
 }
 
@@ -133,23 +111,14 @@ int	parser(t_token *tokens)
 	*commands = NULL;
 	while (temp)
 	{
-		if (temp->type == PIPE)
+		if (temp->type == PIPE || (no_pipe_in_list(temp) && temp->type == WORD))
 		{
 			add_command_back(commands, get_new_command(tokens));
-			tokens = remove_cmd_from_tokens(tokens, temp->id);
+			tokens = remove_cmd_from_tokens(tokens, count_tokens_before_pipe(tokens));
 			temp = tokens;
 		}
-		else if (no_pipe_in_list(temp))
-		{
-			if (temp->type == WORD)
-			{
-				add_command_back(commands, get_new_command(tokens));
-				tokens = remove_cmd_from_tokens(tokens, temp->id);
-				temp = tokens;
-			}
-			else
-				add_command_back(commands, get_new_command(tokens));
-		}
+		else
+			add_command_back(commands, get_new_command(tokens));
 		if (temp)
 			temp = temp->next;
 	}
