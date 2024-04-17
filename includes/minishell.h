@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/16 19:38:14 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/17 16:19:40 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,8 @@ int						undefined_behavior_error(char *str);
 char					**init_array(int size);
 void					free_array(char **arr);
 int						str_is_empty_or_space_only(const char *str);
-char					*join_strings_with_spaces(char **strings);
+char					*join_strings(char **strings, char *delimeter);
+int						count_chars(char *str, char c);
 
 /* tests */
 void					print_commands(t_command *commands);
