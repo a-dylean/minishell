@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/18 17:38:54 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:06:05 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	expander(t_token *tokens)
 	quotes = quotes_check(temp->value);
 	while (temp != NULL)
 	{
-		printf("initial token = %s\n", temp->value);
 		temp->value = perform_expansion(temp->value, quotes);
 		temp = temp->next;
 	}
@@ -173,30 +172,38 @@ char	*get_value_from_buffer(char buffer[])
 		return (NULL);
 	return (new_token);
 }
-int calculate_buffer_size(char *token)
+int	calculate_buffer_size(char *token)
 {
-    int i = 0;
-    int buffer_size = 0;
-    char *env_var;
-    char *env_var_value;
+	int	i;
+	int	buffer_size;
 
-    while (token[i])
-    {
-        if (token[i] != '$')
-        {
-            buffer_size++;
-            i++;
-        }
-        else
-        {
-            env_var = get_env_from_str(&token[i]);
-            if (env_var_exists(env_var))
-            {
-                env_var_value = getenv(env_var);
-                buffer_size += ft_strlen(env_var_value);
-            }
-            i += ft_strlen(env_var) + 1;
-        }
-    }
-    return buffer_size + 1;
+	i = 0;
+	buffer_size = 0;
+	while (token[i])
+	{
+		if (token[i] != '$')
+		{
+			buffer_size++;
+			i++;
+		}
+		else
+			buffer_size += calculate_expansion_size(token, &i);
+	}
+	return (buffer_size + 1);
+}
+int	calculate_expansion_size(char *token, int *i)
+{
+	int buffer_size;
+	char *env_var_value;
+	char *env_var;
+
+	buffer_size = 0;
+	env_var = get_env_from_str(&token[*i]);
+	if (env_var_exists(env_var))
+	{
+		env_var_value = getenv(env_var);
+		buffer_size += ft_strlen(env_var_value);
+	}
+	*i += ft_strlen(env_var) + 1;
+	return (buffer_size);
 }
