@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/18 12:37:30 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/18 16:06:50 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ t_token					*create_token(char *value, int type);
 t_token					*get_last_token(t_token *head);
 void					add_token_back(t_token **tokens, t_token *new_node);
 void					free_stack(t_token **tokens);
+int						stack_len(t_token *tokens);
 
 /* free */
 int						free_in_terminal(t_token **tokens, char *buffer);

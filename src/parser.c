@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/16 17:30:38 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/18 16:26:49 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,29 +37,49 @@ t_token	*remove_cmd_from_tokens(t_token *tokens, int id)
 		return (head);
 	return (tokens);
 }
-
-// function that returns an array of strings (command) from the tokens list
-char	**get_cmd_from_tokens(t_token *tokens, int num_tokens)
+int cmd_string_len(t_token *tokens)
 {
-	int		i;
-	t_token	*temp;
-	char	**array;
+	int len;
+	t_token *temp;
 
-	i = -1;
+	len = 0;
 	temp = tokens;
-	array = init_array(num_tokens);
-	if (temp->type == PIPE)
-		temp = temp->next;
-	while (++i < num_tokens && temp)
+	while (temp && temp->type != PIPE && temp->value)
 	{
-		if (temp->value)
-			array[i] = ft_strdup(temp->value);
-		else
-			array[i] = NULL;
+		len += ft_strlen(temp->value);
 		temp = temp->next;
 	}
-	array[i] = NULL;
-	return (array);
+	return (len);
+}
+// function that returns an array of strings (command) from the tokens list
+
+char	**get_cmd_from_tokens(t_token *tokens, int num_tokens)
+{
+    int		i;
+    t_token	*temp;
+    char	*cmd_str;
+    char	**array;
+
+    i = 0;
+    temp = tokens;
+    cmd_str = malloc(cmd_string_len(tokens) + 1);
+    cmd_str[0] = '\0';
+    if (temp->type == PIPE)
+        temp = temp->next;
+    while (i < num_tokens && temp)
+    {
+        if (temp->value)
+        {
+            strcat(cmd_str, temp->value);
+            if (temp->next)
+                strcat(cmd_str, "!");
+        }
+        temp = temp->next;
+        i++;
+    }
+    array = ft_split(cmd_str, '!');
+	free(cmd_str);
+    return (array);
 }
 
 // function that creates a new command struct and adds redirections (if exists)
