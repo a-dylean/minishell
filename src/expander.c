@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/18 16:41:38 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/18 17:25:59 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 int	expander(t_token *tokens)
 {
 	t_token	*temp;
+	int		quotes;
 
 	temp = tokens;
+	quotes = quotes_check(temp->value);
 	while (temp != NULL)
 	{
 		printf("initial token = %s\n", temp->value);
-		temp->value = perform_expansion(temp->value);
+		temp->value = perform_expansion(temp->value, quotes);
 		temp = temp->next;
 	}
 	return (0);
@@ -116,56 +118,57 @@ int	quotes_check(char *str)
 
 /* function that returns new value for token if expansion is needed */
 
-char	*perform_expansion(char *token)
+char	*perform_expansion(char *token, int quotes)
 {
-	char	buffer[256] = {0};
+	char	buffer[256];
 	int		i;
 	int		j;
-	int		quotes;
-	char	*env_var;
-	char	*env_var_value;
 	char	*new_token;
 
 	i = 0;
 	j = 0;
-	quotes = quotes_check(token);
+	buffer[0] = '\0';
 	while (token[i])
 	{
 		if (token[i] != '$')
-		{
-			buffer[j] = token[i];
-			i++;
-			j++;
-		}
+			buffer[j++] = token[i++];
 		else
 		{
 			if (expansion_needed(&token[i], quotes))
-			{
-				env_var = get_env_from_str(&token[i]);
-				if (env_var_exists(env_var))
-				{
-					env_var_value = getenv(env_var);
-					while (*env_var_value)
-					{
-						buffer[j] = *env_var_value;
-						env_var_value++;
-						j++;
-					}
-				}
-				i += ft_strlen(env_var) + 1;
-			}
+				handle_expansion(token, &i, buffer, &j);
 			else
-			{
-				buffer[j] = token[i];
-				i++;
-				j++;
-			}
+				buffer[j++] = token[i++];
 		}
 	}
 	buffer[j] = '\0';
+	new_token = get_value_from_buffer(buffer);
+	return (new_token);
+}
+
+void	handle_expansion(char *token, int *i, char *buffer, int *j)
+{
+	char	*env_var;
+	char	*env_var_value;
+
+	env_var = get_env_from_str(&token[*i]);
+	if (env_var_exists(env_var))
+	{
+		env_var_value = getenv(env_var);
+		while (*env_var_value)
+		{
+			buffer[(*j)++] = *env_var_value;
+			env_var_value++;
+		}
+	}
+	*i += ft_strlen(env_var) + 1;
+}
+
+char	*get_value_from_buffer(char buffer[])
+{
+	char	*new_token;
+
 	new_token = ft_strdup(buffer);
 	if (!new_token)
 		return (NULL);
-	free(token);
 	return (new_token);
 }
