@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/18 18:11:37 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/18 19:37:22 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,11 +123,19 @@ char	*perform_expansion(char *token, int quotes)
 	int		i;
 	int		j;
 	char	*new_token;
+	int		buffer_size;
 
 	i = 0;
 	j = 0;
-	buffer = malloc(calculate_buffer_size(token));
-	while (token[i])
+	//maybe separate function here init_buffer()
+	if (token)
+		buffer_size = calculate_buffer_size(token);
+	else
+		return (NULL);
+	buffer = malloc(buffer_size);
+	if (!buffer)
+		return (NULL);
+	while (token && token[i])
 	{
 		if (token[i] != '$')
 			buffer[j++] = token[i++];
@@ -203,17 +211,21 @@ int	calculate_buffer_size(char *token)
 
 int	calculate_expansion_size(char *token, int *i)
 {
-	int buffer_size;
-	char *env_var_value;
-	char *env_var;
+	int		buffer_size;
+	char	*env_var_value;
+	char	*env_var;
 
 	buffer_size = 0;
 	env_var = get_env_from_str(&token[*i]);
 	if (env_var_exists(env_var))
 	{
 		env_var_value = getenv(env_var);
-		buffer_size += ft_strlen(env_var_value);
+		if (env_var_value)
+			buffer_size += ft_strlen(env_var_value);
 	}
-	*i += ft_strlen(env_var) + 1;
+	if (env_var)
+		*i += ft_strlen(env_var) + 1;
+	else
+		*i += 1;
 	return (buffer_size);
 }
