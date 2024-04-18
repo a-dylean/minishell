@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/18 18:06:05 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:11:37 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,8 @@ int	expander(t_token *tokens)
 	return (0);
 }
 
-/* function that checks if there's a dollar sign in the string
-and if other conditions are met for expansion (needs to
-to be updated to include more cases with quotes (')) */
+/* function that checks if a string needs to be expanded depending of
+what's before and after dollar sign */
 
 int	expansion_needed(char *str, int quotes)
 {
@@ -78,7 +77,8 @@ int	env_var_exists(char *env_var)
 	return (0);
 }
 
-/* function that checks quotes */
+/* function that returns 1 if a string is subject to expansion depending
+on its position in relation to single and double quotes */
 
 int	quotes_check(char *str)
 {
@@ -145,6 +145,8 @@ char	*perform_expansion(char *token, int quotes)
 	return (new_token);
 }
 
+/* function that copies the env value to the buffer if it exists*/
+
 void	handle_expansion(char *token, int *i, char *buffer, int *j)
 {
 	char	*env_var;
@@ -163,6 +165,8 @@ void	handle_expansion(char *token, int *i, char *buffer, int *j)
 	*i += ft_strlen(env_var) + 1;
 }
 
+/* function that copies the buffer to a new token */
+
 char	*get_value_from_buffer(char buffer[])
 {
 	char	*new_token;
@@ -172,6 +176,9 @@ char	*get_value_from_buffer(char buffer[])
 		return (NULL);
 	return (new_token);
 }
+
+/* function that calculates the size of the buffer needed for the new token */
+
 int	calculate_buffer_size(char *token)
 {
 	int	i;
@@ -191,6 +198,9 @@ int	calculate_buffer_size(char *token)
 	}
 	return (buffer_size + 1);
 }
+
+/* function that calculates the size of the expansion that will be added to the buffer */
+
 int	calculate_expansion_size(char *token, int *i)
 {
 	int buffer_size;
