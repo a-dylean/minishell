@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/17 16:40:53 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/18 10:52:18 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,131 @@ t_command	*get_new_command(t_token *tokens)
 	return (command);
 }
 
-t_command	*get_new_command_bis(t_token *tokens)
+int	count_cmd_before_pipe(t_token *tokens)
+{
+	int		count;
+	t_token	*temp;
+
+	count = 0;
+	temp = tokens;
+	if (temp->type == PIPE)
+		temp = temp->next;
+	while (temp && temp->type != PIPE)
+	{
+		if (temp->type == WORD)
+			count++;
+		temp = temp->next;
+	}
+	return (count);
+}
+
+t_token	*ft_lexerclear_one(t_token **tokens)
+{
+	if ((*tokens)->value)
+	{
+		free((*tokens)->value);
+		(*tokens)->value = NULL;
+	}
+	free(*tokens);
+	*tokens = NULL;
+	return (NULL);
+}
+
+void	ft_lexerdel_first(t_token **tokens)
+{
+	t_token	*node;
+
+	node = *tokens;
+	*tokens = node->next;
+	ft_lexerclear_one(&node);
+	if (*tokens)
+		(*tokens)->prev = NULL;
+}
+
+void	delete_next_word(t_token **tokens)
+{
+	t_token	*node;
+	t_token	*prev;
+	t_token	*start;
+
+	start = *tokens;
+	node = start;
+	
+	if ((*tokens)->type == WORD)
+	{
+		ft_lexerdel_first(tokens);
+		return ;
+	}
+	while (node && node->type != WORD)
+	{
+		prev = node;
+		node = node->next;
+		// node->prev = prev;
+	}
+	if (node)
+		prev->next = node->next;
+	else
+		prev->next = NULL;
+	if (prev->next)
+		prev->next->prev = prev;
+	ft_lexerclear_one(&node);
+	*tokens = start;
+}
+
+char **get_cmd_among_redirection(t_token *tokens)
+{
+	int	num_tokens;
+	int	i;
+	t_token	*temp;
+	char	**array;
+
+	i = 0;
+	temp = tokens;
+	array = NULL;
+	num_tokens = count_cmd_before_pipe(tokens);
+	array = malloc((num_tokens + 1) * sizeof(char *));
+	if (!array)
+		exit(EXIT_FAILURE);
+	if (temp && temp->type == PIPE)
+		temp = temp->next;
+	while (temp && temp->type != PIPE)
+	{
+		if (temp->type == WORD)
+		{
+			if (temp->value != NULL)
+			{
+				array[i] = ft_strdup(temp->value);
+				delete_next_word(&tokens);
+				i++;
+			}
+			// else
+			// 	array[i] = NULL;
+		}
+		temp = temp->next;
+	}
+	array[i] = NULL;
+	// t_token *current = tokens;
+	// while (current)
+	// {
+	// 	printf("Current value: %s\n", current->value);
+	// 	current = current->next;
+	// }
+	// i = 0;
+	// while (array[i])
+	// {
+	// 	printf("Command: %s\n", array[i]);
+	// 	i++;
+	// }
+	return (array);
+}
+
+t_command *redirection_start(t_token *tokens)
 {
 	t_command	*command;
 
 	command = init_command();
+	command->cmd_name = get_cmd_among_redirection(tokens);
 	handle_redirections(tokens, command);
-	// command->cmd_name = get_cmd_from_tokens(tokens);
 	return (command);
 }
 
@@ -110,8 +228,8 @@ void	assign_type_redirections(t_token *tokens)
 	{
 		if (tokens->type == GREAT && (tokens->next && tokens->next->type == WORD))
 			tokens->next->type = FILENAME;
-		else if (tokens->type == LESS && (tokens->prev && tokens->prev->type == WORD))
-			tokens->prev->type = FILENAME;
+		else if (tokens->type == LESS && (tokens->next && tokens->next->type == WORD))
+			tokens->next->type = FILENAME;
 		else if (tokens->type == LESSLESS && (tokens->next && tokens->next->type == WORD))
 			tokens->next->type = DELIMITER;
 		else if (tokens->type == GREATGREAT && (tokens->next && tokens->next->type == WORD))
@@ -138,14 +256,10 @@ int	parser(t_token *tokens)
 			temp = tokens;
 		}
 		else if (no_pipe_in_list(temp) == 1)
-		{
-			// have another function that handles the redirections before the command name
-			add_command_back(commands, get_new_command_bis(tokens));
-		}
+			add_command_back(commands, redirection_start(tokens));
 		if (temp)
 			temp = temp->next;
-		printf("Current type: %d Current value: %s\n", temp->type, temp->value);
-		temp = temp->next;
+
 	}
 	print_commands(*commands);
 	return (0);
