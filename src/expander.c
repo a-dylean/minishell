@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/18 17:25:59 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/18 17:38:54 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,14 +120,14 @@ int	quotes_check(char *str)
 
 char	*perform_expansion(char *token, int quotes)
 {
-	char	buffer[256];
+	char	*buffer;
 	int		i;
 	int		j;
 	char	*new_token;
 
 	i = 0;
 	j = 0;
-	buffer[0] = '\0';
+	buffer = malloc(calculate_buffer_size(token));
 	while (token[i])
 	{
 		if (token[i] != '$')
@@ -142,6 +142,7 @@ char	*perform_expansion(char *token, int quotes)
 	}
 	buffer[j] = '\0';
 	new_token = get_value_from_buffer(buffer);
+	free(buffer);
 	return (new_token);
 }
 
@@ -171,4 +172,31 @@ char	*get_value_from_buffer(char buffer[])
 	if (!new_token)
 		return (NULL);
 	return (new_token);
+}
+int calculate_buffer_size(char *token)
+{
+    int i = 0;
+    int buffer_size = 0;
+    char *env_var;
+    char *env_var_value;
+
+    while (token[i])
+    {
+        if (token[i] != '$')
+        {
+            buffer_size++;
+            i++;
+        }
+        else
+        {
+            env_var = get_env_from_str(&token[i]);
+            if (env_var_exists(env_var))
+            {
+                env_var_value = getenv(env_var);
+                buffer_size += ft_strlen(env_var_value);
+            }
+            i += ft_strlen(env_var) + 1;
+        }
+    }
+    return buffer_size + 1;
 }

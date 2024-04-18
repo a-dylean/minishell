@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/18 17:25:25 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/18 17:31:12 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void					handle_expansion(char *token, int *i, char *buffer,
 							int *j);
 int						quotes_check(char *str);
 char					*get_value_from_buffer(char buffer[]);
+int						calculate_buffer_size(char *token);
 
 /* executer */
 int						ft_terminal(void);
