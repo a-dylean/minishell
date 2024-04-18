@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/17 16:36:36 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/18 13:03:15 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void					handle_redirection_token(t_token *temp,
 							t_token **tokens);
 void					handle_redirections(t_token *tokens,
 							t_command *command);
+void	delete_next_token(t_token **tokens, int type);
 
 /* expander */
 
@@ -98,7 +99,8 @@ t_token					*create_token(char *value, int type);
 t_token					*get_last_token(t_token *head);
 void					add_token_back(t_token **tokens, t_token *new_node);
 void					free_stack(t_token **tokens);
-
+void	ft_lexerdel_first(t_token **tokens);
+t_token	*ft_lexerclear_one(t_token **tokens);
 /* free */
 int						free_in_terminal(t_token **tokens, char *buffer);
 

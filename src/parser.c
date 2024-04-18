@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/18 10:52:18 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/18 14:34:04 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,8 @@ t_token	*ft_lexerclear_one(t_token **tokens)
 		free((*tokens)->value);
 		(*tokens)->value = NULL;
 	}
-	free(*tokens);
-	*tokens = NULL;
+	// free(*tokens);
+	// *tokens = NULL;
 	return (NULL);
 }
 
@@ -176,24 +176,10 @@ char **get_cmd_among_redirection(t_token *tokens)
 				delete_next_word(&tokens);
 				i++;
 			}
-			// else
-			// 	array[i] = NULL;
 		}
 		temp = temp->next;
 	}
 	array[i] = NULL;
-	// t_token *current = tokens;
-	// while (current)
-	// {
-	// 	printf("Current value: %s\n", current->value);
-	// 	current = current->next;
-	// }
-	// i = 0;
-	// while (array[i])
-	// {
-	// 	printf("Command: %s\n", array[i]);
-	// 	i++;
-	// }
 	return (array);
 }
 
@@ -256,7 +242,10 @@ int	parser(t_token *tokens)
 			temp = tokens;
 		}
 		else if (no_pipe_in_list(temp) == 1)
+		{
 			add_command_back(commands, redirection_start(tokens));
+			break ;
+		}
 		if (temp)
 			temp = temp->next;
 
