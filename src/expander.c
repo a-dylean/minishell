@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/17 16:35:29 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/18 13:23:25 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	expander(t_token *tokens)
 	temp = tokens;
 	while (temp != NULL)
 	{
+		printf("initial token = %s\n", temp->value);
 		temp->value = perform_expansion(temp->value);
 		temp = temp->next;
 	}
@@ -29,18 +30,18 @@ int	expander(t_token *tokens)
 and if other conditions are met for expansion (needs to
 to be updated to include more cases with quotes (')) */
 
-int	expansion_needed(char *str)
+int	expansion_needed(char *str, int quotes)
 {
 	int	i;
 
 	i = 0;
 	if (str == NULL)
 		return (0);
+	printf("str = %s\n", str);
+	printf("quotes = %d\n", quotes);
 	while (str[i])
 	{
-		if ((str[i] == '$' && str[i + 1] != ' ' && str[i + 1] != '\0') || (i > 0
-				&& str[i] == '$' && str[i - 1] == ' ') || (i > 0
-				&& str[i] == '$' && str[i - 1] == '"'))
+		if ((str[i] == '$' && str[i + 1] != ' ' && str[i + 1] != '\0') && quotes)
 			return (1);
 		i++;
 	}
@@ -53,119 +54,107 @@ char	*get_env_from_str(char *str)
 	int		i;
 	char	*env_var;
 
-	i = 0;
-	while (str[i] && str[i] != '$')
+	i = 1;
+	while (str[i] && str[i] != '$' && ((ft_isalnum(str[i]) || str[i] == '_')))
 		i++;
-	env_var = ft_substr(str, 0, i);
-	return (env_var);
+	env_var = ft_substr(str, 1, i - 1);
+	printf("env_var = %s\n", env_var);
+	if (env_var)
+		return (env_var);
+	return (NULL);
 }
 
+/* function that checks if env var exists in env list */
+
+int env_var_exists(char *env_var)
+{
+	char *env_var_value;
+	
+	if (env_var == NULL)
+		return (0);
+	env_var_value = getenv(env_var);
+	if (env_var_value)
+		return (1);
+	return (0);
+}
+
+/* function that checks quotes */
+
+int quotes_check(char *str)
+{
+    int i;
+    int in_double_quotes;
+    int in_single_quotes;
+    int has_quotes;
+    
+    i = 0;
+    in_double_quotes = 0;
+    in_single_quotes = 0;
+    has_quotes = 0;
+    while (str[i])
+    {
+        if (str[i] == '\"' && !in_single_quotes)
+        {
+            in_double_quotes = !in_double_quotes;
+            has_quotes = 1;
+        }
+        else if (str[i] == '\'' && !in_double_quotes)
+        {
+            in_single_quotes = !in_single_quotes;
+            has_quotes = 1;
+        }
+        else if (str[i] == '$')
+        {
+            if (in_double_quotes || (in_single_quotes && in_double_quotes))
+                return 1;
+            else if (in_single_quotes && !in_double_quotes)
+                return 0;
+        }
+        i++;
+    }
+    return !has_quotes;
+}
 /* function that split token string by spaces, checks if a token in string
 is subject to expansion, if so,
 	replaces it with env var and then joins tokens back */
 
-// char	*perform_expansion(char *token)
-// {
-// 	char	**split_token;
-// 	char	*expanded_token;
-// 	char	*env_var;
-// 	char	*env_value;
-// 	int		i;
-// 	int		j;
-// 	char	**split_by_dollar;
-
-// 	i = -1;
-// 	split_token = ft_split(token, ' ');
-// 	while (split_token[++i])
-// 	{
-// 		if (expansion_needed(split_token[i]))
-// 		{
-// 			split_by_dollar = ft_split(split_token[i], '$');
-// 			j = -1;
-// 			while (split_by_dollar[++j])
-// 			{
-// 				env_var = get_env_from_str(split_by_dollar[j]);
-// 				if (env_var)
-// 					env_value = getenv(env_var);
-// 				else
-// 					env_value = NULL;
-// 				// free(split_by_dollar[j]);
-// 				if (env_value)
-// 					split_by_dollar[j] = ft_strdup(env_value);
-// 				else
-// 					split_by_dollar[j] = ft_strdup(" ");
-// 				free(env_var);
-// 			}
-// 			if (count_chars(split_token[i], '$') > 1)
-// 				split_token[i] = join_strings(split_by_dollar, "");
-// 			else
-// 				split_token[i] = join_strings(split_by_dollar, " ");
-// 			free_array(split_by_dollar);
-// 		}
-// 	}
-// 	expanded_token = join_strings(split_token, " ");
-// 	free_array(split_token);
-// 	free(token);
-// 	token = ft_strdup(expanded_token);
-// 	free(expanded_token);
-// 	return (token);
-// }
-
-char	**expand_token(char **split_by_dollar)
-{
-	int		j;
-	char	*env_var;
-	char	*env_value;
-
-	j = -1;
-	while (split_by_dollar[++j])
-	{
-		env_var = get_env_from_str(split_by_dollar[j]);
-		if (env_var)
-			env_value = getenv(env_var);
-		else
-			env_value = NULL;
-		if (env_value)
-			split_by_dollar[j] = ft_strdup(env_value);
-		else
-			split_by_dollar[j] = ft_strdup("");
-		free(env_var);
-	}
-	return (split_by_dollar);
-}
-
-char	*join_expanded_token(char **split_by_dollar, char *split_token_i)
-{
-	if (count_chars(split_token_i, '$') > 1)
-		return (join_strings(split_by_dollar, ""));
-	else
-		return (join_strings(split_by_dollar, " "));
-}
-
 char	*perform_expansion(char *token)
 {
-	char **split_token;
-	char *expanded_token;
+	char *buffer;
 	int i;
-	char **split_by_dollar;
-
-	i = -1;
-	split_token = ft_split(token, ' ');
-	while (split_token[++i])
+	int j;
+	int quotes;
+	
+	i = 0;
+	j = 0;
+	quotes = quotes_check(token);
+	buffer = malloc(256);
+	while (token[i])
 	{
-		if (expansion_needed(split_token[i]))
+		if (token[i] != '$')
 		{
-			split_by_dollar = ft_split(split_token[i], '$');
-			split_by_dollar = expand_token(split_by_dollar);
-			split_token[i] = join_expanded_token(split_by_dollar,
-					split_token[i]);
-			free_array(split_by_dollar);
+			buffer[j] = token[i];
 		}
+		else if (token[i] == '$')
+		{
+			if (expansion_needed(&token[i], quotes))
+			{
+				char *env_var = get_env_from_str(&token[i]);
+				if (env_var_exists(env_var))
+				{
+					char *env_var_value = getenv(env_var);
+					// buffer[j] = malloc(ft_strlen(env_var_value) + 1);
+					ft_strlcpy(&buffer[j], env_var_value, ft_strlen(env_var_value) + 1);
+					j += ft_strlen(env_var_value);
+				}
+				i += ft_strlen(get_env_from_str(&token[i]));
+			}
+		}	
+		i++;
+		j++;
+		
 	}
-	expanded_token = join_strings(split_token, " ");
-	free_array(split_token);
-	free(token);
-	token = ft_strdup(expanded_token);
-	free(expanded_token);
-	return (token);
+	printf("buffer = %s\n", buffer);
+	return (buffer);
 }
+

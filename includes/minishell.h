@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/17 16:19:40 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/18 12:37:30 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void					handle_redirections(t_token *tokens,
 /* expander */
 int						expander(t_token *tokens);
 char					*perform_expansion(char *token);
-int						expansion_needed(char *str);
+int						expansion_needed(char *str, int quotes);
 /* executer */
 int						ft_terminal(void);
 
