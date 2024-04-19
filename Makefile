@@ -6,22 +6,24 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 INCLUDES = -I includes -I libft
 
-SRC = src/main.c src/terminal.c src/lexer.c src/linked_lists.c src/errors.c src/parser_errors.c \
-	  src/parser.c src/parser_cmds_ops.c src/parser_redirections_ops.c src/parser_tokens_ops.c \
-	  src/test.c src/expander.c src/utils_array.c src/utils_str.c src/expander_buffer.c src/expander_env.c
+SRC = src/main.c src/terminal.c src/test.c \
+        src/utils/array.c src/utils/linked_lists.c src/utils/string.c \
+        src/errors/errors.c \
+        src/executer/builtins.c \
+        src/expander/buffer.c src/expander/env.c src/expander/expander.c \
+        src/lexer/lexer.c \
+        src/parser/cmds_ops.c src/parser/errors.c src/parser/parser.c src/parser/redirections_ops.c src/parser/tokens_ops.c \
 
 OBJ_DIR = obj
-OBJ := $(patsubst src/%.c,obj/%.o,$(SRC))
+OBJ := $(patsubst src/%.c,$(OBJ_DIR)/%.o,$(SRC))
 
 LIBFT = libft/libft.a
 
 all: $(NAME)
 
-obj/%.o: src/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: src/%.c
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
-
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
 
 $(NAME): $(LIBFT) $(OBJ)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $(OBJ) -L libft -lft -lreadline
