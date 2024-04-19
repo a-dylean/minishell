@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/18 14:34:04 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 12:36:02 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,31 @@
 t_token	*remove_cmd_from_tokens(t_token *tokens, int id)
 {
 	t_token	*temp;
-	int	i = 0;
+	int		i;
 
-	while (tokens && i != id)
+	i = 0;
+	if (id == 0 && tokens->type == PIPE)
 	{
 		temp = tokens;
 		tokens = tokens->next;
 		free(temp);
-		i++;
+		return (tokens);
+	}
+	while (tokens && i != id)
+	{
+		if (tokens->type != PIPE)
+		{
+			temp = tokens;
+			tokens = tokens->next;
+			free(temp);
+			i++;
+		}
+		else
+		{
+			temp = tokens;
+			tokens = tokens->next;
+			free(temp);
+		}
 	}
 	if (tokens && no_pipe_in_list(tokens))
 	{
@@ -99,13 +116,11 @@ int	count_cmd_before_pipe(t_token *tokens)
 
 t_token	*ft_lexerclear_one(t_token **tokens)
 {
-	if ((*tokens)->value)
+	if ((*tokens) && (*tokens)->value)
 	{
 		free((*tokens)->value);
 		(*tokens)->value = NULL;
 	}
-	// free(*tokens);
-	// *tokens = NULL;
 	return (NULL);
 }
 
@@ -128,7 +143,6 @@ void	delete_next_word(t_token **tokens)
 
 	start = *tokens;
 	node = start;
-	
 	if ((*tokens)->type == WORD)
 	{
 		ft_lexerdel_first(tokens);
@@ -150,10 +164,10 @@ void	delete_next_word(t_token **tokens)
 	*tokens = start;
 }
 
-char **get_cmd_among_redirection(t_token *tokens)
+t_token	*get_cmd_among_redirection(t_token *tokens, t_command *command)
 {
-	int	num_tokens;
-	int	i;
+	int		num_tokens;
+	int		i;
 	t_token	*temp;
 	char	**array;
 
@@ -180,7 +194,15 @@ char **get_cmd_among_redirection(t_token *tokens)
 		temp = temp->next;
 	}
 	array[i] = NULL;
-	return (array);
+	if (array[0] == NULL)
+	{
+		free(array);
+		command->cmd_name = NULL;
+		return (tokens);
+	}
+	else
+		command->cmd_name = array;
+	return (tokens);
 }
 
 t_command *redirection_start(t_token *tokens)
@@ -188,8 +210,15 @@ t_command *redirection_start(t_token *tokens)
 	t_command	*command;
 
 	command = init_command();
-	command->cmd_name = get_cmd_among_redirection(tokens);
-	handle_redirections(tokens, command);
+	tokens = get_cmd_among_redirection(tokens, command);
+	if (tokens)
+		handle_redirections(tokens, command);
+	if (command->cmd_name == NULL && command->redirections == NULL)
+	{
+		free(command);
+		return (NULL);
+	}
+	//delete_next_token(&tokens, PIPE);
 	return (command);
 }
 
@@ -212,13 +241,17 @@ void	assign_type_redirections(t_token *tokens)
 {
 	while (tokens)
 	{
-		if (tokens->type == GREAT && (tokens->next && tokens->next->type == WORD))
+		if (tokens->type == GREAT && (tokens->next
+				&& tokens->next->type == WORD))
 			tokens->next->type = FILENAME;
-		else if (tokens->type == LESS && (tokens->next && tokens->next->type == WORD))
+		else if (tokens->type == LESS && (tokens->next
+				&& tokens->next->type == WORD))
 			tokens->next->type = FILENAME;
-		else if (tokens->type == LESSLESS && (tokens->next && tokens->next->type == WORD))
+		else if (tokens->type == LESSLESS && (tokens->next
+				&& tokens->next->type == WORD))
 			tokens->next->type = DELIMITER;
-		else if (tokens->type == GREATGREAT && (tokens->next && tokens->next->type == WORD))
+		else if (tokens->type == GREATGREAT && (tokens->next
+				&& tokens->next->type == WORD))
 			tokens->next->type = FILENAME;
 		tokens = tokens->next;
 	}
@@ -235,20 +268,19 @@ int	parser(t_token *tokens)
 	assign_type_redirections(tokens);
 	while (temp)
 	{
-		if (temp->type == PIPE || (no_pipe_in_list(temp) == 1 && temp->type == WORD))
-		{
-			add_command_back(commands, get_new_command(tokens));
-			tokens = remove_cmd_from_tokens(tokens, count_tokens_before_pipe(tokens));
-			temp = tokens;
-		}
-		else if (no_pipe_in_list(temp) == 1)
+		if (no_pipe_in_list(temp) == 1)
 		{
 			add_command_back(commands, redirection_start(tokens));
 			break ;
 		}
+		else
+		{
+			add_command_back(commands, redirection_start(tokens));
+			tokens = remove_cmd_from_tokens(tokens, count_tokens_before_pipe(tokens));
+			temp = tokens;
+		}
 		if (temp)
 			temp = temp->next;
-
 	}
 	print_commands(*commands);
 	return (0);

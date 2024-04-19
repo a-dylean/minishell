@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:55:53 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/18 13:02:23 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/18 16:23:15 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,31 +102,6 @@ void	handle_redirections(t_token *tokens, t_command *command)
 			add_token_back(redirections, create_token(temp->value, temp->type));
 			add_token_back(redirections, create_token(temp->next->value,
 			 		temp->next->type));
-			// t_token *current = *redirections;
-			// while(current)
-			// {
-			// 	printf("current->value: %s\n", current->value);
-				
-			// 	current = current->next;
-			// }
-			// printf("temp->value: %s\n", temp->value);
-			// printf("\n");
-			// // t_token *current = tokens;
-			// // while (current)
-			// // {
-			// // 	printf("current->value: %s\n", current->value);
-			// // 	current = current->next;
-			// // }
-			// printf("\n");
-			//delete_next_token(&tokens, temp->type);
-			//delete_next_token(&tokens, temp->next->type);
-			// current = tokens;
-			// while (current)
-			// {
-			// 	printf("after ->value: %s\n", current->value);
-			// 	current = current->next;
-			// }
-			// printf("\n");
 			temp = next;
 		}
 		else
