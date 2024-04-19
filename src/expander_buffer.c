@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:09:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 14:17:12 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:42:45 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	handle_expansion(char *token, int *i, char *buffer, int *j)
 	char	*env_var;
 	char	*env_var_value;
 
+	//check for $
 	env_var = get_env_from_str(&token[*i]);
 	if (env_var_exists(env_var))
 	{
