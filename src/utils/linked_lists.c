@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/19 15:24:09 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:08:21 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,21 @@ int stack_len(t_token *tokens)
 
 	len = 0;
 	temp = tokens;
+	while (temp)
+	{
+		len++;
+		temp = temp->next;
+	}
+	return (len);
+}
+
+int	len_command(t_command *command)
+{
+	int			len;
+	t_command	*temp;
+
+	len = 0;
+	temp = command;
 	while (temp)
 	{
 		len++;

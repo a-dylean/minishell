@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 15:29:42 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:29:29 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,36 +78,6 @@ int	count_not_null_tokens(t_token *tokens)
 	return (count);
 }
 
-// function that returns an array of strings (command) from the tokens list
-
-char	**get_cmd_from_tokens(t_token *tokens, int num_tokens)
-{
-	int		i;
-	t_token	*temp;
-	char	**array;
-	int		j;
-	int num_not_null_tokens;
-
-	i = 0;
-	j = 0;
-	temp = tokens;
-	num_not_null_tokens = count_not_null_tokens(tokens);
-	array = init_array(num_not_null_tokens + 1);
-	if (temp->type == PIPE)
-		temp = temp->next;
-	while (i < num_tokens && temp)
-	{
-		if (temp->value != NULL)
-		{
-			array[j] = temp->value;
-			j++;
-		}
-		temp = temp->next;
-		i++;
-	}
-	return (array);
-}
-
 int	count_cmd_before_pipe(t_token *tokens)
 {
 	int		count;
@@ -126,7 +96,8 @@ int	count_cmd_before_pipe(t_token *tokens)
 	return (count);
 }
 
-t_token	*get_cmd_among_redirection(t_token *tokens, t_command *command)
+// function that returns an array of strings (command) from the tokens list
+t_token	*get_cmd_from_tokens(t_token *tokens, t_command *command)
 {
 	int		num_tokens;
 	int		i;
@@ -167,15 +138,15 @@ t_token	*get_cmd_among_redirection(t_token *tokens, t_command *command)
 	return (tokens);
 }
 
-t_command *get_command(t_token *tokens)
+t_command *get_command(t_token *tokens, t_command **commands)
 {
 	t_command	*command;
 
 	command = init_command();
 	expander(tokens);
-	tokens = get_cmd_among_redirection(tokens, command);
+	tokens = get_cmd_from_tokens(tokens, command);
 	if (tokens)
-		handle_redirections(tokens, command);
+		handle_redirections(tokens, command, commands);
 	if (command->cmd_name == NULL && command->redirections == NULL)
 	{
 		free(command);
@@ -214,15 +185,15 @@ int	parser(t_token *tokens)
 	if (!commands)
 		exit(EXIT_FAILURE);
 	*commands = NULL;
-	assign_type_redirections(tokens);
+	assign_type_redirections(tokens); // check if we can call this function earlier (in lexer)
 	while (temp)
 	{
 		if (no_pipe_in_list(temp) == 1)
 		{
-			add_command_back(commands, get_command(tokens));
+			add_command_back(commands, get_command(tokens, commands));
 			break ;
 		}
-		add_command_back(commands, get_command(tokens));
+		add_command_back(commands, get_command(tokens, commands));
 		tokens = remove_pipes(tokens, count_tokens_before_pipe(tokens));
 		temp = tokens;
 		if (temp)

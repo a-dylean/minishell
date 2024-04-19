@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_redirections_ops.c                          :+:      :+:    :+:   */
+/*   redirections_ops.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:55:53 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 14:33:49 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:22:46 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	delete_next_type(t_token **tokens, int type)
 	*tokens = start;
 }
 
-void	handle_redirections(t_token *tokens, t_command *command)
+void	handle_redirections(t_token *tokens, t_command *command, t_command **commands)
 {
 	t_token	*temp;
 	t_token	**redirections;
@@ -60,7 +60,7 @@ void	handle_redirections(t_token *tokens, t_command *command)
 	redirections = init_redirections();
 	temp = tokens;
 	next = NULL;
-	if (temp->type == PIPE && temp->next)
+	if ((*commands) && temp->type == PIPE && temp->next)
 		temp = temp->next;
 	while (temp && temp->type != PIPE)
 	{

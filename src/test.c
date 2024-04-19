@@ -56,3 +56,37 @@ void print_commands(t_command *commands)
         current_command = current_command->next;
     }
 }
+
+void print_commands_reverse(t_command *commands)
+{
+    t_command *current_command = get_last_command(commands);
+    int i;
+
+    while (current_command)
+    {
+        if (current_command->cmd_name)
+        {
+            printf("Command val: ");
+            for (i = 0; current_command->cmd_name[i]; i++)
+                printf("%s ", current_command->cmd_name[i]);
+            while (current_command->redirections)
+            {
+                if (current_command->redirections->value != NULL)
+                    printf("\n\tRedir val: %s Redir type: %d ", current_command->redirections->value, current_command->redirections->type);
+                current_command->redirections = current_command->redirections->next;
+            }
+            printf("\n");
+        }
+        else
+        {
+            printf("Command val: NULL ");
+            while (current_command->redirections)
+            {
+                printf("\n\tRedir val: %s Redir type: %d", current_command->redirections->value, current_command->redirections->type);
+                current_command->redirections = current_command->redirections->next;
+            }
+            printf("\n");
+        }
+        current_command = current_command->prev;
+    }
+}

@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 16:19:41 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:23:54 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct s_command
 	char				*delimiter;
 	t_token				*redirections;
 	struct s_command	*next;
+	struct s_command	*prev;
 	// add delimiter and append data if needed
 	// add last or first command data if needed by pipex
 }						t_command;
@@ -75,11 +76,8 @@ int						parser(t_token *tokens);
 int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
 t_token					**init_redirections(void);
-void					handle_redirection_token(t_token *temp,
-							t_token **redirections, t_token **next,
-							t_token **tokens);
 void					handle_redirections(t_token *tokens,
-							t_command *command);
+							t_command *command, t_command **commands);
 void					delete_next_type(t_token **tokens, int type);
 
 /* expander */
@@ -115,8 +113,8 @@ void					add_token_back(t_token **tokens, t_token *new_node);
 void					free_tokens(t_token **tokens);
 void					del_first(t_token **tokens);
 t_token					*clear_one(t_token **tokens);
-int						len_list(t_token *list);
 int						stack_len(t_token *tokens);
+int						len_command(t_command *command);
 
 /* free */
 int						free_in_terminal(t_token **tokens, char *buffer);
@@ -135,4 +133,5 @@ int						count_chars(char *str, char c);
 /* tests */
 void					print_commands(t_command *commands);
 void					test_list(t_token *tokens);
+void 					print_commands_reverse(t_command *commands);
 #endif
