@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 14:37:47 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:40:48 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ int	*encode_tokens(char *str, t_token **tokens);
 /* parser */
 int						check_syntax(t_token *tokens);
 int						parser(t_token *tokens);
-t_token					*remove_token_by_id(t_token *tokens, int id);
 int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
 t_token					**init_redirections(void);
