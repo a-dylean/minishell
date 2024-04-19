@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/18 12:47:10 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:37:39 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	add_token_back(t_token **tokens, t_token *new_node)
 	}
 }
 
-void	free_stack(t_token **tokens)
+void	free_tokens(t_token **tokens)
 {
 	t_token	*temp;
 	t_token	*current;
@@ -62,4 +62,40 @@ void	free_stack(t_token **tokens)
 		current = temp;
 	}
 	*tokens = NULL;
+}
+
+t_token	*clear_one(t_token **tokens)
+{
+	if ((*tokens) && (*tokens)->value)
+	{
+		free((*tokens)->value);
+		(*tokens)->value = NULL;
+	}
+	return (NULL);
+}
+
+void	del_first(t_token **tokens)
+{
+	t_token	*node;
+
+	node = *tokens;
+	*tokens = node->next;
+	clear_one(&node);
+	if (*tokens)
+		(*tokens)->prev = NULL;
+}
+
+int	len_list(t_token *list)
+{
+	t_token	*current;
+	int		i;
+
+	current = list;
+	i = 0;
+	while (current)
+	{
+		current = current->next;
+		i++;
+	}
+	return (i);
 }

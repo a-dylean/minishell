@@ -6,13 +6,13 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 12:36:02 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:37:33 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_token	*remove_cmd_from_tokens(t_token *tokens, int id)
+t_token	*remove_pipes(t_token *tokens, int id)
 {
 	t_token	*temp;
 	int		i;
@@ -35,15 +35,6 @@ t_token	*remove_cmd_from_tokens(t_token *tokens, int id)
 			i++;
 		}
 		else
-		{
-			temp = tokens;
-			tokens = tokens->next;
-			free(temp);
-		}
-	}
-	if (tokens && no_pipe_in_list(tokens))
-	{
-		if (i == id)
 		{
 			temp = tokens;
 			tokens = tokens->next;
@@ -84,18 +75,6 @@ char	**get_cmd_from_tokens(t_token *tokens)
 	return (array);
 }
 
-// function that creates a new command struct and adds redirections (if exists) 
-// and command arr to it
-t_command	*get_new_command(t_token *tokens)
-{
-	t_command	*command;
-
-	command = init_command();
-	handle_redirections(tokens, command);
-	command->cmd_name = get_cmd_from_tokens(tokens);
-	return (command);
-}
-
 int	count_cmd_before_pipe(t_token *tokens)
 {
 	int		count;
@@ -112,56 +91,6 @@ int	count_cmd_before_pipe(t_token *tokens)
 		temp = temp->next;
 	}
 	return (count);
-}
-
-t_token	*ft_lexerclear_one(t_token **tokens)
-{
-	if ((*tokens) && (*tokens)->value)
-	{
-		free((*tokens)->value);
-		(*tokens)->value = NULL;
-	}
-	return (NULL);
-}
-
-void	ft_lexerdel_first(t_token **tokens)
-{
-	t_token	*node;
-
-	node = *tokens;
-	*tokens = node->next;
-	ft_lexerclear_one(&node);
-	if (*tokens)
-		(*tokens)->prev = NULL;
-}
-
-void	delete_next_word(t_token **tokens)
-{
-	t_token	*node;
-	t_token	*prev;
-	t_token	*start;
-
-	start = *tokens;
-	node = start;
-	if ((*tokens)->type == WORD)
-	{
-		ft_lexerdel_first(tokens);
-		return ;
-	}
-	while (node && node->type != WORD)
-	{
-		prev = node;
-		node = node->next;
-		// node->prev = prev;
-	}
-	if (node)
-		prev->next = node->next;
-	else
-		prev->next = NULL;
-	if (prev->next)
-		prev->next->prev = prev;
-	ft_lexerclear_one(&node);
-	*tokens = start;
 }
 
 t_token	*get_cmd_among_redirection(t_token *tokens, t_command *command)
@@ -187,7 +116,7 @@ t_token	*get_cmd_among_redirection(t_token *tokens, t_command *command)
 			if (temp->value != NULL)
 			{
 				array[i] = ft_strdup(temp->value);
-				delete_next_word(&tokens);
+				delete_next_type(&tokens, WORD);
 				i++;
 			}
 		}
@@ -205,7 +134,7 @@ t_token	*get_cmd_among_redirection(t_token *tokens, t_command *command)
 	return (tokens);
 }
 
-t_command *redirection_start(t_token *tokens)
+t_command *get_command(t_token *tokens)
 {
 	t_command	*command;
 
@@ -218,23 +147,7 @@ t_command *redirection_start(t_token *tokens)
 		free(command);
 		return (NULL);
 	}
-	//delete_next_token(&tokens, PIPE);
 	return (command);
-}
-
-int	len_stack(t_token *stack)
-{
-	t_token	*current;
-	int		i;
-
-	current = stack;
-	i = 0;
-	while (current)
-	{
-		current = current->next;
-		i++;
-	}
-	return (i);
 }
 
 void	assign_type_redirections(t_token *tokens)
@@ -264,21 +177,20 @@ int	parser(t_token *tokens)
 
 	temp = tokens;
 	commands = (t_command **)malloc(sizeof(t_command));
+	if (!commands)
+		exit(EXIT_FAILURE);
 	*commands = NULL;
 	assign_type_redirections(tokens);
 	while (temp)
 	{
 		if (no_pipe_in_list(temp) == 1)
 		{
-			add_command_back(commands, redirection_start(tokens));
+			add_command_back(commands, get_command(tokens));
 			break ;
 		}
-		else
-		{
-			add_command_back(commands, redirection_start(tokens));
-			tokens = remove_cmd_from_tokens(tokens, count_tokens_before_pipe(tokens));
-			temp = tokens;
-		}
+		add_command_back(commands, get_command(tokens));
+		tokens = remove_pipes(tokens, count_tokens_before_pipe(tokens));
+		temp = tokens;
 		if (temp)
 			temp = temp->next;
 	}

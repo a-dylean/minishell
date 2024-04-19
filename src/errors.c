@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:32:04 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/17 17:25:40 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:36:55 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int free_in_terminal(t_token **tokens, char *buffer)
 {
 	(void)tokens;
 	// if (tokens && *tokens)
-	// 	free_stack(tokens);
+	// 	free_tokens(tokens);
 	free(buffer);
 	return (EXIT_SUCCESS);
 }
