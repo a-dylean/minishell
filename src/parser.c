@@ -3,30 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 13:04:44 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/19 15:29:42 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_token	*remove_cmd_from_tokens(t_token *tokens, int id)
+t_token	*remove_pipes(t_token *tokens, int id)
 {
 	t_token	*temp;
-	t_token	*head;
+	int		i;
 
-	head = tokens;
-	while (tokens && tokens->id != id)
+	i = 0;
+	if (id == 0 && tokens->type == PIPE)
 	{
 		temp = tokens;
 		tokens = tokens->next;
 		free(temp);
+		return (tokens);
 	}
-	if (no_pipe_in_list(tokens))
+	while (tokens && i != id)
 	{
-		if (tokens && tokens->id == id)
+		if (tokens->type != PIPE)
+		{
+			temp = tokens;
+			tokens = tokens->next;
+			free(temp);
+			i++;
+		}
+		else
 		{
 			temp = tokens;
 			tokens = tokens->next;
@@ -34,7 +42,7 @@ t_token	*remove_cmd_from_tokens(t_token *tokens, int id)
 		}
 	}
 	if (tokens == NULL)
-		return (head);
+		return (NULL);
 	return (tokens);
 }
 int	cmd_string_len(t_token *tokens)
@@ -100,20 +108,100 @@ char	**get_cmd_from_tokens(t_token *tokens, int num_tokens)
 	return (array);
 }
 
-// function that creates a new command struct and adds redirections (if exists)
-// and command arr to it
+int	count_cmd_before_pipe(t_token *tokens)
+{
+	int		count;
+	t_token	*temp;
 
-t_command	*get_new_command(t_token *tokens)
+	count = 0;
+	temp = tokens;
+	if (temp->type == PIPE)
+		temp = temp->next;
+	while (temp && temp->type != PIPE)
+	{
+		if (temp->type == WORD)
+			count++;
+		temp = temp->next;
+	}
+	return (count);
+}
+
+t_token	*get_cmd_among_redirection(t_token *tokens, t_command *command)
+{
+	int		num_tokens;
+	int		i;
+	t_token	*temp;
+	char	**array;
+
+	i = 0;
+	temp = tokens;
+	array = NULL;
+	num_tokens = count_cmd_before_pipe(tokens);
+	array = malloc((num_tokens + 1) * sizeof(char *));
+	if (!array)
+		exit(EXIT_FAILURE);
+	if (temp && temp->type == PIPE)
+		temp = temp->next;
+	while (temp && temp->type != PIPE)
+	{
+		if (temp->type == WORD)
+		{
+			if (temp->value != NULL)
+			{
+				array[i] = ft_strdup(temp->value);
+				delete_next_type(&tokens, WORD);
+				i++;
+			}
+		}
+		temp = temp->next;
+	}
+	array[i] = NULL;
+	if (array[0] == NULL)
+	{
+		free(array);
+		command->cmd_name = NULL;
+		return (tokens);
+	}
+	else
+		command->cmd_name = array;
+	return (tokens);
+}
+
+t_command *get_command(t_token *tokens)
 {
 	t_command	*command;
-	int			num_tokens;
 
 	command = init_command();
-	num_tokens = count_tokens_before_pipe(tokens);
 	expander(tokens);
-	handle_redirections(tokens, command);
-	command->cmd_name = get_cmd_from_tokens(tokens, num_tokens);
+	tokens = get_cmd_among_redirection(tokens, command);
+	if (tokens)
+		handle_redirections(tokens, command);
+	if (command->cmd_name == NULL && command->redirections == NULL)
+	{
+		free(command);
+		return (NULL);
+	}
 	return (command);
+}
+
+void	assign_type_redirections(t_token *tokens)
+{
+	while (tokens)
+	{
+		if (tokens->type == GREAT && (tokens->next
+				&& tokens->next->type == WORD))
+			tokens->next->type = FILENAME;
+		else if (tokens->type == LESS && (tokens->next
+				&& tokens->next->type == WORD))
+			tokens->next->type = FILENAME;
+		else if (tokens->type == LESSLESS && (tokens->next
+				&& tokens->next->type == WORD))
+			tokens->next->type = DELIMITER;
+		else if (tokens->type == GREATGREAT && (tokens->next
+				&& tokens->next->type == WORD))
+			tokens->next->type = FILENAME;
+		tokens = tokens->next;
+	}
 }
 
 int	parser(t_token *tokens)
@@ -123,36 +211,24 @@ int	parser(t_token *tokens)
 
 	temp = tokens;
 	commands = (t_command **)malloc(sizeof(t_command));
+	if (!commands)
+		exit(EXIT_FAILURE);
 	*commands = NULL;
+	assign_type_redirections(tokens);
 	while (temp)
 	{
-		if (temp->type == PIPE)
+		if (no_pipe_in_list(temp) == 1)
 		{
-			add_command_back(commands, get_new_command(tokens));
-			tokens = remove_cmd_from_tokens(tokens, temp->id);
-			temp = tokens;
-		}
-		else if (no_pipe_in_list(temp))
-		{
-			add_command_back(commands, get_new_command(tokens));
-			// free_stack(&tokens);
+			add_command_back(commands, get_command(tokens));
 			break ;
 		}
+		add_command_back(commands, get_command(tokens));
+		tokens = remove_pipes(tokens, count_tokens_before_pipe(tokens));
+		temp = tokens;
 		if (temp)
 			temp = temp->next;
 	}
 	// remove outer double quotes here ??
-	// print_commands(*commands);
-	t_command *current_command = *commands;
-	for (int i = 0; current_command; i++)
-	{
-		printf("Command %d: ", i);
-		for (int j = 0; current_command->cmd_name[j]; j++)
-		{
-			printf("%s ", current_command->cmd_name[j]);
-		}
-		printf("\n");
-		current_command = current_command->next;
-	}
+	print_commands(*commands);
 	return (0);
 }

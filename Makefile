@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc -g
 # for debugging -g -fsanitize=address
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 INCLUDES = -I includes -I libft
 

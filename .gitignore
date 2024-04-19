@@ -1,4 +1,7 @@
 *.o
 *.a
+file1
+file2
+file
 minishell
 .vscode

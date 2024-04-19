@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 14:19:49 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/19 15:22:32 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ typedef enum s_type
 	GREAT,
 	GREATGREAT,
 	LESSLESS,
+	FILENAME,
+	DELIMITER,
 }						t_type;
 
 typedef struct s_token
@@ -69,10 +71,7 @@ int						*encode_tokens(char *str, t_token **tokens);
 
 /* parser */
 int						check_syntax(t_token *tokens);
-
-/* parser */
 int						parser(t_token *tokens);
-t_token					*remove_token_by_id(t_token *tokens, int id);
 int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
 t_token					**init_redirections(void);
@@ -81,6 +80,7 @@ void					handle_redirection_token(t_token *temp,
 							t_token **tokens);
 void					handle_redirections(t_token *tokens,
 							t_command *command);
+void					delete_next_type(t_token **tokens, int type);
 
 /* expander */
 int						expander(t_token *tokens);
@@ -112,7 +112,10 @@ void					add_command_back(t_command **commands,
 t_token					*create_token(char *value, int type);
 t_token					*get_last_token(t_token *head);
 void					add_token_back(t_token **tokens, t_token *new_node);
-void					free_stack(t_token **tokens);
+void					free_tokens(t_token **tokens);
+void					del_first(t_token **tokens);
+t_token					*clear_one(t_token **tokens);
+int						len_list(t_token *list);
 int						stack_len(t_token *tokens);
 
 /* free */

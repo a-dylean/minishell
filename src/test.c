@@ -26,28 +26,33 @@ void test_list(t_token *tokens) {
 void print_commands(t_command *commands)
 {
     t_command *current_command = commands;
-    int i;
+	int i;
 
     while (current_command)
     {
-        printf("Command: ");
         if (current_command->cmd_name)
-        {
-            for (i = 0; current_command->cmd_name[i]; i++)
-            {
-                printf("%s ", current_command->cmd_name[i]);
-            }
-            printf("\n");
-        }
-
-        t_token *current_redirection = current_command->redirections;
-        while (current_redirection)
-        {
-            printf("Redir val: %s\n", current_redirection->value);
-            printf("Redir type: %d\n", current_redirection->type);
-            current_redirection = current_redirection->next;
-        }
-
+		{
+			printf("Command val: ");
+			for (i = 0; current_command->cmd_name[i]; i++)
+				printf("%s ", current_command->cmd_name[i]);
+			while (current_command->redirections)
+			{
+				if (current_command->redirections->value != NULL)
+					printf("\n\tRedir val: %s Redir type: %d ", current_command->redirections->value, current_command->redirections->type);
+				current_command->redirections = current_command->redirections->next;
+			}
+			printf("\n");
+		}
+		else
+		{
+			printf("Command val: NULL ");
+			while (current_command->redirections)
+			{
+				printf("\n\tRedir val: %s Redir type: %d", current_command->redirections->value, current_command->redirections->type);
+				current_command->redirections = current_command->redirections->next;
+			}
+			printf("\n");
+		}
         current_command = current_command->next;
     }
 }

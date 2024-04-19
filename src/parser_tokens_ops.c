@@ -3,44 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_tokens_ops.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:52:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 13:02:44 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:40:44 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-t_token	*remove_token_by_id(t_token *tokens, int id)
-{
-	t_token	*temp;
-	t_token	*current;
-
-	// if (tokens == NULL)
-	// 	return (NULL);
-	if (tokens->id == id)
-	{
-		temp = tokens->next;
-		free(tokens);
-		return (temp);
-	}
-	current = tokens;
-	while (current->next != NULL)
-	{
-		if (current->next->id == id)
-		{
-			temp = current->next->next;
-			free(current->next);
-			current->next = temp;
-			if (temp != NULL)
-				temp->prev = current;
-			break ;
-		}
-		current = current->next;
-	}
-	return (tokens);
-}
 
 int	count_tokens_before_pipe(t_token *tokens)
 {

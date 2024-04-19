@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_lists.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/18 16:06:29 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/19 15:24:09 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	add_token_back(t_token **tokens, t_token *new_node)
 	}
 }
 
-void	free_stack(t_token **tokens)
+void	free_tokens(t_token **tokens)
 {
 	t_token	*temp;
 	t_token	*current;
@@ -62,6 +62,27 @@ void	free_stack(t_token **tokens)
 		current = temp;
 	}
 	*tokens = NULL;
+}
+
+t_token	*clear_one(t_token **tokens)
+{
+	if ((*tokens) && (*tokens)->value)
+	{
+		free((*tokens)->value);
+		(*tokens)->value = NULL;
+	}
+	return (NULL);
+}
+
+void	del_first(t_token **tokens)
+{
+	t_token	*node;
+
+	node = *tokens;
+	*tokens = node->next;
+	clear_one(&node);
+	if (*tokens)
+		(*tokens)->prev = NULL;
 }
 
 int stack_len(t_token *tokens)
