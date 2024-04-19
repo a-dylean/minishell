@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/18 19:37:26 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/19 13:04:44 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ char	**get_cmd_from_tokens(t_token *tokens, int num_tokens)
 	j = 0;
 	temp = tokens;
 	num_not_null_tokens = count_not_null_tokens(tokens);
-	printf("num_not_null_tokens = %d\n", num_not_null_tokens);
 	array = init_array(num_not_null_tokens + 1);
 	if (temp->type == PIPE)
 		temp = temp->next;
@@ -108,18 +107,11 @@ t_command	*get_new_command(t_token *tokens)
 {
 	t_command	*command;
 	int			num_tokens;
-	t_token		*temp;
 
 	command = init_command();
 	num_tokens = count_tokens_before_pipe(tokens);
 	expander(tokens);
 	handle_redirections(tokens, command);
-	temp = tokens;
-	for (int i = 0; i < num_tokens; i++)
-	{
-		printf("tokens[%d] = %s\n", i, temp->value);
-		temp = temp->next;
-	}
 	command->cmd_name = get_cmd_from_tokens(tokens, num_tokens);
 	return (command);
 }
@@ -143,13 +135,24 @@ int	parser(t_token *tokens)
 		else if (no_pipe_in_list(temp))
 		{
 			add_command_back(commands, get_new_command(tokens));
-			free_stack(&tokens);
+			// free_stack(&tokens);
 			break ;
 		}
 		if (temp)
 			temp = temp->next;
 	}
 	// remove outer double quotes here ??
-	print_commands(*commands);
+	// print_commands(*commands);
+	t_command *current_command = *commands;
+	for (int i = 0; current_command; i++)
+	{
+		printf("Command %d: ", i);
+		for (int j = 0; current_command->cmd_name[j]; j++)
+		{
+			printf("%s ", current_command->cmd_name[j]);
+		}
+		printf("\n");
+		current_command = current_command->next;
+	}
 	return (0);
 }

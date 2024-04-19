@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/18 19:37:22 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/19 13:02:41 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,11 @@
 int	expander(t_token *tokens)
 {
 	t_token	*temp;
-	int		quotes;
 
 	temp = tokens;
-	quotes = quotes_check(temp->value);
-	while (temp != NULL)
+	while (temp)
 	{
-		temp->value = perform_expansion(temp->value, quotes);
+		temp->value = perform_expansion(temp->value);
 		temp = temp->next;
 	}
 	return (0);
@@ -117,22 +115,24 @@ int	quotes_check(char *str)
 
 /* function that returns new value for token if expansion is needed */
 
-char	*perform_expansion(char *token, int quotes)
+char	*perform_expansion(char *token)
 {
 	char	*buffer;
 	int		i;
 	int		j;
 	char	*new_token;
 	int		buffer_size;
+	int		quotes;
 
 	i = 0;
 	j = 0;
+	quotes = quotes_check(token);
 	//maybe separate function here init_buffer()
 	if (token)
 		buffer_size = calculate_buffer_size(token);
 	else
 		return (NULL);
-	buffer = malloc(buffer_size);
+	buffer = malloc(buffer_size + 1);
 	if (!buffer)
 		return (NULL);
 	while (token && token[i])

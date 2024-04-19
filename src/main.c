@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:05:44 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 12:37:08 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 13:03:34 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ int main(int argc, char **argv)
 	ft_terminal();
 	if (tokens)
 		free(tokens);
-	// *tokens = encode_tokens("ls -l -h hfjg << file1 | cat -ls >> hello | popo", tokens);
+	// thos test encode tokens should return list of tokens
+	// printf("ls | \"cat \"$ hfh\"$USER\" | \"$ $fd cat $g $\"\n");
+	// tokens = encode_tokens("ls | cat \"$ hfh\" \'$USER\' | \"$ $fd cat $g $\"", tokens);
 	// parser(*tokens);
     return (0);
 }
