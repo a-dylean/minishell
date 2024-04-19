@@ -6,13 +6,13 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/19 11:53:25 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 16:26:40 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_terminal()
+int	minishell_loop()
 {
 	char	*buffer;
 	t_token	**tokens;
@@ -20,6 +20,7 @@ int	ft_terminal()
 	buffer = NULL;
 	while ((buffer = readline("minishell$> ")) != NULL)
 	{
+		// handle empty input - example, \n as input
 		tokens = (t_token **)malloc(sizeof(t_token));
 		if (!tokens)
 			return (1);
@@ -38,6 +39,7 @@ int	ft_terminal()
 		}
 		if (buffer[0] != '\0')
 			add_history(buffer);
+		// store the environment in the structure HERE
 		encode_tokens(buffer, tokens);
 		if (!check_syntax(*tokens))
 			parser(*tokens);

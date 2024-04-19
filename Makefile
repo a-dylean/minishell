@@ -8,11 +8,11 @@ INCLUDES = -I includes -I libft
 
 SRC = src/main.c src/terminal.c src/test.c \
         src/utils/array.c src/utils/linked_lists.c src/utils/string.c \
-        src/errors/errors.c \
+        src/errors/printer_utils.c src/errors/syntax.c \
         src/executer/builtins.c \
         src/expander/buffer.c src/expander/env.c src/expander/expander.c \
         src/lexer/lexer.c \
-        src/parser/cmds_ops.c src/parser/errors.c src/parser/parser.c src/parser/redirections_ops.c src/parser/tokens_ops.c \
+        src/parser/cmds_ops.c src/parser/parser.c src/parser/redirections_ops.c src/parser/tokens_ops.c \
 
 OBJ_DIR = obj
 OBJ := $(patsubst src/%.c,$(OBJ_DIR)/%.o,$(SRC))

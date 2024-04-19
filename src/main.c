@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:05:44 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 13:03:34 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/19 16:20:39 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ int main(int argc, char **argv)
     (void)argv;
 
 	t_token	**tokens;
-
+	// add argc checks
 	tokens = (t_token **)malloc(sizeof(t_token));
 	if (!tokens)
 		return (1);
 	*tokens = NULL;
-	ft_terminal();
+	minishell_loop();
 	if (tokens)
 		free(tokens);
 	// thos test encode tokens should return list of tokens

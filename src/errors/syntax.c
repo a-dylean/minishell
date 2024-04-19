@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_errors.c                                    :+:      :+:    :+:   */
+/*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:16:29 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/17 14:28:43 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 16:13:54 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+// modify for readabilty, split into smaller functions
 int	invalid_type_syntax_error(t_token *token)
 {
 	if (token->value[0] == '>' && token->value[1] == '>'

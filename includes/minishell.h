@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 15:22:32 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 16:19:41 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ char					*get_env_from_str(char *str);
 int						env_var_exists(char *env_var);
 
 /* executer */
-int						ft_terminal(void);
+int						minishell_loop(void);
 
 /* linked lists*/
 t_command				*init_command(void);
