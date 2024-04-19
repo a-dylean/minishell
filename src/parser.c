@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 14:02:57 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 13:04:44 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,45 +37,82 @@ t_token	*remove_cmd_from_tokens(t_token *tokens, int id)
 		return (head);
 	return (tokens);
 }
+int	cmd_string_len(t_token *tokens)
+{
+	int		len;
+	t_token	*temp;
+
+	len = 0;
+	temp = tokens;
+	while (temp && temp->type != PIPE && temp->value)
+	{
+		len += ft_strlen(temp->value);
+		temp = temp->next;
+	}
+	return (len);
+}
+
+int	count_not_null_tokens(t_token *tokens)
+{
+	int		count;
+	t_token	*temp;
+
+	count = 0;
+	temp = tokens;
+	if (temp->type == PIPE)
+		temp = temp->next;
+	while (temp && temp->type != PIPE)
+	{
+		if (temp->value)
+			count++;
+		temp = temp->next;
+	}
+	return (count);
+}
 
 // function that returns an array of strings (command) from the tokens list
-char	**get_cmd_from_tokens(t_token *tokens)
+
+char	**get_cmd_from_tokens(t_token *tokens, int num_tokens)
 {
-	int		num_tokens;
 	int		i;
 	t_token	*temp;
 	char	**array;
+	int		j;
+	int num_not_null_tokens;
 
 	i = 0;
+	j = 0;
 	temp = tokens;
-	num_tokens = count_tokens_before_pipe(tokens);
-	array = malloc((num_tokens + 1) * sizeof(char *));
-	if (!array)
-		exit(EXIT_FAILURE);
+	num_not_null_tokens = count_not_null_tokens(tokens);
+	array = init_array(num_not_null_tokens + 1);
 	if (temp->type == PIPE)
 		temp = temp->next;
 	while (i < num_tokens && temp)
 	{
-		if (temp->value)
-			array[i] = ft_strdup(temp->value);
-		else
-			array[i] = NULL;
+		if (temp->value != NULL)
+		{
+			array[j] = temp->value;
+			j++;
+		}
 		temp = temp->next;
 		i++;
 	}
-	array[i] = NULL;
 	return (array);
 }
 
-// function that creates a new command struct and adds redirections (if exists) 
+// function that creates a new command struct and adds redirections (if exists)
 // and command arr to it
+
 t_command	*get_new_command(t_token *tokens)
 {
 	t_command	*command;
+	int			num_tokens;
 
 	command = init_command();
+	num_tokens = count_tokens_before_pipe(tokens);
+	expander(tokens);
 	handle_redirections(tokens, command);
-	command->cmd_name = get_cmd_from_tokens(tokens);
+	command->cmd_name = get_cmd_from_tokens(tokens, num_tokens);
 	return (command);
 }
 
@@ -98,12 +135,24 @@ int	parser(t_token *tokens)
 		else if (no_pipe_in_list(temp))
 		{
 			add_command_back(commands, get_new_command(tokens));
-			free_stack(&tokens);
+			// free_stack(&tokens);
 			break ;
 		}
 		if (temp)
 			temp = temp->next;
 	}
-	print_commands(*commands);
+	// remove outer double quotes here ??
+	// print_commands(*commands);
+	t_command *current_command = *commands;
+	for (int i = 0; current_command; i++)
+	{
+		printf("Command %d: ", i);
+		for (int j = 0; current_command->cmd_name[j]; j++)
+		{
+			printf("%s ", current_command->cmd_name[j]);
+		}
+		printf("\n");
+		current_command = current_command->next;
+	}
 	return (0);
 }

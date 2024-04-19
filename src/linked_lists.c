@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/12 14:32:57 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/18 16:06:29 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,19 @@ void	free_stack(t_token **tokens)
 		current = temp;
 	}
 	*tokens = NULL;
+}
+
+int stack_len(t_token *tokens)
+{
+	int		len;
+	t_token	*temp;
+
+	len = 0;
+	temp = tokens;
+	while (temp)
+	{
+		len++;
+		temp = temp->next;
+	}
+	return (len);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 14:03:24 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:19:49 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_token
 typedef struct s_info
 {
 	struct t_command	*commands;
+	char				**env;
 }						t_info;
 
 typedef struct s_command
@@ -55,7 +56,6 @@ typedef struct s_command
 	char				*out;
 	char				*in;
 	char				*delimiter;
-	char				**env;
 	t_token				*redirections;
 	struct s_command	*next;
 	// add delimiter and append data if needed
@@ -65,7 +65,7 @@ typedef struct s_command
 /* lexer */
 
 int						valid_quotes(char *str);
-int	*encode_tokens(char *str, t_token **tokens);
+int						*encode_tokens(char *str, t_token **tokens);
 
 /* parser */
 int						check_syntax(t_token *tokens);
@@ -83,9 +83,26 @@ void					handle_redirections(t_token *tokens,
 							t_command *command);
 
 /* expander */
+int						expander(t_token *tokens);
+char					*get_value_after_expansion(char *token);
+int						expansion_needed(char *str, int quotes);
+void					handle_expansion(char *token, int *i, char *buffer,
+							int *j);
+int						quotes_check(char *str);
+char					*get_value_from_buffer(char buffer[]);
+int						calculate_buffer_size(char *token);
+int						calculate_expansion_size(char *token, int *i);
+char					*init_buffer(char *token);
+char					*get_buffer_value(char *token);
+void					handle_expansion(char *token, int *i, char *buffer,
+							int *j);
+char					*get_value_from_buffer(char buffer[]);
+int						calculate_buffer_size(char *token);
+char					*get_env_from_str(char *str);
+int						env_var_exists(char *env_var);
 
 /* executer */
-int						ft_terminal();
+int						ft_terminal(void);
 
 /* linked lists*/
 t_command				*init_command(void);
@@ -96,6 +113,7 @@ t_token					*create_token(char *value, int type);
 t_token					*get_last_token(t_token *head);
 void					add_token_back(t_token **tokens, t_token *new_node);
 void					free_stack(t_token **tokens);
+int						stack_len(t_token *tokens);
 
 /* free */
 int						free_in_terminal(t_token **tokens, char *buffer);
@@ -104,8 +122,14 @@ int						free_in_terminal(t_token **tokens, char *buffer);
 int						syntax_error_in_token(char *token);
 int						undefined_behavior_error(char *str);
 
+/* utils */
+char					**init_array(int size);
+void					free_array(char **arr);
+int						str_is_empty_or_space_only(const char *str);
+char					*join_strings(char **strings, char *delimeter);
+int						count_chars(char *str, char c);
+
 /* tests */
 void					print_commands(t_command *commands);
 void					test_list(t_token *tokens);
-
 #endif
