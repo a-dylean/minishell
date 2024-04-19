@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 13:04:13 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:19:49 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void					handle_redirections(t_token *tokens,
 
 /* expander */
 int						expander(t_token *tokens);
-char					*perform_expansion(char *token);
+char					*get_value_after_expansion(char *token);
 int						expansion_needed(char *str, int quotes);
 void					handle_expansion(char *token, int *i, char *buffer,
 							int *j);
@@ -92,6 +92,14 @@ int						quotes_check(char *str);
 char					*get_value_from_buffer(char buffer[]);
 int						calculate_buffer_size(char *token);
 int						calculate_expansion_size(char *token, int *i);
+char					*init_buffer(char *token);
+char					*get_buffer_value(char *token);
+void					handle_expansion(char *token, int *i, char *buffer,
+							int *j);
+char					*get_value_from_buffer(char buffer[]);
+int						calculate_buffer_size(char *token);
+char					*get_env_from_str(char *str);
+int						env_var_exists(char *env_var);
 
 /* executer */
 int						ft_terminal(void);
