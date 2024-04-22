@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/22 13:01:31 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:50:43 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,8 +200,9 @@ int	parser(t_token *tokens)
 			temp = temp->next;
 	}
 	// remove outer double quotes here ??
-	ft_pwd();
-	ft_cd("/home/jlabonde/minishell/src");
-	ft_pwd();
+	// ft_pwd();
+	// ft_cd("/home/jlabonde/minishell/src");
+	// ft_pwd();
+	ft_exit("9223372036854775807");
 	return (0);
 }
