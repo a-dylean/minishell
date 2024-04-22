@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 17:23:54 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/22 17:00:00 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,38 @@ typedef enum s_type
 
 typedef struct s_token
 {
-	int					id;
-	char				*value;
+	int id; // check if we still use it
 	int					type;
+	char				*value;
 	struct s_token		*next;
 	struct s_token		*prev;
 }						t_token;
 
-typedef struct s_info
+typedef struct s_env
+{
+	char				*var_name;
+	char				*value;
+	struct s_env		*next;
+}						t_env;
+
+typedef struct s_shell
 {
 	struct t_command	*commands;
-	char				**env;
-}						t_info;
+	int					envless;
+	char				*prompt;
+	char				*heredoc;
+	t_env				*env_head;
+	int					exit_code;
+	int					std_fds[2];
+	char				*user_name;
+	// char			**cmd_paths;
+	// char			*prev_prompt;
+	// int				exec_on_pipe;
+	// struct termios	mirror_termios;
+	// char			*trimmed_prompt;
+	// char			*terminal_prompt;
+	// int				cmd_has_been_executed;
+}						t_shell;
 
 typedef struct s_command
 {
@@ -66,7 +86,6 @@ typedef struct s_command
 }						t_command;
 
 /* lexer */
-
 int						valid_quotes(char *str);
 int						*encode_tokens(char *str, t_token **tokens);
 
@@ -76,8 +95,8 @@ int						parser(t_token *tokens);
 int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
 t_token					**init_redirections(void);
-void					handle_redirections(t_token *tokens,
-							t_command *command, t_command **commands);
+void					handle_redirections(t_token *tokens, t_command *command,
+							t_command **commands);
 void					delete_next_type(t_token **tokens, int type);
 
 /* expander */
@@ -99,7 +118,11 @@ int						calculate_buffer_size(char *token);
 char					*get_env_from_str(char *str);
 int						env_var_exists(char *env_var);
 
+/* env */
+t_env					*init_env(char **env);
+
 /* executer */
+void					init_shell(t_shell *shell, char **env);
 int						minishell_loop(void);
 
 /* linked lists*/
@@ -133,5 +156,5 @@ int						count_chars(char *str, char c);
 /* tests */
 void					print_commands(t_command *commands);
 void					test_list(t_token *tokens);
-void 					print_commands_reverse(t_command *commands);
+void					print_commands_reverse(t_command *commands);
 #endif

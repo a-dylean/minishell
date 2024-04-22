@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/05 17:05:44 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/22 17:01:02 by atonkopi         ###   ########.fr       */
+/*   Created: 2024/04/22 14:28:00 by atonkopi          #+#    #+#             */
+/*   Updated: 2024/04/22 16:16:56 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	main(int argc, char **argv, char **env)
+void init_shell(t_shell *shell, char **env)
 {
-	t_shell shell;
-	
-	if (argc > 1 || argv[1])
+	(void)env;
+	if (getenv("USER") == NULL)
+		// init_missing_environment(shell, env);
+		printf("USER not found in environment\n");
+	else
 	{
-		ft_putstr_fd("minishell: no arguments needed\n", 2);
-		return (EXIT_FAILURE);
+		shell->envless = 0;
+		shell->env_head = init_env(env);
+		shell->user_name = getenv("USER");
 	}
-	init_shell(&shell, env);
-	minishell_loop();
-	// free everything
-	// exit with correct exit code ?
-	return (0);
+	shell->exit_code = 0;
+	shell->heredoc = NULL;
+	shell->std_fds[0] = dup(STDIN_FILENO);
+	shell->std_fds[1] = dup(STDOUT_FILENO);
 }
