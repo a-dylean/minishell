@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:28:00 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/22 16:16:56 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/22 17:07:40 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void init_shell(t_shell *shell, char **env)
 {
 	(void)env;
 	if (getenv("USER") == NULL)
-		// init_missing_environment(shell, env);
+		// initialize shell with no env
 		printf("USER not found in environment\n");
 	else
 	{
