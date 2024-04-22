@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 17:23:54 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/22 13:00:15 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,11 @@ int						env_var_exists(char *env_var);
 
 /* executer */
 int						minishell_loop(void);
+
+/* builtins */
+void					ft_echo(char *str);
+int						ft_pwd(void);
+int						ft_cd(char *path);
 
 /* linked lists*/
 t_command				*init_command(void);
