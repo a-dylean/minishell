@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 12:38:11 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/22 13:08:19 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	valid_quotes(char *str)
 {
@@ -32,67 +32,6 @@ int	valid_quotes(char *str)
 	}
 	result = !(in_single_quote || in_double_quote);
 	return (result);
-}
-
-int	pipe_type(char *str, int i, int count)
-{
-	count = i;
-	while (str[count] == '|')
-		count++;
-	if (count - i == 2)
-		return (PIPE);
-	else if (count - i == 1)
-		return (PIPE);
-	else
-		return (-1);
-}
-
-int	great_type(char *str, int i, int count)
-{
-	count = i;
-	while (str[count] == '>')
-		count++;
-	if (count - i == 2)
-		return (GREATGREAT);
-	else if (count - i == 1)
-		return (GREAT);
-	else
-		return (-1);
-}
-
-int	less_type(char *str, int i, int count)
-{
-	count = i;
-	while (str[count] == '<')
-		count++;
-	if (count - i == 2)
-		return (LESSLESS);
-	else if (count - i == 1)
-		return (LESS);
-	else
-		return (-1);
-}
-
-int	get_type(char *str)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (str[i])
-	{
-		if (str[i] == '|')
-			return (pipe_type(str, i, count));
-		else if (str[i] == '>')
-			return (great_type(str, i, count));
-		else if (str[i] == '<')
-			return (less_type(str, i, count));
-		else
-			return (WORD);
-		i++;
-	}
-	return (-1);
 }
 
 int	len_between_quotes(char *str, int i, char quote)
@@ -132,20 +71,6 @@ int	count_spaces(char *str, int i)
 	return (len);
 }
 
-int	check_tokens(char *str, int i, char c)
-{
-	int	j;
-
-	j = i;
-	if (str[i] == c)
-	{
-		while (str[j] == c)
-			j++;
-		return (j - i);
-	}
-	return (0);
-}
-
 int	*encode_tokens(char *str, t_token **tokens)
 {
 	int		i;
@@ -167,10 +92,13 @@ int	*encode_tokens(char *str, t_token **tokens)
 			return (NULL);
 		substring = ft_substr(str, i, j);
 		if (substring != NULL)
-			add_token_back(tokens, create_token(substring, get_type(substring)));
+			add_token_back(tokens, create_token(substring,
+					get_type(substring)));
 		if (substring)
 			free(substring);
 		i += j;
 	}
+	// assign type to redirections here ? (not in parser)
+	// maybe return tokens array and not just exit status ?
 	return (EXIT_SUCCESS);
 }
