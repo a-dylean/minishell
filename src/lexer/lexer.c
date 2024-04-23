@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 15:57:36 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:15:00 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	*encode_tokens(char *str, t_token **tokens)
 {
 	int		i;
 	int		j;
-	char	*substring;
+	char	*substr;
 
 	i = 0;
 	j = 0;
@@ -90,12 +90,11 @@ int	*encode_tokens(char *str, t_token **tokens)
 			j = len_word(str, i);
 		if (j < 0)
 			return (NULL);
-		substring = ft_substr(str, i, j);
-		if (substring != NULL)
-			add_token_back(tokens, create_token(substring,
-					get_type(substring)));
-		if (substring)
-			free(substring);
+		substr = ft_substr(str, i, j);
+		if (substr != NULL)
+			add_token_back(tokens, create_token(substr, get_type(substr)));
+		if (substr)
+			free(substr);
 		i += j;
 	}
 	// assign type to redirections here ? (not in parser)

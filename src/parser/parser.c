@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 16:06:48 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:11:08 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,9 +130,8 @@ t_token	*get_cmd_from_tokens(t_token *tokens, t_command *command)
 	array[i] = NULL;
 	if (array[0] == NULL)
 	{
-		free(array);
+		free_array(array);
 		command->cmd_name = NULL;
-		return (tokens);
 	}
 	else
 		command->cmd_name = array;
@@ -141,22 +140,22 @@ t_token	*get_cmd_from_tokens(t_token *tokens, t_command *command)
 
 bool	is_builtin(char *cmd)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (i < 7)
 	{
 		if (!ft_strcmp("echo", cmd) || !ft_strcmp("cd", cmd)
 			|| !ft_strcmp("pwd", cmd) || !ft_strcmp("export", cmd)
-				|| !ft_strcmp("unset", cmd) || !ft_strcmp("env", cmd)
-				|| !ft_strcmp("exit", cmd))
+			|| !ft_strcmp("unset", cmd) || !ft_strcmp("env", cmd)
+			|| !ft_strcmp("exit", cmd))
 			return (true);
 		i++;
 	}
 	return (false);
 }
 
-t_command *get_command(t_token *tokens, t_command **commands, t_shell *shell)
+t_command	*get_command(t_token *tokens, t_command **commands, t_shell *shell)
 {
 	t_command	*command;
 
@@ -204,7 +203,8 @@ int	parser(t_token *tokens, t_shell *shell)
 	if (!commands)
 		exit(EXIT_FAILURE);
 	*commands = NULL;
-	assign_type_redirections(tokens); // check if we can call this function earlier (in lexer)
+	assign_type_redirections(tokens);
+		// check if we can call this function earlier (in lexer)
 	while (temp)
 	{
 		if (no_pipe_in_list(temp) == 1)
