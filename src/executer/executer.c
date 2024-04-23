@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/23 12:28:38 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/23 13:10:49 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	exec_builtin(t_command *commands)
 {
 	if (ft_strcmp(commands->cmd_name[0], "cd") == 0)
-		ft_cd(commands->cmd_name[1]);
+		ft_cd(commands);
 	else if (ft_strcmp(commands->cmd_name[0], "pwd") == 0)
 	 	ft_pwd();
 	// else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)

@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 12:12:37 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/23 13:14:37 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void					executer(t_command *commands);
 /* builtins */
 void					ft_echo(char *str);
 int						ft_pwd(void);
-int						ft_cd(char *path);
+int						ft_cd(t_command *commands);
 int						ft_exit(t_command *commands);
 
 /* linked lists*/
