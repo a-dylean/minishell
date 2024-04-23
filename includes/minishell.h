@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 14:59:27 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 15:15:33 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_shell
 	char				*prompt;
 	char				*heredoc;
 	t_env				*env_head;
-	int					exit_code;
+	int					exit_status;
 	int					std_fds[2];
 	char				*user_name;
 	// char			**cmd_paths;
@@ -102,7 +102,7 @@ void					assign_type_redirections(t_token *tokens);
 
 /* parser */
 int						check_syntax(t_token *tokens);
-int						parser(t_token *tokens);
+int						parser(t_token *tokens, t_shell *shell);
 int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
 t_token					**init_redirections(void);
@@ -111,8 +111,8 @@ void					handle_redirections(t_token *tokens, t_command *command,
 void					delete_next_type(t_token **tokens, int type);
 
 /* expander */
-int						expander(t_token *tokens);
-char					*get_value_after_expansion(char *token);
+int						expander(t_token *tokens, t_shell *shell);
+char					*get_value_after_expansion(char *token, t_shell *shell);
 int						expansion_needed(char *str, int quotes);
 void					handle_expansion(char *token, int *i, char *buffer,
 							int *j);
@@ -121,20 +121,22 @@ char					*get_value_from_buffer(char buffer[]);
 int						calculate_buffer_size(char *token);
 int						calculate_expansion_size(char *token, int *i);
 char					*init_buffer(char *token);
-char					*get_buffer_value(char *token);
+char					*get_buffer_value(char *token, t_shell *shell);
 void					handle_expansion(char *token, int *i, char *buffer,
 							int *j);
 char					*get_value_from_buffer(char buffer[]);
 int						calculate_buffer_size(char *token);
 char					*get_env_from_str(char *str);
 int						env_var_exists(char *env_var);
+void					expand_to_exit_status(char *token, char *buffer, int *j,
+							t_shell *shell);
 
 /* env */
 t_env					*init_env(char **env);
 
 /* executer */
 void					init_shell(t_shell *shell, char **env);
-int						minishell_loop(void);
+int						minishell_loop(t_shell *shell);
 
 /* linked lists*/
 t_command				*init_command(void);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/22 11:37:44 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/23 11:25:05 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,12 +138,12 @@ t_token	*get_cmd_from_tokens(t_token *tokens, t_command *command)
 	return (tokens);
 }
 
-t_command *get_command(t_token *tokens, t_command **commands)
+t_command *get_command(t_token *tokens, t_command **commands, t_shell *shell)
 {
 	t_command	*command;
 
 	command = init_command();
-	expander(tokens);
+	expander(tokens, shell);
 	tokens = get_cmd_from_tokens(tokens, command);
 	if (tokens)
 		handle_redirections(tokens, command, commands);
@@ -175,7 +175,7 @@ void	assign_type_redirections(t_token *tokens)
 	}
 }
 
-int	parser(t_token *tokens)
+int	parser(t_token *tokens, t_shell *shell)
 {
 	t_command	**commands;
 	t_token		*temp;
@@ -190,10 +190,10 @@ int	parser(t_token *tokens)
 	{
 		if (no_pipe_in_list(temp) == 1)
 		{
-			add_command_back(commands, get_command(tokens, commands));
+			add_command_back(commands, get_command(tokens, commands, shell));
 			break ;
 		}
-		add_command_back(commands, get_command(tokens, commands));
+		add_command_back(commands, get_command(tokens, commands, shell));
 		tokens = remove_pipes(tokens, count_tokens_before_pipe(tokens));
 		temp = tokens;
 		if (temp)

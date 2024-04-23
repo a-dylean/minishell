@@ -6,20 +6,20 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 14:26:28 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 11:24:35 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	expander(t_token *tokens)
+int	expander(t_token *tokens, t_shell *shell)
 {
 	t_token	*temp;
 
 	temp = tokens;
 	while (temp)
 	{
-		temp->value = get_value_after_expansion(temp->value);
+		temp->value = get_value_after_expansion(temp->value, shell);
 		temp = temp->next;
 	}
 	return (0);
@@ -27,12 +27,12 @@ int	expander(t_token *tokens)
 
 /* function that returns the value of the buffer */
 
-char	*get_value_after_expansion(char *token)
+char	*get_value_after_expansion(char *token, t_shell *shell)
 {
 	char	*new_token;
 	char	*buffer;
 
-	buffer = get_buffer_value(token);
+	buffer = get_buffer_value(token, shell);
 	new_token = get_value_from_buffer(buffer);
 	if (!new_token)
 		return (NULL);
