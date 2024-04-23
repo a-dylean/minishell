@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:22:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 17:02:32 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/23 11:08:06 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ t_command	*init_command(void)
 	if (!new_command)
 		exit(EXIT_FAILURE);
 	new_command->cmd_name = NULL;
-	new_command->out = NULL;
-	new_command->in = NULL;
+	new_command->is_builtin = false;
 	new_command->delimiter = NULL;
 	return (new_command);
 }

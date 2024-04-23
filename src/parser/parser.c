@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 15:57:48 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:06:48 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ t_token	*remove_pipes(t_token *tokens, int id)
 		return (NULL);
 	return (tokens);
 }
+
 int	cmd_string_len(t_token *tokens)
 {
 	int		len;
@@ -138,6 +139,23 @@ t_token	*get_cmd_from_tokens(t_token *tokens, t_command *command)
 	return (tokens);
 }
 
+bool	is_builtin(char *cmd)
+{
+	int		i;
+
+	i = 0;
+	while (i < 7)
+	{
+		if (!ft_strcmp("echo", cmd) || !ft_strcmp("cd", cmd)
+			|| !ft_strcmp("pwd", cmd) || !ft_strcmp("export", cmd)
+				|| !ft_strcmp("unset", cmd) || !ft_strcmp("env", cmd)
+				|| !ft_strcmp("exit", cmd))
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
 t_command *get_command(t_token *tokens, t_command **commands, t_shell *shell)
 {
 	t_command	*command;
@@ -152,6 +170,7 @@ t_command *get_command(t_token *tokens, t_command **commands, t_shell *shell)
 		free(command);
 		return (NULL);
 	}
+	command->is_builtin = is_builtin(command->cmd_name[0]);
 	return (command);
 }
 
@@ -200,9 +219,6 @@ int	parser(t_token *tokens, t_shell *shell)
 			temp = temp->next;
 	}
 	// remove outer double quotes here ??
-	// ft_pwd();
-	// ft_cd("/home/jlabonde/minishell/src");
-	// ft_pwd();
-	ft_exit("9223372036854775807");
+	executer(*commands);
 	return (0);
 }

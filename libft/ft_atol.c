@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/23 11:28:24 by jlabonde          #+#    #+#             */
+/*   Updated: 2024/04/23 11:28:25 by jlabonde         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
 long	ft_atol(const char *str)
@@ -26,7 +38,6 @@ long	ft_atol(const char *str)
 		}
 		else if (sign < 0 && -ret < (LONG_MIN + (str[i] - '0')) / 10)
 		{
-			printf("here");
 			errno = ERANGE;
 			return LONG_MIN;
 		}
