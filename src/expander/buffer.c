@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:09:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 11:40:23 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 12:18:57 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char	*get_buffer_value(char *token, t_shell *shell)
 	if (!buffer)
 		return (NULL);
 	quotes = quotes_check(token);
+	printf("TOKEN[%d]: %c\n", i, token[i]);
 	while (token[i])
 	{
 		if (token[i] != '$')
@@ -52,6 +53,8 @@ char	*get_buffer_value(char *token, t_shell *shell)
 			if (token[i + 1] == '?')
 			{
 				expand_to_exit_status(&token[i], buffer, &j, shell);
+				if (token[i + 2] == '\0')
+					break;
 				i += 2;
 			}
 			if (expansion_needed(&token[i], quotes))
