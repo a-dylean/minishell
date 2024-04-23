@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 16:48:47 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:14:36 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+t_token	*remove_first_pipe(t_token *tokens, int id)
+{
+	t_token	*temp;
+
+	if (id == 0 && tokens->type == PIPE)
+	{
+		temp = tokens;
+		tokens = tokens->next;
+		free(temp);
+	}
+	return (tokens);
+}
 
 t_token	*remove_pipes(t_token *tokens, int id)
 {
@@ -19,12 +32,7 @@ t_token	*remove_pipes(t_token *tokens, int id)
 
 	i = 0;
 	if (id == 0 && tokens->type == PIPE)
-	{
-		temp = tokens;
-		tokens = tokens->next;
-		free(temp);
-		return (tokens);
-	}
+		return (remove_first_pipe(tokens, id));
 	while (tokens && i != id)
 	{
 		if (tokens->type != PIPE)
@@ -98,20 +106,12 @@ int	count_cmd_before_pipe(t_token *tokens)
 }
 
 // function that returns an array of strings (command) from the tokens list
-t_token	*get_cmd_from_tokens(t_token *tokens, t_command *command)
-{
-	int		num_tokens;
-	int		i;
-	t_token	*temp;
-	char	**array;
 
-	i = 0;
+int	process_tokens(t_token *tokens, char **array, int i)
+{
+	t_token	*temp;
+
 	temp = tokens;
-	array = NULL;
-	num_tokens = count_cmd_before_pipe(tokens);
-	array = malloc((num_tokens + 1) * sizeof(char *));
-	if (!array)
-		exit(EXIT_FAILURE);
 	if (temp && temp->type == PIPE)
 		temp = temp->next;
 	while (temp && temp->type != PIPE)
@@ -127,10 +127,25 @@ t_token	*get_cmd_from_tokens(t_token *tokens, t_command *command)
 		}
 		temp = temp->next;
 	}
+	return (i);
+}
+t_token	*get_cmd_from_tokens(t_token *tokens, t_command *command)
+{
+	int		num_tokens;
+	int		i;
+	char	**array;
+
+	i = 0;
+	array = NULL;
+	num_tokens = count_cmd_before_pipe(tokens);
+	array = malloc((num_tokens + 1) * sizeof(char *));
+	if (!array)
+		exit(EXIT_FAILURE);
+	i = process_tokens(tokens, array, i);
 	array[i] = NULL;
 	if (array[0] == NULL)
 	{
-		free(array);
+		free_array(array);
 		command->cmd_name = NULL;
 	}
 	else
@@ -169,7 +184,8 @@ t_command	*get_command(t_token *tokens, t_command **commands, t_shell *shell)
 		free(command);
 		return (NULL);
 	}
-	// command->is_builtin = is_builtin(command->cmd_name[0]);
+	if (command->cmd_name)
+		command->is_builtin = is_builtin(command->cmd_name[0]);
 	return (command);
 }
 
@@ -220,7 +236,7 @@ int	parser(t_token *tokens, t_shell *shell)
 	}
 	// remove outer double quotes here ??
 	print_commands(*commands);
-	// executer(*commands);
+	executer(*commands);
 	return (0);
 }
 
