@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander_buffer.c                                  :+:      :+:    :+:   */
+/*   buffer.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:09:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 14:42:45 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 11:40:23 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*init_buffer(char *token)
 }
 /* function that returns new value for token if expansion is needed */
 
-char	*get_buffer_value(char *token)
+char	*get_buffer_value(char *token, t_shell *shell)
 {
 	char	*buffer;
 	int		i;
@@ -49,6 +49,11 @@ char	*get_buffer_value(char *token)
 			buffer[j++] = token[i++];
 		else
 		{
+			if (token[i + 1] == '?')
+			{
+				expand_to_exit_status(&token[i], buffer, &j, shell);
+				i += 2;
+			}
 			if (expansion_needed(&token[i], quotes))
 				handle_expansion(token, &i, buffer, &j);
 			else
@@ -58,6 +63,19 @@ char	*get_buffer_value(char *token)
 	buffer[j] = '\0';
 	return (buffer);
 }
+
+void	expand_to_exit_status(char *token, char *buffer, int *j, t_shell *shell)
+{
+	char	*exit_status;
+
+	exit_status = ft_itoa(shell->exit_status);
+	while (*exit_status)
+	{
+		buffer[(*j)++] = *exit_status;
+		exit_status++;
+	}
+	token++;
+}
 /* function that copies the env value to the buffer if it exists*/
 
 void	handle_expansion(char *token, int *i, char *buffer, int *j)
@@ -65,7 +83,6 @@ void	handle_expansion(char *token, int *i, char *buffer, int *j)
 	char	*env_var;
 	char	*env_var_value;
 
-	//check for $
 	env_var = get_env_from_str(&token[*i]);
 	if (env_var_exists(env_var))
 	{

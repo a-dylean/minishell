@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:28:00 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/22 17:07:40 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 11:30:28 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void init_shell(t_shell *shell, char **env)
 		shell->env_head = init_env(env);
 		shell->user_name = getenv("USER");
 	}
-	shell->exit_code = 0;
+	shell->exit_status = 0;
 	shell->heredoc = NULL;
 	shell->std_fds[0] = dup(STDIN_FILENO);
 	shell->std_fds[1] = dup(STDOUT_FILENO);
