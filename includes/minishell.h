@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/22 15:09:48 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/23 12:12:37 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 # include "../libft/libft.h"
 # include "../pipex/pipex.h"
 # include <limits.h>
-#include <errno.h>
+# include <errno.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 # define S_QUOTE '\''
 # define D_QUOTE '\"'
@@ -56,9 +57,8 @@ typedef struct s_info
 typedef struct s_command
 {
 	char				**cmd_name;
-	char				*out;
-	char				*in;
-	char				*delimiter;
+	char				*delimiter; // store the delimiter ?
+	bool				is_builtin;
 	t_token				*redirections;
 	struct s_command	*next;
 	struct s_command	*prev;
@@ -102,12 +102,13 @@ int						env_var_exists(char *env_var);
 
 /* executer */
 int						minishell_loop(void);
+void					executer(t_command *commands);
 
 /* builtins */
 void					ft_echo(char *str);
 int						ft_pwd(void);
 int						ft_cd(char *path);
-int						ft_exit(char *status);
+int						ft_exit(t_command *commands);
 
 /* linked lists*/
 t_command				*init_command(void);
