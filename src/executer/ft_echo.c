@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 13:33:34 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/23 13:46:02 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:26:16 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 // we need to handle cases such as echo -n and echo -nnnnnnnnnnnnnnnnnn, which is also valid in bash
 
-int		check_echo_flag(char *flag)
-{
-	int	i;
+// int		check_echo_flag(char *flag)
+// {
+// 	int	i;
 
-	i = 0;
-	while (flag[i])
-	{
+// 	i = 0;
+// 	while (flag[i])
+// 	{
 		
-	}
-}
+// 	}
+// }
 
 void	ft_echo(t_command *commands)
 {
@@ -43,8 +43,8 @@ void	ft_echo(t_command *commands)
 		{
 			if (commands->cmd_name[1][2] == '\0')
 				n_flag = true;
-			else
-				check_echo_flag(commands->cmd_name[1]);
+			// else
+			// 	check_echo_flag(commands->cmd_name[1]);
 		}
 
 	}

@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 16:11:08 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:48:47 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ t_token	*get_cmd_from_tokens(t_token *tokens, t_command *command)
 	array[i] = NULL;
 	if (array[0] == NULL)
 	{
-		free_array(array);
+		free(array);
 		command->cmd_name = NULL;
 	}
 	else
@@ -169,7 +169,7 @@ t_command	*get_command(t_token *tokens, t_command **commands, t_shell *shell)
 		free(command);
 		return (NULL);
 	}
-	command->is_builtin = is_builtin(command->cmd_name[0]);
+	// command->is_builtin = is_builtin(command->cmd_name[0]);
 	return (command);
 }
 
@@ -219,6 +219,8 @@ int	parser(t_token *tokens, t_shell *shell)
 			temp = temp->next;
 	}
 	// remove outer double quotes here ??
-	executer(*commands);
+	print_commands(*commands);
+	// executer(*commands);
 	return (0);
 }
+
