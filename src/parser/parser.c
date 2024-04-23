@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 11:25:05 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 15:57:48 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,9 @@ int	parser(t_token *tokens, t_shell *shell)
 			temp = temp->next;
 	}
 	// remove outer double quotes here ??
-	print_commands(*commands);
+	// ft_pwd();
+	// ft_cd("/home/jlabonde/minishell/src");
+	// ft_pwd();
+	ft_exit("9223372036854775807");
 	return (0);
 }

@@ -34,7 +34,7 @@ void print_commands(t_command *commands)
 		{
 			printf("Command val: ");
 			for (i = 0; current_command->cmd_name[i]; i++)
-				printf("%s ", current_command->cmd_name[i]);
+				printf("[%d] %s ", i, current_command->cmd_name[i]);
 			while (current_command->redirections)
 			{
 				if (current_command->redirections->value != NULL)

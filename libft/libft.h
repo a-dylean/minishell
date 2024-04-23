@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 10:55:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/15 16:17:02 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:10:58 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <string.h>
 # include <strings.h>
 # include <unistd.h>
+# include <limits.h>
+# include <errno.h>
 
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);
@@ -45,6 +47,7 @@ int		ft_memcmp(const void *s1, const void *s2, size_t n);
 char	*ft_strnstr(const char *s1, const char *s2, size_t n);
 int		ft_atoi(const char *str);
 long	ft_atoi_long(const char *str);
+long	ft_atol(const char *str);
 void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_strdup(char *src);
 char	*ft_substr(char const *s, unsigned int start, size_t len);

@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 15:15:33 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 15:57:21 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "../libft/libft.h"
 # include "../pipex/pipex.h"
 # include <limits.h>
+#include <errno.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdio.h>
@@ -137,6 +138,12 @@ t_env					*init_env(char **env);
 /* executer */
 void					init_shell(t_shell *shell, char **env);
 int						minishell_loop(t_shell *shell);
+
+/* builtins */
+void					ft_echo(char *str);
+int						ft_pwd(void);
+int						ft_cd(char *path);
+int						ft_exit(char *status);
 
 /* linked lists*/
 t_command				*init_command(void);
