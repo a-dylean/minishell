@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/23 12:14:31 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/23 13:24:14 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,6 @@ int	minishell_loop()
 		*tokens = NULL;
 		if (trim_and_verify_buffer(buffer) == 1)
 			continue ;
-		// if (ft_strncmp(buffer, "exit", 4) == 0)
-		// {
-		// 	free_in_terminal(tokens, buffer);
-		// 	break ;
-		// }
 		// store the environment in the structure HERE
 		encode_tokens(buffer, tokens);
 		if (!check_syntax(*tokens))

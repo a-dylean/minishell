@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:43:34 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/23 12:43:58 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/23 13:24:34 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	get_exit_code(char *arg)
 		exit(stat);
 	}
 }
-
+// we need to add functions handling the freeing of the commands structure
 int	ft_exit(t_command *commands)
 {
 	if (commands->cmd_name[1] && commands->cmd_name[2])

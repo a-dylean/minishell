@@ -6,17 +6,11 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:10:39 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/23 12:44:47 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/23 13:33:50 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// we need to handle cases such as echo -n and echo -nnnnnnnnnnnnnnnnnn, which is also valid in bash
-// void	ft_echo(t_command *commands)
-// {
-	
-// }
 
 int	ft_pwd(void) // works with absolut path for now. Needs to work with relative path
 {
