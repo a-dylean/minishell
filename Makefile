@@ -11,7 +11,7 @@ SRC = 	src/main.c src/terminal.c src/init.c src/env_utils.c src/test.c \
         src/errors/printer_utils.c src/errors/syntax.c \
         src/executer/builtins.c \
         src/expander/buffer.c src/expander/env.c src/expander/expander.c \
-        src/lexer/lexer.c \
+        src/lexer/lexer.c src/lexer/types.c \
         src/parser/cmds_ops.c src/parser/parser.c src/parser/redirections_ops.c src/parser/tokens_ops.c \
 
 OBJ_DIR = obj

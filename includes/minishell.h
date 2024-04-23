@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/22 17:00:00 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 14:59:27 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,17 @@ typedef struct s_command
 /* lexer */
 int						valid_quotes(char *str);
 int						*encode_tokens(char *str, t_token **tokens);
+int						get_type(char *str);
+int						pipe_type(char *str, int i, int count);
+// int						great_type(char *str, int i, int count);
+// int						less_type(char *str, int i, int count);
+int						get_type(char *str);
+int						len_word(char *str, int i);
+int						len_between_quotes(char *str, int i, char c);
+int						count_spaces(char *str, int i);
+int						len_between_tokens(char *str, int i, char c);
+int						check_redir_type(char *str, int i, int count, char ch);
+void					assign_type_redirections(t_token *tokens);
 
 /* parser */
 int						check_syntax(t_token *tokens);
