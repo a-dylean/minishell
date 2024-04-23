@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   terminal.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/23 16:04:35 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:17:23 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	minishell_loop(t_shell *shell)
 		if (trim_and_verify_buffer(buffer) == 1)
 			continue ;
 		// store the environment in the structure HERE
-		encode_tokens(buffer, tokens);
+		lexer(buffer, tokens);
 		if (!check_syntax(*tokens))
 			parser(*tokens, shell);
 		free_in_terminal(tokens, buffer);

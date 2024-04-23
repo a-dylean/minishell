@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 12:55:53 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 17:22:46 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:20:03 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,34 +21,6 @@ t_token	**init_redirections(void)
 		exit(EXIT_FAILURE);
 	*redirections = NULL;
 	return (redirections);
-}
-
-void	delete_next_type(t_token **tokens, int type)
-{
-	t_token *node;
-	t_token *prev;
-	t_token *start;
-
-	start = *tokens;
-	node = start;
-	if ((*tokens)->type == type)
-	{
-		del_first(tokens);
-		return ;
-	}
-	while (node && node->type != type)
-	{
-		prev = node;
-		node = node->next;
-	}
-	if (node)
-		prev->next = node->next;
-	else
-		prev->next = NULL;
-	if (prev->next)
-		prev->next->prev = prev;
-	clear_one(&node);
-	*tokens = start;
 }
 
 void	handle_redirections(t_token *tokens, t_command *command, t_command **commands)

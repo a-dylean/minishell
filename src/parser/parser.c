@@ -6,53 +6,11 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 17:14:36 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:20:30 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-t_token	*remove_first_pipe(t_token *tokens, int id)
-{
-	t_token	*temp;
-
-	if (id == 0 && tokens->type == PIPE)
-	{
-		temp = tokens;
-		tokens = tokens->next;
-		free(temp);
-	}
-	return (tokens);
-}
-
-t_token	*remove_pipes(t_token *tokens, int id)
-{
-	t_token	*temp;
-	int		i;
-
-	i = 0;
-	if (id == 0 && tokens->type == PIPE)
-		return (remove_first_pipe(tokens, id));
-	while (tokens && i != id)
-	{
-		if (tokens->type != PIPE)
-		{
-			temp = tokens;
-			tokens = tokens->next;
-			free(temp);
-			i++;
-		}
-		else
-		{
-			temp = tokens;
-			tokens = tokens->next;
-			free(temp);
-		}
-	}
-	if (tokens == NULL)
-		return (NULL);
-	return (tokens);
-}
 
 int	cmd_string_len(t_token *tokens)
 {
@@ -106,7 +64,6 @@ int	count_cmd_before_pipe(t_token *tokens)
 }
 
 // function that returns an array of strings (command) from the tokens list
-
 int	process_tokens(t_token *tokens, char **array, int i)
 {
 	t_token	*temp;
@@ -219,8 +176,7 @@ int	parser(t_token *tokens, t_shell *shell)
 	if (!commands)
 		exit(EXIT_FAILURE);
 	*commands = NULL;
-	assign_type_redirections(tokens);
-		// check if we can call this function earlier (in lexer)
+	assign_type_redirections(tokens); // check if we can call this function earlier (in lexer)
 	while (temp)
 	{
 		if (no_pipe_in_list(temp) == 1)

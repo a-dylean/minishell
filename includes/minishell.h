@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 16:08:12 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:19:33 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ typedef struct s_command
 
 /* lexer */
 int						valid_quotes(char *str);
-int						*encode_tokens(char *str, t_token **tokens);
+int						*lexer(char *str, t_token **tokens);
 int						get_type(char *str);
 int						pipe_type(char *str, int i, int count);
 // int						great_type(char *str, int i, int count);
@@ -139,6 +139,7 @@ t_env					*init_env(char **env);
 void					init_shell(t_shell *shell, char **env);
 int						minishell_loop(t_shell *shell);
 void					executer(t_command *commands);
+t_token					*remove_pipes(t_token *tokens, int id);
 
 /* builtins */
 void					ft_echo(t_command *commands);
