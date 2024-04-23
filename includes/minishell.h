@@ -39,18 +39,38 @@ typedef enum s_type
 
 typedef struct s_token
 {
-	int					id;
-	char				*value;
+	int id; // check if we still use it
 	int					type;
+	char				*value;
 	struct s_token		*next;
 	struct s_token		*prev;
 }						t_token;
 
-typedef struct s_info
+typedef struct s_env
+{
+	char				*var_name;
+	char				*value;
+	struct s_env		*next;
+}						t_env;
+
+typedef struct s_shell
 {
 	struct t_command	*commands;
-	char				**env;
-}						t_info;
+	int					envless;
+	char				*prompt;
+	char				*heredoc;
+	t_env				*env_head;
+	int					exit_code;
+	int					std_fds[2];
+	char				*user_name;
+	// char			**cmd_paths;
+	// char			*prev_prompt;
+	// int				exec_on_pipe;
+	// struct termios	mirror_termios;
+	// char			*trimmed_prompt;
+	// char			*terminal_prompt;
+	// int				cmd_has_been_executed;
+}						t_shell;
 
 typedef struct s_command
 {
@@ -66,7 +86,6 @@ typedef struct s_command
 }						t_command;
 
 /* lexer */
-
 int						valid_quotes(char *str);
 int						*encode_tokens(char *str, t_token **tokens);
 int						get_type(char *str);
@@ -110,7 +129,11 @@ int						calculate_buffer_size(char *token);
 char					*get_env_from_str(char *str);
 int						env_var_exists(char *env_var);
 
+/* env */
+t_env					*init_env(char **env);
+
 /* executer */
+void					init_shell(t_shell *shell, char **env);
 int						minishell_loop(void);
 
 /* linked lists*/

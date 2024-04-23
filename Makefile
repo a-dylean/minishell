@@ -6,7 +6,7 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 INCLUDES = -I includes -I libft
 
-SRC = src/main.c src/terminal.c src/test.c \
+SRC = 	src/main.c src/terminal.c src/init.c src/env_utils.c src/test.c \
         src/utils/array.c src/utils/linked_lists.c src/utils/string.c \
         src/errors/printer_utils.c src/errors/syntax.c \
         src/executer/builtins.c \
