@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/22 13:08:19 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 14:58:41 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	*encode_tokens(char *str, t_token **tokens)
 		if (str[i] == S_QUOTE || str[i] == D_QUOTE)
 			j = len_between_quotes(str, i, str[i]);
 		else if (ft_strchr("|<>", str[i]))
-			j = check_tokens(str, i, str[i]);
+			j = len_between_tokens(str, i, str[i]);
 		else
 			j = len_word(str, i);
 		if (j < 0)

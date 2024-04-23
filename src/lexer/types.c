@@ -6,14 +6,13 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:35:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/22 13:08:32 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 14:59:49 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// rename this function to len between special chars or smth similar ?
-int	check_tokens(char *str, int i, char c)
+int	len_between_tokens(char *str, int i, char c)
 {
 	int	j;
 
