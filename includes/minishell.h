@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/24 15:17:28 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/24 16:13:07 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define S_QUOTE '\''
 # define D_QUOTE '\"'
 
-/* structures */
+/* enums */
 typedef enum s_type
 {
 	WORD,
@@ -46,6 +46,7 @@ typedef enum s_quotes
 	SQUOTED,
 }						t_quotes;
 
+/* structures */
 typedef struct s_token
 {
 	int id; // check if we still use it
@@ -132,7 +133,6 @@ char					*get_buffer_value(char *token, char *buffer,
 							t_shell *shell);
 void					handle_expansion(char *token, int *i, char *buffer,
 							int *j);
-char					*get_value_from_buffer(char buffer[]);
 int						calculate_buffer_size(char *token);
 char					*get_env_from_str(char *str);
 int						env_var_exists(char *env_var);
