@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/24 13:05:36 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/24 13:10:17 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ void	executer(t_command *commands, t_shell *shell)
 					}
 				}
 			}
-			else if (prev_fd != 0)
+			if (prev_fd != 0)
 			{
 				if (dup2(prev_fd, STDIN_FILENO) == -1)
 				{
@@ -191,7 +191,7 @@ void	executer(t_command *commands, t_shell *shell)
 					exit(EXIT_FAILURE);
 				}
 			}
-			else if (current->next)
+			if (current->next)
 			{
 				if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 				{
