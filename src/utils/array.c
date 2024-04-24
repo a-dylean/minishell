@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_array.c                                      :+:      :+:    :+:   */
+/*   array.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 17:31:02 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/16 17:32:58 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/24 10:27:00 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@ char	**init_array(int size)
 		exit(EXIT_FAILURE);
 	return (array);
 }
+
 void	free_array(char **arr)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (arr[i])
