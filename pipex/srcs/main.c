@@ -6,30 +6,30 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:18:11 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/15 15:29:20 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/24 14:35:50 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	open_fds(t_struct *pipex, int is_last)
-{
-	if (pipex->is_first)
-		open_infile(pipex);
-	if (!is_last)
-		dup2(pipex->pipe_fd[1], STDOUT_FILENO);
-	else
-	{
-		pipex->outfile_fd = open(pipex->outfile_name, O_WRONLY | O_TRUNC
-				| O_CREAT, 0666);
-		if (pipex->outfile_fd == -1)
-			exit_error(pipex->outfile_name, pipex, 1, 0);
-		dup2(pipex->outfile_fd, STDOUT_FILENO);
-		close(pipex->outfile_fd);
-	}
-	close(pipex->pipe_fd[0]);
-	close(pipex->pipe_fd[1]);
-}
+// void	open_fds(t_struct *pipex, int is_last)
+// {
+// 	if (pipex->is_first)
+// 		open_infile(pipex);
+// 	if (!is_last)
+// 		dup2(pipex->pipe_fd[1], STDOUT_FILENO);
+// 	else
+// 	{
+// 		pipex->outfile_fd = open(pipex->outfile_name, O_WRONLY | O_TRUNC
+// 				| O_CREAT, 0666);
+// 		if (pipex->outfile_fd == -1)
+// 			exit_error(pipex->outfile_name, pipex, 1, 0);
+// 		dup2(pipex->outfile_fd, STDOUT_FILENO);
+// 		close(pipex->outfile_fd);
+// 	}
+// 	close(pipex->pipe_fd[0]);
+// 	close(pipex->pipe_fd[1]);
+// }
 
 char	*check_path(char *cmd, t_struct *pipex)
 {
@@ -60,42 +60,38 @@ char	*check_path(char *cmd, t_struct *pipex)
 	return (NULL);
 }
 
-void	pipex_init(int ac, char **av, char **ev, t_struct *pipex)
-{
-	pipex->exit_code_child = 1;
-	pipex->outfile_name = av[ac - 1];
-	pipex->infile_name = av[1];
-	pipex->env = ev;
-	pipex->is_first = 1;
+// void	pipex_init(t_struct *pipex)
+// {
+// 	pipex->exit_code_child = 1;
+// 	pipex->is_first = 1;
+// }
 
-}
+// void	exec(char *cmd, t_struct *pipex, int is_last)
+// {
+// 	int	i;
 
-void	exec(char *cmd, t_struct *pipex, int is_last)
-{
-	int	i;
-
-	i = -1;
-	open_fds(pipex, is_last);
-	pipex->command = ft_split(cmd, ' ');
-	if (pipex->command[0] == NULL)
-		exit_error("Command not found", pipex, 1, 127);
-	get_path(pipex);
-	if (!pipex->path)
-	{
-		while (pipex->command[++i])
-			free(pipex->command[i]);
-		exit_error("Command not found", pipex, 1, 127);
-	}
-	else
-	{
-		execve(pipex->path, pipex->command, pipex->env);
-		perror(pipex->path);
-		pipex->exit_code_child = 126;
-	}
-	free(pipex->path);
-	ft_free(pipex->command);
-	exit(pipex->exit_code_child);
-}
+// 	i = -1;
+// 	open_fds(pipex, is_last);
+// 	pipex->command = ft_split(cmd, ' ');
+// 	if (pipex->command[0] == NULL)
+// 		exit_error("Command not found", pipex, 1, 127);
+// 	get_path(pipex);
+// 	if (!pipex->path)
+// 	{
+// 		while (pipex->command[++i])
+// 			free(pipex->command[i]);
+// 		exit_error("Command not found", pipex, 1, 127);
+// 	}
+// 	else
+// 	{
+// 		execve(pipex->path, pipex->command, pipex->env);
+// 		perror(pipex->path);
+// 		pipex->exit_code_child = 126;
+// 	}
+// 	free(pipex->path);
+// 	ft_free(pipex->command);
+// 	exit(pipex->exit_code_child);
+// }
 
 int	main(int ac, char **av, char **ev)
 {

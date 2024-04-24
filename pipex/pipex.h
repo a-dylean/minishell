@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:18:47 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/09 10:07:44 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/24 14:43:33 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,12 @@ typedef struct t_struct
 	int		exit_code_child;
 	int		wstatus;
 	pid_t	last_pid;
-	char	*outfile_name;
-	char	*infile_name;
-	char	*path;
-	char	**command;
 	char	**env;
+	char	*path;
 }			t_struct;
 void	exit_error(char *str, t_struct *pipex, int close_fds, int exit_code);
 char	*find_path(t_struct *pipex);
 char	*check_path(char *cmd, t_struct *pipex);
-void	get_path(t_struct *pipex);
 void	open_infile(t_struct *pipex);
 int		wait_commands(t_struct *pipex);
 int		pipex(int ac, char **av, char **ev);

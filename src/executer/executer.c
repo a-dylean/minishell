@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/24 13:10:17 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/24 15:38:06 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,11 @@ int	get_fd_in(t_token *redirections)
 				in_fd = open(current->next->value, O_RDONLY);
 			}
 		}
+		if (in_fd == -1)
+		{
+			perror(current->next->value);
+			exit(EXIT_FAILURE);
+		}
 		current = current->next;
 	}
 	return (in_fd);
@@ -121,10 +126,124 @@ int	get_fd_out(t_token *redirections)
 				out_fd = open(current->next->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			}
 		}
+		if (out_fd == -1)
+		{
+			perror(current->next->value);
+			exit(EXIT_FAILURE);
+		}
 		current = current->next;
 	}
 	return (out_fd);
 }
+
+// void	get_path(char *cmd, t_struct *pipex)
+// {
+// 	if (ft_strchr(cmd, '/') != NULL
+// 		&& access(cmd, X_OK) == 0)
+// 		pipex->path = ft_strdup(cmd);
+// 	else
+// 		pipex->path = get_cmd_path(cmd);
+// }
+
+// int	wait_commands(t_struct *pipex)
+// {
+// 	int	ret;
+
+// 	ret = 0;
+// 	while (errno != ECHILD)
+// 	{
+// 		if (wait(&pipex->wstatus) == pipex->last_pid)
+// 		{
+// 			if (WIFEXITED(pipex->wstatus))
+// 				ret = WEXITSTATUS(pipex->wstatus);
+// 			else
+// 				ret = 128 + WTERMSIG(pipex->wstatus);
+// 		}
+// 	}
+// 	return (ret);
+// }
+
+// void	exec(t_command *command, t_struct *pipex, int is_last)
+// {
+// 	int	original_stdout = dup(STDOUT_FILENO);
+// 	if (pipex->is_first)
+// 		pipex->infile_fd = get_fd_in(command->redirections);
+// 	if (!is_last)
+// 	{
+// 		dup2(pipex->pipe_fd[1], STDOUT_FILENO);
+// 		close(pipex->pipe_fd[0]);
+// 		close(pipex->pipe_fd[1]);
+// 	}
+// 	else
+// 	{
+// 		pipex->outfile_fd = get_fd_out(command->redirections);
+// 		dup2(pipex->outfile_fd, STDOUT_FILENO);
+// 		close(pipex->outfile_fd);
+// 		close(pipex->pipe_fd[0]);
+// 		close(pipex->pipe_fd[1]);
+// 	}
+// 	// this above can be put in a separate function like in pipex open_fds
+// 	get_path(command->cmd_name[0], pipex);
+// 	if (!pipex->path)
+// 		exit(127); // command not found
+// 	else
+// 	{
+// 		execve(pipex->path, command->cmd_name, pipex->env);
+// 		perror(pipex->path);
+// 		//exit(126);
+// 	}
+// 	dup2(original_stdout, STDOUT_FILENO);
+//     close(original_stdout);
+// }
+
+// void	pipex_init(t_struct *pipex, t_shell *shell)
+// {
+// 	pipex->exit_code_child = 1;
+// 	pipex->is_first = 1;
+// 	pipex->path = NULL;
+// 	pipex->infile_fd = -2;
+// 	pipex->outfile_fd = -2;
+// 	pipex->env = shell->env;
+// }
+
+// void	executer(t_command *commands, t_shell *shell)
+// {
+// 	t_command	*current;
+// 	t_struct	pipex;
+
+// 	printf("Starting executer function\n");
+// 	pipex_init(&pipex, shell);
+// 	(void) shell;
+// 	current = commands;
+// 	while(current)
+// 	{
+// 		printf("Executing command: %s\n", current->cmd_name[0]);
+// 		if (pipe(pipex.pipe_fd) == -1)
+// 			return ; //exit_error("pipe", &pipex, 0, 1);
+// 		pipex.last_pid = fork();
+// 		if (pipex.last_pid == -1)
+// 			perror("fork"); // exit_error("fork", &pipex, 1, 1);
+// 		if (pipex.last_pid == 0)
+// 			exec(current, &pipex, current->next == NULL);
+// 		else
+// 		{
+// 			if (current->next != NULL)
+// 				dup2(pipex.pipe_fd[0], STDIN_FILENO);
+// 			else
+// 			{
+// 				// This is the last command in the pipeline, restore the standard input
+// 				dup2(pipex.pipe_fd[1], STDIN_FILENO);
+// 			}
+// 			close(pipex.pipe_fd[0]);
+// 			close(pipex.pipe_fd[1]);
+// 			waitpid(pipex.last_pid, NULL, 0);
+// 			pipex.is_first = 0;
+// 			current = current->next;
+// 		}
+// 	}
+// 	printf("Finished executing commands\n");
+// 	pipex.exit_code_child = wait_commands(&pipex);
+// }
 
 void	executer(t_command *commands, t_shell *shell)
 {
@@ -133,7 +252,8 @@ void	executer(t_command *commands, t_shell *shell)
 	int			prev_fd;
 	char		*cmd_path;
 	int	fd_in, fd_out;
-
+	pid_t		pids[100];
+	int			n = 0;
 	current = commands;
 	prev_fd = 0;
 	while (current)
@@ -154,18 +274,12 @@ void	executer(t_command *commands, t_shell *shell)
 			perror("fork");
 			exit(EXIT_FAILURE);
 		}
-		else if (pid == 0)
+		else if (pid == 0) // child process
 		{
-			// child process
 			if (current->redirections)
 			{
 				fd_in = get_fd_in(current->redirections);
 				fd_out = get_fd_out(current->redirections);
-				if (fd_in == -1 || fd_out == -1)
-				{
-					perror("open");
-					exit(EXIT_FAILURE);
-				}
 				if (fd_in != -2)
 				{
 					if (dup2(fd_in, STDIN_FILENO) == -1)
@@ -200,20 +314,25 @@ void	executer(t_command *commands, t_shell *shell)
 				}
 			}
 			// execute the command
-			cmd_path = get_cmd_path(current->cmd_name[0]);
-			if (!cmd_path)
-            {
-                fprintf(stderr, "%s: command not found\n", current->cmd_name[0]);
-                exit(EXIT_FAILURE);
-            }
-			execve(cmd_path, current->cmd_name, shell->env);
-			perror("execve");
-			exit(EXIT_FAILURE);
+			if (commands->is_builtin == true)
+				exec_builtin(current);
+			else
+			{
+				cmd_path = get_cmd_path(current->cmd_name[0]);
+				if (!cmd_path)
+				{
+					fprintf(stderr, "%s: command not found\n", current->cmd_name[0]);
+					exit(EXIT_FAILURE);
+				}
+				execve(cmd_path, current->cmd_name, shell->env);
+				perror("execve");
+				exit(EXIT_FAILURE);
+			}
 		}
 		else
 		{
 			// parent process
-			wait(NULL);
+			pids[n++] = pid; // find another way to store the pids
 			if (prev_fd != 0)
 				close(prev_fd);
 			if (current->next)
@@ -228,4 +347,6 @@ void	executer(t_command *commands, t_shell *shell)
 		}
 		current = current->next;
 	}
+	for (int i = 0; i < n; i++)
+		waitpid(pids[i], NULL, 0);
 }
