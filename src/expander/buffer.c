@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:09:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 13:35:47 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/24 15:02:44 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,13 @@ char	*init_buffer(char *token)
 }
 /* function that returns new value for token if expansion is needed */
 
-char	*get_buffer_value(char *token, t_shell *shell)
+char	*get_buffer_value(char *token, char *buffer, t_shell *shell)
 {
-	char	*buffer;
 	int		i;
 	int		j;
-	int		quotes;
 
 	i = 0;
 	j = 0;
-	buffer = init_buffer(token);
-	if (!buffer)
-		return (NULL);
-	quotes = quotes_check(token);
 	while (token[i])
 	{
 		if (token[i] != '$')
@@ -56,10 +50,8 @@ char	*get_buffer_value(char *token, t_shell *shell)
 					break;
 				i += 2;
 			}
-			if (expansion_needed(&token[i], quotes))
-				handle_expansion(token, &i, buffer, &j);
 			else
-				buffer[j++] = token[i++];
+				handle_expansion(token, &i, buffer, &j);
 		}
 	}
 	buffer[j] = '\0';

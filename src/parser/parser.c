@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/24 10:54:49 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/24 11:49:50 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ int	parser(t_token *tokens, t_shell *shell)
 	}
 	// remove outer double quotes here ??
 	print_commands(*commands);
-	executer(*commands, shell);
+	// executer(*commands, shell);
 	return (0);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/24 11:05:05 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/24 15:17:28 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 # define MINISHELL_H
 # include "../libft/libft.h"
 # include "../pipex/pipex.h"
-# include <limits.h>
 # include <errno.h>
+# include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <stdbool.h>
 
 # define S_QUOTE '\''
 # define D_QUOTE '\"'
@@ -39,11 +39,19 @@ typedef enum s_type
 	DELIMITER,
 }						t_type;
 
+typedef enum s_quotes
+{
+	NONE,
+	DQUOTED,
+	SQUOTED,
+}						t_quotes;
+
 typedef struct s_token
 {
 	int id; // check if we still use it
 	int					type;
 	char				*value;
+	int					quotes_status;
 	struct s_token		*next;
 	struct s_token		*prev;
 }						t_token;
@@ -116,15 +124,12 @@ t_token					*remove_pipes(t_token *tokens, int id);
 /* expander */
 int						expander(t_token *tokens, t_shell *shell);
 char					*get_value_after_expansion(char *token, t_shell *shell);
-int						expansion_needed(char *str, int quotes);
-void					handle_expansion(char *token, int *i, char *buffer,
-							int *j);
-int						quotes_check(char *str);
 char					*get_value_from_buffer(char buffer[]);
 int						calculate_buffer_size(char *token);
 int						calculate_expansion_size(char *token, int *i);
 char					*init_buffer(char *token);
-char					*get_buffer_value(char *token, t_shell *shell);
+char					*get_buffer_value(char *token, char *buffer,
+							t_shell *shell);
 void					handle_expansion(char *token, int *i, char *buffer,
 							int *j);
 char					*get_value_from_buffer(char buffer[]);
@@ -133,6 +138,7 @@ char					*get_env_from_str(char *str);
 int						env_var_exists(char *env_var);
 void					expand_to_exit_status(char *token, char *buffer, int *j,
 							t_shell *shell);
+int						replace_with_expansion(t_token **token, t_shell *shell);
 
 /* env */
 t_env					*init_env(char **env);
@@ -175,6 +181,7 @@ char					**init_array(int size);
 void					free_array(char **arr);
 int						str_is_empty_or_space_only(const char *str);
 int						count_chars(char *str, char c);
+int						char_is_separator(char c);
 
 /* tests */
 void					print_commands(t_command *commands);
