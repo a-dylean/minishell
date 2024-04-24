@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 16:15:00 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:17:23 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	count_spaces(char *str, int i)
 	return (len);
 }
 
-int	*encode_tokens(char *str, t_token **tokens)
+int	*lexer(char *str, t_token **tokens)
 {
 	int		i;
 	int		j;
