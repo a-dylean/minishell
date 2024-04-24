@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/24 11:22:20 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/24 13:05:36 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,114 +71,59 @@ char	*get_cmd_path(char *cmd)
     return (NULL);
 }
 
-// void	executer(t_command *commands, t_shell *shell)
-// {
-// 	t_command	*current;
-// 	int			pipe_fd[2];
-// 	int			prev_fd;
-// 	char		*cmd_path;
-
-// 	current = commands;
-// 	prev_fd = 0;
-// 	while (current)
-// 	{
-// 		if (current->next)
-// 		{
-// 			if (pipe(pipe_fd) == -1) // protect the pipe
-// 			{
-// 				perror("pipe");
-// 				exit(EXIT_FAILURE);
-// 			}
-// 		}
-// 		pid_t	pid = fork();
-// 		if (pid == -1)
-// 		{
-// 			perror("fork");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 		else if (pid == 0)
-// 		{
-// 			// child process
-// 			if (prev_fd != 0)
-// 			{
-// 				if (dup2(prev_fd, STDIN_FILENO) == -1)
-// 				{
-// 					perror("dup2");
-// 					exit(EXIT_FAILURE);
-// 				}
-// 			}
-// 			if (current->next)
-// 			{
-// 				if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-// 				{
-// 					perror("dup2");
-// 					exit(EXIT_FAILURE);
-// 				}
-// 			}
-// 			// execute the command
-// 			cmd_path = get_cmd_path(current->cmd_name[0]);
-// 			if (!cmd_path)
-//             {
-//                 fprintf(stderr, "%s: command not found\n", current->cmd_name[0]);
-//                 exit(EXIT_FAILURE);
-//             }
-// 			execve(cmd_path, current->cmd_name, shell->env);
-// 			perror("execve");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 		else
-// 		{
-// 			// parent process
-// 			wait(NULL);
-// 			if (prev_fd != 0)
-// 				close(prev_fd);
-// 			if (current->next)
-// 			{
-// 				close(pipe_fd[1]);
-// 				prev_fd = pipe_fd[0];
-// 			}
-// 		}
-// 		current = current->next;
-// 	}
-// }
-
 int	get_fd_in(t_token *redirections)
 {
 	t_token	*current;
+	int	in_fd;
 
+	in_fd = -2;
 	current = redirections;
 	while (current)
 	{
 		if (current->type == LESS || current->type == LESSLESS)
 		{
 			if (current->next && current->next->type == FILENAME)
-				return (open(current->next->value, O_RDONLY));
+			{
+				if (in_fd != -2)
+					close(in_fd);
+				in_fd = open(current->next->value, O_RDONLY);
+			}
 		}
 		current = current->next;
 	}
-	return (-1);
+	return (in_fd);
 }
 
 int	get_fd_out(t_token *redirections)
 {
 	t_token	*current;
+	int		out_fd;
 
+	out_fd = -2;
 	current = redirections;
 	while (current)
 	{
 		if (current->type == GREAT)
 		{
 			if (current->next && current->next->type == FILENAME)
-				return (open(current->next->value, O_WRONLY | O_CREAT | O_TRUNC, 0644));
+			{
+				if (out_fd != -2)
+					close(out_fd);
+				out_fd = open(current->next->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			}
 		}
 		else if (current->type == GREATGREAT)
 		{
 			if (current->next && current->next->type == FILENAME)
-				return (open(current->next->value, O_WRONLY | O_CREAT | O_APPEND, 0644));
+			{
+				if (out_fd != -2)
+					close(out_fd);
+				out_fd = open(current->next->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			}
 		}
 		current = current->next;
 	}
-	return (-1);
+	return (out_fd);
 }
 
 void	executer(t_command *commands, t_shell *shell)
@@ -221,15 +166,21 @@ void	executer(t_command *commands, t_shell *shell)
 					perror("open");
 					exit(EXIT_FAILURE);
 				}
-				if (dup2(fd_in, STDIN_FILENO) == -1)
+				if (fd_in != -2)
 				{
-					perror("dup2");
-					exit(EXIT_FAILURE);
+					if (dup2(fd_in, STDIN_FILENO) == -1)
+					{
+						perror("dup2");
+						exit(EXIT_FAILURE);
+					}
 				}
-				if (dup2(fd_out, STDOUT_FILENO) == -1)
+				if (fd_out != -2)
 				{
-					perror("dup2");
-					exit(EXIT_FAILURE);
+					if (dup2(fd_out, STDOUT_FILENO) == -1)
+					{
+						perror("dup2");
+						exit(EXIT_FAILURE);
+					}
 				}
 			}
 			else if (prev_fd != 0)
