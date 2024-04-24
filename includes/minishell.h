@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 17:19:33 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/24 11:05:05 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_shell
 	char				*prompt;
 	char				*heredoc;
 	t_env				*env_head;
+	char				**env;
 	int					exit_status;
 	int					std_fds[2];
 	char				*user_name;
@@ -110,6 +111,7 @@ t_token					**init_redirections(void);
 void					handle_redirections(t_token *tokens, t_command *command,
 							t_command **commands);
 void					delete_next_type(t_token **tokens, int type);
+t_token					*remove_pipes(t_token *tokens, int id);
 
 /* expander */
 int						expander(t_token *tokens, t_shell *shell);
@@ -138,7 +140,7 @@ t_env					*init_env(char **env);
 /* executer */
 void					init_shell(t_shell *shell, char **env);
 int						minishell_loop(t_shell *shell);
-void					executer(t_command *commands);
+void					executer(t_command *commands, t_shell *shell);
 t_token					*remove_pipes(t_token *tokens, int id);
 
 /* builtins */
@@ -178,4 +180,5 @@ int						count_chars(char *str, char c);
 void					print_commands(t_command *commands);
 void					test_list(t_token *tokens);
 void					print_commands_reverse(t_command *commands);
+
 #endif

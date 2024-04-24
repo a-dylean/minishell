@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc -g
 # for debugging -g -fsanitize=address
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 
 INCLUDES = -I includes -I libft
 
@@ -12,7 +12,7 @@ SRC = 	src/main.c src/terminal.c src/init.c src/env_utils.c src/test.c \
         src/executer/builtins.c src/executer/executer.c src/executer/ft_exit.c src/executer/ft_cd.c src/executer/ft_echo.c\
         src/expander/buffer.c src/expander/env.c src/expander/expander.c \
         src/lexer/lexer.c src/lexer/types.c \
-        src/parser/cmds_ops.c src/parser/parser.c src/parser/redirections_ops.c src/parser/tokens_ops.c \
+        src/parser/cmds_ops.c src/parser/parser.c src/parser/redirections_ops.c src/parser/tokens_ops.c src/parser/deletions.c \
 
 OBJ_DIR = obj
 OBJ := $(patsubst src/%.c,$(OBJ_DIR)/%.o,$(SRC))

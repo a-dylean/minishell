@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:28:00 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 11:30:28 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/24 10:58:39 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void init_shell(t_shell *shell, char **env)
 		shell->envless = 0;
 		shell->env_head = init_env(env);
 		shell->user_name = getenv("USER");
+		shell->env = env;
 	}
 	shell->exit_status = 0;
 	shell->heredoc = NULL;
