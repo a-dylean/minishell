@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/25 17:38:26 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/25 18:28:16 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	set_quotes_status(t_token *tokens)
 		temp = temp->next;
 	}
 }
-void perform_expansion(t_token *tokens, t_shell *shell)
+void	perform_expansion(t_token *tokens, t_shell *shell)
 {
 	t_token	*temp;
 	int		i;
@@ -80,13 +80,6 @@ void perform_expansion(t_token *tokens, t_shell *shell)
 			temp = temp->next;
 	}
 }
-char *remove_unquoted_chars(char *str) 
-{
-	printf("str: %s\n", str);
-    char *new_str = ft_strdup("HELLO");
-    return new_str;
-}
-
 char	*delete_quotes(char *str, char c)
 {
 	int	i;
@@ -108,17 +101,25 @@ char	*delete_quotes(char *str, char c)
 	return (str);
 }
 
-void remove_quotes(t_token *tokens)
+void	remove_unquoted_chars(t_token **token)
+{
+	if (ft_strlen((*token)->value) == 2)
+		(*token)->value = ft_strdup("");
+	else if ((*token)->quotes_status == DQUOTED)
+		(*token)->value = delete_quotes((*token)->value, D_QUOTE);
+	else if ((*token)->quotes_status == SQUOTED)
+		(*token)->value = delete_quotes((*token)->value, S_QUOTE);
+}
+
+void	remove_quotes(t_token *tokens)
 {
 	t_token	*temp;
-	char	*new_value;
 
 	temp = tokens;
 	while (temp)
 	{
-		new_value = delete_quotes(temp->value, S_QUOTE);
-		new_value = delete_quotes(new_value, D_QUOTE);
-		temp->value = new_value;
+		if (temp->quotes_status != NONE)
+			remove_unquoted_chars(&temp);
 		temp = temp->next;
 	}
 }
