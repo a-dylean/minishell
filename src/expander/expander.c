@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/25 16:23:51 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/25 17:38:26 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,12 @@ void	set_quotes_status(t_token *tokens)
 		temp = temp->next;
 	}
 }
-
-int	expander(t_token *tokens, t_shell *shell)
+void perform_expansion(t_token *tokens, t_shell *shell)
 {
 	t_token	*temp;
 	int		i;
 
 	temp = tokens;
-	set_quotes_status(temp);
 	while (temp)
 	{
 		if (temp->type == WORD || temp->type == FILENAME)
@@ -81,5 +79,54 @@ int	expander(t_token *tokens, t_shell *shell)
 		if (temp)
 			temp = temp->next;
 	}
+}
+char *remove_unquoted_chars(char *str) 
+{
+	printf("str: %s\n", str);
+    char *new_str = ft_strdup("HELLO");
+    return new_str;
+}
+
+char	*delete_quotes(char *str, char c)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+		{
+			j = 0;
+			while (str[i + j] == c)
+				j++;
+			ft_strlcpy(&str[i], &str[i + j], strlen(str) - i);
+		}
+		i++;
+	}
+	return (str);
+}
+
+void remove_quotes(t_token *tokens)
+{
+	t_token	*temp;
+	char	*new_value;
+
+	temp = tokens;
+	while (temp)
+	{
+		new_value = delete_quotes(temp->value, S_QUOTE);
+		new_value = delete_quotes(new_value, D_QUOTE);
+		temp->value = new_value;
+		temp = temp->next;
+	}
+}
+
+int	expander(t_token *tokens, t_shell *shell)
+{
+	set_quotes_status(tokens);
+	perform_expansion(tokens, shell);
+	remove_quotes(tokens);
 	return (0);
 }
