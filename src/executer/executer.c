@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/24 15:38:06 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:37:40 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,7 +314,7 @@ void	executer(t_command *commands, t_shell *shell)
 				}
 			}
 			// execute the command
-			if (commands->is_builtin == true)
+			if (current->is_builtin == true)
 				exec_builtin(current);
 			else
 			{

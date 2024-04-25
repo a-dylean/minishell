@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/24 14:48:23 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:30:55 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ t_token					*remove_pipes(t_token *tokens, int id);
 
 /* builtins */
 void					ft_echo(t_command *commands);
-int						ft_pwd(void);
+void					ft_pwd(void);
 int						ft_cd(t_command *commands);
 int						ft_exit(t_command *commands);
 
