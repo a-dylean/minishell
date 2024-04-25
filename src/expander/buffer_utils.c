@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   buffer.c                                           :+:      :+:    :+:   */
+/*   buffer_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:09:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/25 16:17:21 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/25 16:27:47 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,28 +39,6 @@ char	*get_value_from_buffer(char buffer[])
 	if (!new_token)
 		return (NULL);
 	return (new_token);
-}
-
-/* function that calculates the size of the buffer needed for the new token */
-
-int	calculate_buffer_size(char *token)
-{
-	int	i;
-	int	buffer_size;
-
-	i = 0;
-	buffer_size = 0;
-	while (token[i])
-	{
-		if (token[i] != '$')
-		{
-			buffer_size++;
-			i++;
-		}
-		else
-			buffer_size += calculate_expansion_size(token, &i);
-	}
-	return (buffer_size + 1);
 }
 
 void	expand_to_exit_status(char *token, char *buffer, int *j, t_shell *shell)

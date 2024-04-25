@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   replacement.c                                      :+:      :+:    :+:   */
+/*   buffer_size.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:25:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/24 16:14:16 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/25 16:28:04 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,29 +36,24 @@ int	calculate_expansion_size(char *token, int *i)
 	return (buffer_size);
 }
 
-/* function that returns the value of the buffer */
+/* function that calculates the size of the buffer needed for the new token */
 
-char	*get_value_after_expansion(char *token, t_shell *shell)
+int	calculate_buffer_size(char *token)
 {
-	char	*new_token;
-	char	*buffer;
+	int	i;
+	int	buffer_size;
 
-	buffer = init_buffer(token);
-	if (!buffer)
-		return (NULL);
-	buffer = get_buffer_value(token, buffer, shell);
-	new_token = get_value_from_buffer(buffer);
-	if (!new_token)
-		return (NULL);
-	free(buffer);
-	return (new_token);
-}
-
-int replace_with_expansion(t_token **token, t_shell *shell)
-{
-	(void)shell;
-	
-	printf("Str for expansion: %s\n", (*token)->value);
-	(*token)->value = get_value_after_expansion((*token)->value, shell);
-	return (0);
+	i = 0;
+	buffer_size = 0;
+	while (token[i])
+	{
+		if (token[i] != '$')
+		{
+			buffer_size++;
+			i++;
+		}
+		else
+			buffer_size += calculate_expansion_size(token, &i);
+	}
+	return (buffer_size + 1);
 }

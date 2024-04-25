@@ -6,11 +6,29 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/25 13:51:40 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/25 16:23:51 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+/* function that returns the value of the buffer */
+
+char	*get_value_after_expansion(char *token, t_shell *shell)
+{
+	char	*new_token;
+	char	*buffer;
+
+	buffer = init_buffer(token);
+	if (!buffer)
+		return (NULL);
+	buffer = get_buffer_value(token, buffer, shell);
+	new_token = get_value_from_buffer(buffer);
+	if (!new_token)
+		return (NULL);
+	free(buffer);
+	return (new_token);
+}
 
 void	set_quotes_status(t_token *tokens)
 {
@@ -48,17 +66,16 @@ int	expander(t_token *tokens, t_shell *shell)
 	{
 		if (temp->type == WORD || temp->type == FILENAME)
 		{
-			i = 0;
-			while (temp->value[i])
+			i = -1;
+			while (temp->value[++i])
 			{
 				if (temp->value[i] == '$' && temp->value[i + 1] != '\0'
 					&& !char_is_separator(temp->value[i + 1])
 					&& (temp->quotes_status == NONE
 						|| temp->quotes_status == DQUOTED))
-					replace_with_expansion(&temp, shell);
+					temp->value = get_value_after_expansion(temp->value, shell);
 				if (!temp || !temp->value)
 					break ;
-				i++;
 			}
 		}
 		if (temp)
