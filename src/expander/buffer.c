@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:09:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/24 16:18:57 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/25 16:17:21 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,9 @@ void	expand_to_exit_status(char *token, char *buffer, int *j, t_shell *shell)
 	}
 	token++;
 }
-/* function that copies the env value to the buffer if it exists*/
+/* function that copies the env value to the buffer if it exists
+and if it doesn't it doesn't copy anything ($$ is not handeled the bash
+way (returning PID) because it's not in the subject) */
 
 void	handle_expansion(char *token, int *i, char *buffer, int *j)
 {
@@ -92,15 +94,18 @@ void	handle_expansion(char *token, int *i, char *buffer, int *j)
 			env_var_value++;
 		}
 	}
-	*i += ft_strlen(env_var) + 1;
+	if (env_var)
+		*i += ft_strlen(env_var) + 1;
+	else if (token[*i] == '$')
+		(*i)++;
 }
 
 /* function that returns buffer that is the new value for token */
 
 char	*get_buffer_value(char *token, char *buffer, t_shell *shell)
 {
-	int		i;
-	int		j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -114,7 +119,7 @@ char	*get_buffer_value(char *token, char *buffer, t_shell *shell)
 			{
 				expand_to_exit_status(&token[i], buffer, &j, shell);
 				if (token[i + 2] == '\0')
-					break;
+					break ;
 				i += 2;
 			}
 			else
