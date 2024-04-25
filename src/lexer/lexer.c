@@ -12,26 +12,24 @@
 
 #include "../../includes/minishell.h"
 
-int	valid_quotes(char *str)
+int valid_quotes(char *str)
 {
-	int	i;
-	int	in_single_quote;
-	int	in_double_quote;
-	int	result;
-
+    int i;
+	int in_single_quote;
+    int in_double_quote;
+    
+	i = 0;
 	in_single_quote = 0;
 	in_double_quote = 0;
-	i = 0;
-	while (str[i])
+    while (str[i]) 
 	{
-		if (str[i] == S_QUOTE)
-			in_single_quote = !in_single_quote;
-		else if (str[i] == D_QUOTE)
-			in_double_quote = !in_double_quote;
-		i++;
-	}
-	result = !(in_single_quote || in_double_quote);
-	return (result);
+        if (str[i] == S_QUOTE && !in_double_quote)
+            in_single_quote = !in_single_quote;
+        else if (str[i] == D_QUOTE && !in_single_quote)
+            in_double_quote = !in_double_quote;
+        i++;
+    }
+    return !(in_single_quote || in_double_quote);
 }
 
 int	len_between_quotes(char *str, int i, char quote)
