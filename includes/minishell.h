@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/24 16:13:07 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/25 18:42:45 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ char					*get_env_from_str(char *str);
 int						env_var_exists(char *env_var);
 void					expand_to_exit_status(char *token, char *buffer, int *j,
 							t_shell *shell);
-int						replace_with_expansion(t_token **token, t_shell *shell);
+void					remove_quotes(t_token *tokens);
 
 /* env */
 t_env					*init_env(char **env);
@@ -161,7 +161,6 @@ t_command				*get_last_command(t_command *head);
 void					add_command_back(t_command **commands,
 							t_command *new_node);
 t_token					*create_token(char *value, int type);
-t_token					*get_last_token(t_token *head);
 void					add_token_back(t_token **tokens, t_token *new_node);
 void					free_tokens(t_token **tokens);
 void					del_first(t_token **tokens);
