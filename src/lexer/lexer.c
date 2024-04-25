@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 17:17:23 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/25 13:54:57 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	len_between_quotes(char *str, int i, char quote)
 	int	len;
 
 	len = 1;
-	while (str[i + len] != quote)
+	while (str[i + len] != quote && str[i + len])	
 		len++;
 	len++;
 	return (len);
@@ -50,7 +50,7 @@ int	len_word(char *str, int i)
 	int	len;
 
 	len = 1;
-	while (!ft_isspace(str[i + len]) && str[i + len])
+	while (str[i + len] && !ft_isspace(str[i + len]))
 	{
 		if (str[i + len] != S_QUOTE && str[i + len] != D_QUOTE
 			&& !ft_strchr("|><", str[i + len]))
@@ -66,7 +66,7 @@ int	count_spaces(char *str, int i)
 	int	len;
 
 	len = 0;
-	while (ft_isspace(str[i + len]) && str[i])
+	while (str[i + len] && str[i] && ft_isspace(str[i + len]))
 		len++;
 	return (len);
 }

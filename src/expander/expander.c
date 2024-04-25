@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/24 16:13:51 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/25 13:51:40 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	set_quotes_status(t_token *tokens)
 	int		in_double_quotes;
 
 	temp = tokens;
-
 	while (temp)
 	{
 		in_single_quotes = 0;
@@ -43,13 +42,10 @@ int	expander(t_token *tokens, t_shell *shell)
 	t_token	*temp;
 	int		i;
 
-	(void)shell;
 	temp = tokens;
 	set_quotes_status(temp);
 	while (temp)
 	{
-		// printf("TOKEN[%d]\ntemp->value: %s\ntemp->type: %d\ntemp->quotes: %d\n",
-		// 	temp->id, temp->value, temp->type, temp->quotes_status);
 		if (temp->type == WORD || temp->type == FILENAME)
 		{
 			i = 0;
@@ -60,10 +56,13 @@ int	expander(t_token *tokens, t_shell *shell)
 					&& (temp->quotes_status == NONE
 						|| temp->quotes_status == DQUOTED))
 					replace_with_expansion(&temp, shell);
+				if (!temp || !temp->value)
+					break ;
 				i++;
 			}
 		}
-		temp = temp->next;
+		if (temp)
+			temp = temp->next;
 	}
 	return (0);
 }
