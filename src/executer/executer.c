@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/25 13:27:33 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/25 16:40:33 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,10 +206,10 @@ void	executer(t_command *commands, t_shell *shell)
 				close(pipe_fd[0]);
 			}
 			// execute the command
-			if (current->is_builtin == true)
-				exec_builtin(current);
-			else
-			{
+			// if (current->is_builtin == true)
+			// 	exec_builtin(current);
+			// else
+			// {
 				cmd_path = get_cmd_path(current->cmd_name[0]);
 				if (!cmd_path)
 				{
@@ -219,7 +219,7 @@ void	executer(t_command *commands, t_shell *shell)
 				execve(cmd_path, current->cmd_name, shell->env);
 				perror("execve");
 				exit(EXIT_FAILURE);
-			}
+			// }
 		}
 		else
 		{
