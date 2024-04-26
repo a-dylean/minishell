@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 14:57:32 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:06:47 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +116,24 @@ void	get_fd_out(t_token *redirections, t_shell *shell)
 	}
 }
 
+void	wait_commands(t_shell *shell)
+{
+	while (errno != ECHILD)
+	{
+		if (wait(&shell->wstatus) == shell->last_pid)
+		{
+			if (WIFEXITED(shell->wstatus))
+				shell->exit_status = WEXITSTATUS(shell->wstatus);
+			else
+				shell->exit_status = 128 + WTERMSIG(shell->wstatus);
+		}
+	}
+}
+
 void	executer(t_command *commands, t_shell *shell)
 {
 	t_command	*current;
 	int			prev_fd;
-	pid_t		pids[100];
-	int			n = 0;
 	current = commands;
 	prev_fd = 0;
 	while (current)
@@ -134,13 +146,13 @@ void	executer(t_command *commands, t_shell *shell)
 				exit(EXIT_FAILURE);
 			}
 		}
-		pid_t	pid = fork();
-		if (pid == -1)
+		shell->last_pid = fork();
+		if (shell->last_pid == -1)
 		{
 			perror("fork");
 			exit(EXIT_FAILURE);
 		}
-		else if (pid == 0) // child process
+		else if (shell->last_pid == 0) // child process
 		{
 			if (current->redirections)
 			{
@@ -199,7 +211,6 @@ void	executer(t_command *commands, t_shell *shell)
 		else
 		{
 			// parent process
-			pids[n++] = pid; // find another way to store the pids
 			if (prev_fd != 0)
 				close(prev_fd);
 			if (current->next)
@@ -214,6 +225,5 @@ void	executer(t_command *commands, t_shell *shell)
 		}
 		current = current->next;
 	}
-	for (int i = 0; i < n; i++)
-		waitpid(pids[i], NULL, 0);
+	wait_commands(shell);
 }
