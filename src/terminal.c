@@ -3,14 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   terminal.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/23 17:17:23 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:24:24 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int valid_quotes(char *str)
+{
+    int i;
+	int in_single_quote;
+    int in_double_quote;
+    
+	i = 0;
+	in_single_quote = 0;
+	in_double_quote = 0;
+    while (str[i]) 
+	{
+        if (str[i] == S_QUOTE && !in_double_quote)
+            in_single_quote = !in_single_quote;
+        else if (str[i] == D_QUOTE && !in_single_quote)
+            in_double_quote = !in_double_quote;
+        i++;
+    }
+    return !(in_single_quote || in_double_quote);
+}
 
 int	trim_and_verify_buffer(char *buffer)
 {
@@ -18,37 +38,35 @@ int	trim_and_verify_buffer(char *buffer)
 	if (!buffer || buffer[0] == '\0')
 	{
 		free(buffer);
-		return (1);
+		return (EXIT_FAILURE);
 	}
 	else if (!valid_quotes(buffer))
 	{
 		printf("Error: invalid quotes\n");
 		free(buffer);
-		return (1);
+		return (EXIT_FAILURE);
 	}
-	else if (buffer[0] != '\0')
-			add_history(buffer);
-	return (0);
+	add_history(buffer);
+	return (EXIT_SUCCESS);
 }
 
 int	minishell_loop(t_shell *shell)
 {
-	char	*buffer;
-	t_token	**tokens;
+	char		*buffer;
+	t_token		**tokens;
+	t_command	*commands;
 
 	buffer = NULL;
-	while ((buffer = readline("minishell$> ")) != NULL)
+	commands = NULL;
+	while ((buffer = readline(PROMPT)))
 	{
-		tokens = (t_token **)malloc(sizeof(t_token));
-		if (!tokens)
-			return (1);
-		*tokens = NULL;
-		if (trim_and_verify_buffer(buffer) == 1)
+		if (trim_and_verify_buffer(buffer))
 			continue ;
-		// store the environment in the structure HERE
+		tokens = init_tokens();
 		lexer(buffer, tokens);
 		if (!check_syntax(*tokens))
-			parser(*tokens, shell);
+			commands = parser(*tokens, shell);
+		executer(commands, shell);
 		free_in_terminal(tokens, buffer);
 	}
 	rl_clear_history();

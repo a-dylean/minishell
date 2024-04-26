@@ -6,31 +6,11 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/25 13:54:57 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:13:20 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int valid_quotes(char *str)
-{
-    int i;
-	int in_single_quote;
-    int in_double_quote;
-    
-	i = 0;
-	in_single_quote = 0;
-	in_double_quote = 0;
-    while (str[i]) 
-	{
-        if (str[i] == S_QUOTE && !in_double_quote)
-            in_single_quote = !in_single_quote;
-        else if (str[i] == D_QUOTE && !in_single_quote)
-            in_double_quote = !in_double_quote;
-        i++;
-    }
-    return !(in_single_quote || in_double_quote);
-}
 
 int	len_between_quotes(char *str, int i, char quote)
 {

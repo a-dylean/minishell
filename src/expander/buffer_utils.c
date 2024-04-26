@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:09:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/25 16:27:47 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:04:07 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	handle_expansion(char *token, int *i, char *buffer, int *j)
 		*i += ft_strlen(env_var) + 1;
 	else if (token[*i] == '$')
 		(*i)++;
+	free(env_var);
 }
 
 /* function that returns buffer that is the new value for token */

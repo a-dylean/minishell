@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:25:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/25 16:28:04 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:06:28 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	calculate_expansion_size(char *token, int *i)
 		*i += ft_strlen(env_var) + 1;
 	else
 		*i += 1;
+	free(env_var);
 	return (buffer_size);
 }
 

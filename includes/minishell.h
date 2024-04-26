@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/25 18:42:45 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:37:47 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 
 # define S_QUOTE '\''
 # define D_QUOTE '\"'
+// # define PROMPT "\033[1;90m minishell $> \033[0m" // grey
+# define PROMPT "\033[1;35mminishell$> \033[0m"
 
 /* enums */
 typedef enum s_type
@@ -87,7 +89,7 @@ typedef struct s_shell
 typedef struct s_command
 {
 	char				**cmd_name;
-	char				*delimiter; // store the delimiter ?
+	char *delimiter; // store the delimiter ?
 	bool				is_builtin;
 	t_token				*redirections;
 	struct s_command	*next;
@@ -113,7 +115,7 @@ void					assign_type_redirections(t_token *tokens);
 
 /* parser */
 int						check_syntax(t_token *tokens);
-int						parser(t_token *tokens, t_shell *shell);
+t_command				*parser(t_token *tokens, t_shell *shell);
 int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
 t_token					**init_redirections(void);
@@ -144,6 +146,7 @@ void					remove_quotes(t_token *tokens);
 t_env					*init_env(char **env);
 
 /* executer */
+void					executer(t_command *commands, t_shell *shell);
 void					init_shell(t_shell *shell, char **env);
 int						minishell_loop(t_shell *shell);
 void					executer(t_command *commands, t_shell *shell);
@@ -176,6 +179,7 @@ int						syntax_error_in_token(char *token);
 int						undefined_behavior_error(char *str);
 
 /* utils */
+t_token					**init_tokens(void);
 char					**init_array(int size);
 void					free_array(char **arr);
 int						str_is_empty_or_space_only(const char *str);
