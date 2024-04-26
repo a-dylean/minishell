@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 15:50:12 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:26:43 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	execute_command(t_command *current, t_shell *shell)
 		if (!shell->cmd_path)
 		{
 			fprintf(stderr, "%s: command not found\n", current->cmd_name[0]);
-			exit(EXIT_FAILURE);
+			exit(EXIT_FAILURE); // try to kill the process here instead of exit to tell the parent to stop
 		}
 		execve(shell->cmd_path, current->cmd_name, shell->env);
 		perror("execve");
