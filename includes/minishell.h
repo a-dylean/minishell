@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/26 15:31:48 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:50:31 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,10 @@ t_env					*init_env(char **env);
 void					init_shell(t_shell *shell, char **env);
 int						minishell_loop(t_shell *shell);
 void					executer(t_command *commands, t_shell *shell);
-t_token					*remove_pipes(t_token *tokens, int id);
+void					has_no_filename(t_command *current, t_shell *shell, int prev_fd);
+void					open_and_redirect_fd(t_command *current, t_shell *shell);
+char					*get_cmd_path(char *cmd);
+void					wait_commands(t_shell *shell);
 
 /* builtins */
 int						ft_echo(char **cmd);
