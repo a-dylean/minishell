@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/26 17:05:15 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:16:23 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,9 +190,6 @@ t_command *parser(t_token *tokens, t_shell *shell)
 		if (temp)
 			temp = temp->next;
 	}
-	// remove outer double quotes here ??
-	// print_commands(*commands);
-	// executer(*commands, shell);
 	return (*commands);
 }
 

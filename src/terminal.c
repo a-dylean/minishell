@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 17:04:48 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:17:30 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	trim_and_verify_buffer(char *buffer)
 		return (EXIT_FAILURE);
 	}
 	add_history(buffer);
+	free(buffer);
 	return (EXIT_SUCCESS);
 }
 
@@ -63,9 +64,16 @@ int	minishell_loop(t_shell *shell)
 		if (trim_and_verify_buffer(buffer))
 			continue ;
 		tokens = init_tokens();
+		if (!tokens)
+			return (EXIT_FAILURE); // we need to free stuff here
 		lexer(buffer, tokens);
 		if (!check_syntax(*tokens))
 			commands = parser(*tokens, shell);
+		if (!commands)
+		{
+			// free the tokens list
+			return (EXIT_FAILURE);
+		}
 		executer(commands, shell);
 		free_in_terminal(tokens, buffer);
 	}
