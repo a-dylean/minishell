@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 15:25:35 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:35:52 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void	pipe_and_fork(t_command *current, t_shell *shell)
 	}
 }
 
-void	redirect_in_and_output(t_command *current, t_shell *shell)
+void	open_and_redirect_fd(t_command *current, t_shell *shell)
 {
 	get_fd_in(current->redirections, shell);
 	get_fd_out(current->redirections, shell);
@@ -170,7 +170,7 @@ void	redirect_in_and_output(t_command *current, t_shell *shell)
 	}
 }
 
-void	no_in_and_outfile(t_command *current, t_shell *shell, int prev_fd)
+void	has_no_filename(t_command *current, t_shell *shell, int prev_fd)
 {
 	if (prev_fd != 0)
 	{
@@ -191,6 +191,40 @@ void	no_in_and_outfile(t_command *current, t_shell *shell, int prev_fd)
 	}
 }
 
+void	execute_command(t_command *current, t_shell *shell)
+{
+	if (current->is_builtin == true)
+		exec_builtin(current);
+	else
+	{
+		shell->cmd_path = get_cmd_path(current->cmd_name[0]);
+		if (!shell->cmd_path)
+		{
+			fprintf(stderr, "%s: command not found\n", current->cmd_name[0]);
+			exit(EXIT_FAILURE);
+		}
+		execve(shell->cmd_path, current->cmd_name, shell->env);
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+}
+
+int	handle_parent(t_command *current, t_shell *shell, int prev_fd)
+{
+	if (prev_fd != 0)
+		close(prev_fd);
+	if (current->next)
+	{
+		close(shell->pipe_fd[1]);
+		prev_fd = shell->pipe_fd[0];
+	}
+	if (shell->infile_fd != -1)
+		close(shell->infile_fd);
+	if (shell->outfile_fd != -1)
+		close(shell->outfile_fd);
+	return (prev_fd);
+}
+
 void	executer(t_command *commands, t_shell *shell)
 {
 	t_command	*current;
@@ -202,40 +236,13 @@ void	executer(t_command *commands, t_shell *shell)
 		pipe_and_fork(current, shell);
 		if (shell->last_pid == 0) // child process
 		{
-			no_in_and_outfile(current, shell, prev_fd);
+			has_no_filename(current, shell, prev_fd);
 			if (current->redirections)
-				redirect_in_and_output(current, shell);
-			// execute the command
-			if (current->is_builtin == true)
-				exec_builtin(current);
-			else
-			{
-				shell->cmd_path = get_cmd_path(current->cmd_name[0]);
-				if (!shell->cmd_path)
-				{
-					fprintf(stderr, "%s: command not found\n", current->cmd_name[0]);
-					exit(EXIT_FAILURE);
-				}
-				execve(shell->cmd_path, current->cmd_name, shell->env);
-				perror("execve");
-				exit(EXIT_FAILURE);
-			}
+				open_and_redirect_fd(current, shell);
+			execute_command(current, shell);
 		}
 		else
-		{
-			// parent process
-			if (prev_fd != 0)
-				close(prev_fd);
-			if (current->next)
-			{
-				close(shell->pipe_fd[1]);
-				prev_fd = shell->pipe_fd[0];
-			}
-			if (shell->infile_fd != -1)
-				close(shell->infile_fd);
-			if (shell->outfile_fd != -1)
-				close(shell->outfile_fd);
-		}
+			prev_fd = handle_parent(current, shell, prev_fd);
 		current = current->next;
 	}
 	wait_commands(shell);

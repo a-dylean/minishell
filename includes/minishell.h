@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/26 15:03:10 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:31:48 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_shell
 	/*for executer below*/
 	int					infile_fd;
 	int					outfile_fd;
+	int					prev_fd;
 	pid_t				last_pid;
 	int					pipe_fd[2];
 	int					wstatus;
