@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 15:06:47 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:09:02 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,24 @@ void	wait_commands(t_shell *shell)
 	}
 }
 
+void	pipe_and_fork(t_command *current, t_shell *shell)
+{
+	if (current->next)
+	{
+		if (pipe(shell->pipe_fd) == -1)
+		{
+			perror("pipe");
+			exit(EXIT_FAILURE);
+		}
+	}
+	shell->last_pid = fork();
+	if (shell->last_pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+}
+
 void	executer(t_command *commands, t_shell *shell)
 {
 	t_command	*current;
@@ -138,21 +156,8 @@ void	executer(t_command *commands, t_shell *shell)
 	prev_fd = 0;
 	while (current)
 	{
-		if (current->next)
-		{
-			if (pipe(shell->pipe_fd) == -1)
-			{
-				perror("pipe");
-				exit(EXIT_FAILURE);
-			}
-		}
-		shell->last_pid = fork();
-		if (shell->last_pid == -1)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
-		else if (shell->last_pid == 0) // child process
+		pipe_and_fork(current, shell);
+		if (shell->last_pid == 0) // child process
 		{
 			if (current->redirections)
 			{
