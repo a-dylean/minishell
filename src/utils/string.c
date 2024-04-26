@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 19:35:35 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 16:08:07 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/24 15:14:39 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,9 @@ int count_chars(char *str, char c)
 		i++;
 	}
 	return (count);
+}
+
+int	char_is_separator(char c)
+{
+	return (c == '$' || c == ' ' || c == '=' || c == '\0');
 }

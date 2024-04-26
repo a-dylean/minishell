@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:28:00 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/26 15:43:51 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:05:58 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,15 @@ void init_shell(t_shell *shell, char **env)
 	shell->heredoc = NULL;
 	shell->std_fds[0] = dup(STDIN_FILENO);
 	shell->std_fds[1] = dup(STDOUT_FILENO);
+}
+
+t_token **init_tokens(void)
+{
+	t_token **tokens;
+
+	tokens = (t_token **)malloc(sizeof(t_token));
+	if (!tokens)
+		return (NULL);
+	*tokens = NULL;
+	return (tokens);
 }

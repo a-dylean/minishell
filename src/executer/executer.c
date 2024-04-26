@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 16:26:43 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:08:16 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	exec_builtin(t_command *commands)
 		status = ft_cd(commands);
 	else if (ft_strcmp(commands->cmd_name[0], "pwd") == 0)
 		status = ft_pwd();
-	else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
-		status = ft_echo(commands->cmd_name);
+	// else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
+	// 	status = ft_echo(commands->cmd_name);
 	// else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
 	// 	status = ft_export();
 	// else if (ft_strcmp(commands->cmd_name[0], "unset") == 0)

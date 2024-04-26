@@ -3,43 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 17:17:23 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:13:20 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	valid_quotes(char *str)
-{
-	int	i;
-	int	in_single_quote;
-	int	in_double_quote;
-	int	result;
-
-	in_single_quote = 0;
-	in_double_quote = 0;
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == S_QUOTE)
-			in_single_quote = !in_single_quote;
-		else if (str[i] == D_QUOTE)
-			in_double_quote = !in_double_quote;
-		i++;
-	}
-	result = !(in_single_quote || in_double_quote);
-	return (result);
-}
 
 int	len_between_quotes(char *str, int i, char quote)
 {
 	int	len;
 
 	len = 1;
-	while (str[i + len] != quote)
+	while (str[i + len] != quote && str[i + len])	
 		len++;
 	len++;
 	return (len);
@@ -50,7 +28,7 @@ int	len_word(char *str, int i)
 	int	len;
 
 	len = 1;
-	while (!ft_isspace(str[i + len]) && str[i + len])
+	while (str[i + len] && !ft_isspace(str[i + len]))
 	{
 		if (str[i + len] != S_QUOTE && str[i + len] != D_QUOTE
 			&& !ft_strchr("|><", str[i + len]))
@@ -66,7 +44,7 @@ int	count_spaces(char *str, int i)
 	int	len;
 
 	len = 0;
-	while (ft_isspace(str[i + len]) && str[i])
+	while (str[i + len] && str[i] && ft_isspace(str[i + len]))
 		len++;
 	return (len);
 }

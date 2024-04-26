@@ -6,50 +6,46 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 13:33:34 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 12:35:27 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:10:05 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int		check_echo_flag(char *flag)
-{
-	int	i;
+// we need to handle cases such as echo -n and echo -nnnnnnnnnnnnnnnnnn, which is also valid in bash
 
-	i = 1;
-	while (flag[i])
-	{
-		if (flag[i] != 'n')
-			return (false);
-		i++;
-	}
-	return (true);
-}
+// int		check_echo_flag(char *flag)
+// {
+// 	int	i;
 
-int	ft_echo(char **cmd)
+// 	i = 0;
+// 	while (flag[i])
+// 	{
+		
+// 	}
+// }
+
+void	ft_echo(t_command *commands)
 {
 	bool	n_flag;
 	int		i;
 
 	n_flag = false;
-	i = 1;
-	if (!cmd[i])
+	i = 0;
+	if (!commands->cmd_name[1])
 	{
 		write(STDOUT_FILENO, "\n", 1);
-		return (0);
+		return ;
 	}
-	else if (cmd[i] && cmd[i][0] == '-')
+	else if (commands->cmd_name[1][0] == '-')
 	{
-		n_flag = check_echo_flag(cmd[1]);
-		if (n_flag)
-			i++;
+		if (commands->cmd_name[1][1] && commands->cmd_name[1][1] == 'n')
+		{
+			if (commands->cmd_name[1][2] == '\0')
+				n_flag = true;
+			// else
+			// 	check_echo_flag(commands->cmd_name[1]);
+		}
+
 	}
-	while (cmd[i])
-    {
-        write(STDOUT_FILENO, cmd[i], strlen(cmd[i]));
-        i++;
-    }
-    if (!n_flag)
-        write(STDOUT_FILENO, "\n", 1);
-    return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/24 13:30:03 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:05:15 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ void	assign_type_redirections(t_token *tokens)
 	}
 }
 
-int	parser(t_token *tokens, t_shell *shell)
+t_command *parser(t_token *tokens, t_shell *shell)
 {
 	t_command	**commands;
 	t_token		*temp;
@@ -191,8 +191,8 @@ int	parser(t_token *tokens, t_shell *shell)
 			temp = temp->next;
 	}
 	// remove outer double quotes here ??
-	//print_commands(*commands);
-	executer(*commands, shell);
-	return (0);
+	// print_commands(*commands);
+	// executer(*commands, shell);
+	return (*commands);
 }
 

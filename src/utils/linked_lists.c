@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_lists.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/19 17:08:21 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:53:23 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_token	*create_token(char *value, int type)
 	token->id = id++;
 	token->value = ft_strdup(value);
 	token->type = type;
+	token->quotes_status = NONE;
 	token->next = NULL;
 	token->prev = NULL;
 	return (token);

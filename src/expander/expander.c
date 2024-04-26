@@ -6,24 +6,11 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 11:24:35 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/25 18:41:55 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	expander(t_token *tokens, t_shell *shell)
-{
-	t_token	*temp;
-
-	temp = tokens;
-	while (temp)
-	{
-		temp->value = get_value_after_expansion(temp->value, shell);
-		temp = temp->next;
-	}
-	return (0);
-}
 
 /* function that returns the value of the buffer */
 
@@ -32,7 +19,10 @@ char	*get_value_after_expansion(char *token, t_shell *shell)
 	char	*new_token;
 	char	*buffer;
 
-	buffer = get_buffer_value(token, shell);
+	buffer = init_buffer(token);
+	if (!buffer)
+		return (NULL);
+	buffer = get_buffer_value(token, buffer, shell);
 	new_token = get_value_from_buffer(buffer);
 	if (!new_token)
 		return (NULL);
@@ -40,85 +30,62 @@ char	*get_value_after_expansion(char *token, t_shell *shell)
 	return (new_token);
 }
 
-/* function that checks if a string needs to be expanded depending of
-what's before and after dollar sign */
-
-int	expansion_needed(char *str, int quotes)
+void	set_quotes_status(t_token *tokens)
 {
-	int	i;
+	t_token	*temp;
+	int		in_single_quotes;
+	int		in_double_quotes;
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i])
+	temp = tokens;
+	while (temp)
 	{
-		if ((str[i] == '$' && str[i + 1] != ' ' && str[i + 1] != '\0' && str[i
-				+ 1] != '$' && str[i + 1] != S_QUOTE && str[i + 1] != D_QUOTE)
-			&& quotes)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-/* function that returns 1 if a string is subject to expansion depending
-on its position in relation to single and double quotes */
-
-int	quotes_check(char *str)
-{
-	int	i;
-	int	in_double_quotes;
-	int	in_single_quotes;
-	int	has_quotes;
-
-	i = 0;
-	in_double_quotes = 0;
-	in_single_quotes = 0;
-	has_quotes = 0;
-	while (str[i])
-	{
-		if (str[i] == '\"' && !in_single_quotes)
-		{
-			in_double_quotes = !in_double_quotes;
-			has_quotes = 1;
-		}
-		else if (str[i] == '\'' && !in_double_quotes)
-		{
+		in_single_quotes = 0;
+		in_double_quotes = 0;
+		if (temp->value[0] == S_QUOTE && !in_double_quotes)
 			in_single_quotes = !in_single_quotes;
-			has_quotes = 1;
-		}
-		else if (str[i] == '$')
-		{
-			if (in_double_quotes || (in_single_quotes && in_double_quotes))
-				return (1);
-			else if (in_single_quotes && !in_double_quotes)
-				return (0);
-		}
-		i++;
+		else if (temp->value[0] == D_QUOTE && !in_single_quotes)
+			in_double_quotes = !in_double_quotes;
+		if (in_single_quotes)
+			temp->quotes_status = SQUOTED;
+		else if (in_double_quotes)
+			temp->quotes_status = DQUOTED;
+		else
+			temp->quotes_status = NONE;
+		temp = temp->next;
 	}
-	return (!has_quotes);
 }
 
-/* function that calculates the size of the expansion
-that will be added to the buffer */
-
-int	calculate_expansion_size(char *token, int *i)
+void	perform_expansion(t_token *tokens, t_shell *shell)
 {
-	int		buffer_size;
-	char	*env_var_value;
-	char	*env_var;
+	t_token	*temp;
+	int		i;
 
-	buffer_size = 0;
-	env_var = get_env_from_str(&token[*i]);
-	if (env_var_exists(env_var))
+	temp = tokens;
+	while (temp)
 	{
-		env_var_value = getenv(env_var);
-		if (env_var_value)
-			buffer_size += ft_strlen(env_var_value);
+		if (temp->type == WORD || temp->type == FILENAME)
+		{
+			i = -1;
+			while (temp->value[++i])
+			{
+				if (temp->value[i] == '$' && temp->value[i + 1] != '\0'
+					&& !char_is_separator(temp->value[i + 1])
+					&& (temp->quotes_status == NONE
+						|| temp->quotes_status == DQUOTED))
+					temp->value = get_value_after_expansion(temp->value, shell);
+				if (!temp || !temp->value)
+					break ;
+			}
+		}
+		if (temp)
+			temp = temp->next;
 	}
-	if (env_var)
-		*i += ft_strlen(env_var) + 1;
-	else
-		*i += 1;
-	return (buffer_size);
+}
+
+int	expander(t_token *tokens, t_shell *shell)
+{
+	set_quotes_status(tokens);
+	perform_expansion(tokens, shell);
+	remove_quotes(tokens);
+	return (0);
 }

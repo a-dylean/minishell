@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   buffer.c                                           :+:      :+:    :+:   */
+/*   buffer_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:09:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 13:35:47 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:04:07 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,42 +28,17 @@ char	*init_buffer(char *token)
 		return (NULL);
 	return (buffer);
 }
-/* function that returns new value for token if expansion is needed */
 
-char	*get_buffer_value(char *token, t_shell *shell)
+/* function that copies the buffer to a new token */
+
+char	*get_value_from_buffer(char buffer[])
 {
-	char	*buffer;
-	int		i;
-	int		j;
-	int		quotes;
+	char	*new_token;
 
-	i = 0;
-	j = 0;
-	buffer = init_buffer(token);
-	if (!buffer)
+	new_token = ft_strdup(buffer);
+	if (!new_token)
 		return (NULL);
-	quotes = quotes_check(token);
-	while (token[i])
-	{
-		if (token[i] != '$')
-			buffer[j++] = token[i++];
-		else
-		{
-			if (token[i + 1] == '?')
-			{
-				expand_to_exit_status(&token[i], buffer, &j, shell);
-				if (token[i + 2] == '\0')
-					break;
-				i += 2;
-			}
-			if (expansion_needed(&token[i], quotes))
-				handle_expansion(token, &i, buffer, &j);
-			else
-				buffer[j++] = token[i++];
-		}
-	}
-	buffer[j] = '\0';
-	return (buffer);
+	return (new_token);
 }
 
 void	expand_to_exit_status(char *token, char *buffer, int *j, t_shell *shell)
@@ -78,7 +53,9 @@ void	expand_to_exit_status(char *token, char *buffer, int *j, t_shell *shell)
 	}
 	token++;
 }
-/* function that copies the env value to the buffer if it exists*/
+/* function that copies the env value to the buffer if it exists
+and if it doesn't it doesn't copy anything ($$ is not handeled the bash
+way (returning PID) because it's not in the subject) */
 
 void	handle_expansion(char *token, int *i, char *buffer, int *j)
 {
@@ -95,39 +72,39 @@ void	handle_expansion(char *token, int *i, char *buffer, int *j)
 			env_var_value++;
 		}
 	}
-	*i += ft_strlen(env_var) + 1;
+	if (env_var)
+		*i += ft_strlen(env_var) + 1;
+	else if (token[*i] == '$')
+		(*i)++;
+	free(env_var);
 }
 
-/* function that copies the buffer to a new token */
+/* function that returns buffer that is the new value for token */
 
-char	*get_value_from_buffer(char buffer[])
-{
-	char	*new_token;
-
-	new_token = ft_strdup(buffer);
-	if (!new_token)
-		return (NULL);
-	return (new_token);
-}
-
-/* function that calculates the size of the buffer needed for the new token */
-
-int	calculate_buffer_size(char *token)
+char	*get_buffer_value(char *token, char *buffer, t_shell *shell)
 {
 	int	i;
-	int	buffer_size;
+	int	j;
 
 	i = 0;
-	buffer_size = 0;
+	j = 0;
 	while (token[i])
 	{
 		if (token[i] != '$')
-		{
-			buffer_size++;
-			i++;
-		}
+			buffer[j++] = token[i++];
 		else
-			buffer_size += calculate_expansion_size(token, &i);
+		{
+			if (token[i + 1] == '?')
+			{
+				expand_to_exit_status(&token[i], buffer, &j, shell);
+				if (token[i + 2] == '\0')
+					break ;
+				i += 2;
+			}
+			else
+				handle_expansion(token, &i, buffer, &j);
+		}
 	}
-	return (buffer_size + 1);
+	buffer[j] = '\0';
+	return (buffer);
 }
