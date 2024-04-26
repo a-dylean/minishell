@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 15:09:02 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:13:40 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,28 @@ void	pipe_and_fork(t_command *current, t_shell *shell)
 	}
 }
 
+void	redirect_in_and_output(t_command *current, t_shell *shell)
+{
+	get_fd_in(current->redirections, shell);
+	get_fd_out(current->redirections, shell);
+	if (shell->infile_fd != -2)
+	{
+		if (dup2(shell->infile_fd, STDIN_FILENO) == -1)
+		{
+			perror("dup2");
+			exit(EXIT_FAILURE);
+		}
+	}
+	if (shell->outfile_fd != -2)
+	{
+		if (dup2(shell->outfile_fd, STDOUT_FILENO) == -1)
+		{
+			perror("dup2");
+			exit(EXIT_FAILURE);
+		}
+	}
+}
+
 void	executer(t_command *commands, t_shell *shell)
 {
 	t_command	*current;
@@ -160,26 +182,7 @@ void	executer(t_command *commands, t_shell *shell)
 		if (shell->last_pid == 0) // child process
 		{
 			if (current->redirections)
-			{
-				get_fd_in(current->redirections, shell);
-				get_fd_out(current->redirections, shell);
-				if (shell->infile_fd != -2)
-				{
-					if (dup2(shell->infile_fd, STDIN_FILENO) == -1)
-					{
-						perror("dup2");
-						exit(EXIT_FAILURE);
-					}
-				}
-				if (shell->outfile_fd != -2)
-				{
-					if (dup2(shell->outfile_fd, STDOUT_FILENO) == -1)
-					{
-						perror("dup2");
-						exit(EXIT_FAILURE);
-					}
-				}
-			}
+				redirect_in_and_output(current, shell);
 			if (prev_fd != 0)
 			{
 				if (dup2(prev_fd, STDIN_FILENO) == -1)
