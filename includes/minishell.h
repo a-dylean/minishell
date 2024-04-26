@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/26 14:45:20 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:53:52 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,16 @@ typedef struct s_shell
 {
 	struct t_command	*commands;
 	int					envless;
+	/*for executer below*/
 	int					infile_fd;
 	int					outfile_fd;
+	int					pipe_fd[2];
+	char				*cmd_path;
+	char				**env;
+	/*end*/
 	char				*prompt;
 	char				*heredoc;
 	t_env				*env_head;
-	char				**env;
 	int					exit_status;
 	int					std_fds[2];
 	char				*user_name;

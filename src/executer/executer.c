@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 14:48:07 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:52:43 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,7 @@ void	get_fd_out(t_token *redirections, t_shell *shell)
 void	executer(t_command *commands, t_shell *shell)
 {
 	t_command	*current;
-	int			pipe_fd[2];
 	int			prev_fd;
-	char		*cmd_path;
 	pid_t		pids[100];
 	int			n = 0;
 	current = commands;
@@ -131,7 +129,7 @@ void	executer(t_command *commands, t_shell *shell)
 	{
 		if (current->next)
 		{
-			if (pipe(pipe_fd) == -1)
+			if (pipe(shell->pipe_fd) == -1)
 			{
 				perror("pipe");
 				exit(EXIT_FAILURE);
@@ -176,25 +174,25 @@ void	executer(t_command *commands, t_shell *shell)
 			}
 			if (current->next && !current->redirections)
 			{
-				if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+				if (dup2(shell->pipe_fd[1], STDOUT_FILENO) == -1)
 				{
 					perror("dup2");
 					exit(EXIT_FAILURE);
 				}
-				close(pipe_fd[0]);
+				close(shell->pipe_fd[0]);
 			}
 			// execute the command
 			if (current->is_builtin == true)
 				exec_builtin(current);
 			else
 			{
-				cmd_path = get_cmd_path(current->cmd_name[0]);
-				if (!cmd_path)
+				shell->cmd_path = get_cmd_path(current->cmd_name[0]);
+				if (!shell->cmd_path)
 				{
 					fprintf(stderr, "%s: command not found\n", current->cmd_name[0]);
 					exit(EXIT_FAILURE);
 				}
-				execve(cmd_path, current->cmd_name, shell->env);
+				execve(shell->cmd_path, current->cmd_name, shell->env);
 				perror("execve");
 				exit(EXIT_FAILURE);
 			}
@@ -207,8 +205,8 @@ void	executer(t_command *commands, t_shell *shell)
 				close(prev_fd);
 			if (current->next)
 			{
-				close(pipe_fd[1]);
-				prev_fd = pipe_fd[0];
+				close(shell->pipe_fd[1]);
+				prev_fd = shell->pipe_fd[0];
 			}
 			if (shell->infile_fd != -1)
 				close(shell->infile_fd);
