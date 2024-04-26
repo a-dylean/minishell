@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 14:37:48 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:48:07 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,10 @@ char	*get_cmd_path(char *cmd)
     return (NULL);
 }
 
-int	get_fd_in(t_token *redirections)
+void	get_fd_in(t_token *redirections, t_shell *shell)
 {
 	t_token	*current;
-	int	in_fd;
 
-	in_fd = -2;
 	current = redirections;
 	while (current)
 	{
@@ -71,27 +69,24 @@ int	get_fd_in(t_token *redirections)
 		{
 			if (current->next && current->next->type == FILENAME)
 			{
-				if (in_fd != -2)
-					close(in_fd);
-				in_fd = open(current->next->value, O_RDONLY);
+				if (shell->infile_fd != -2)
+					close(shell->infile_fd);
+				shell->infile_fd = open(current->next->value, O_RDONLY);
 			}
 		}
-		if (in_fd == -1)
+		if (shell->infile_fd == -1)
 		{
 			perror(current->next->value);
 			exit(EXIT_FAILURE);
 		}
 		current = current->next;
 	}
-	return (in_fd);
 }
 
-int	get_fd_out(t_token *redirections)
+void	get_fd_out(t_token *redirections, t_shell *shell)
 {
 	t_token	*current;
-	int		out_fd;
 
-	out_fd = -2;
 	current = redirections;
 	while (current)
 	{
@@ -99,28 +94,27 @@ int	get_fd_out(t_token *redirections)
 		{
 			if (current->next && current->next->type == FILENAME)
 			{
-				if (out_fd != -2)
-					close(out_fd);
-				out_fd = open(current->next->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				if (shell->outfile_fd != -2)
+					close(shell->outfile_fd);
+				shell->outfile_fd = open(current->next->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			}
 		}
 		else if (current->type == GREATGREAT)
 		{
 			if (current->next && current->next->type == FILENAME)
 			{
-				if (out_fd != -2)
-					close(out_fd);
-				out_fd = open(current->next->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+				if (shell->outfile_fd != -2)
+					close(shell->outfile_fd);
+				shell->outfile_fd = open(current->next->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			}
 		}
-		if (out_fd == -1)
+		if (shell->outfile_fd == -1)
 		{
 			perror(current->next->value);
 			exit(EXIT_FAILURE);
 		}
 		current = current->next;
 	}
-	return (out_fd);
 }
 
 void	executer(t_command *commands, t_shell *shell)
@@ -129,15 +123,12 @@ void	executer(t_command *commands, t_shell *shell)
 	int			pipe_fd[2];
 	int			prev_fd;
 	char		*cmd_path;
-	int	fd_in, fd_out;
 	pid_t		pids[100];
 	int			n = 0;
 	current = commands;
 	prev_fd = 0;
 	while (current)
 	{
-		fd_in = -1;
-		fd_out = -1;
 		if (current->next)
 		{
 			if (pipe(pipe_fd) == -1)
@@ -156,19 +147,19 @@ void	executer(t_command *commands, t_shell *shell)
 		{
 			if (current->redirections)
 			{
-				fd_in = get_fd_in(current->redirections);
-				fd_out = get_fd_out(current->redirections);
-				if (fd_in != -2)
+				get_fd_in(current->redirections, shell);
+				get_fd_out(current->redirections, shell);
+				if (shell->infile_fd != -2)
 				{
-					if (dup2(fd_in, STDIN_FILENO) == -1)
+					if (dup2(shell->infile_fd, STDIN_FILENO) == -1)
 					{
 						perror("dup2");
 						exit(EXIT_FAILURE);
 					}
 				}
-				if (fd_out != -2)
+				if (shell->outfile_fd != -2)
 				{
-					if (dup2(fd_out, STDOUT_FILENO) == -1)
+					if (dup2(shell->outfile_fd, STDOUT_FILENO) == -1)
 					{
 						perror("dup2");
 						exit(EXIT_FAILURE);
@@ -219,10 +210,10 @@ void	executer(t_command *commands, t_shell *shell)
 				close(pipe_fd[1]);
 				prev_fd = pipe_fd[0];
 			}
-			if (fd_in != -1)
-				close(fd_in);
-			if (fd_out != -1)
-				close(fd_out);			
+			if (shell->infile_fd != -1)
+				close(shell->infile_fd);
+			if (shell->outfile_fd != -1)
+				close(shell->outfile_fd);
 		}
 		current = current->next;
 	}
