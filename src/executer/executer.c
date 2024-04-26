@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 11:28:40 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 11:39:23 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,22 @@
 
 void	exec_builtin(t_command *commands)
 {
+	int		status;
 	if (ft_strcmp(commands->cmd_name[0], "cd") == 0)
-		ft_cd(commands);
+		status = ft_cd(commands);
 	else if (ft_strcmp(commands->cmd_name[0], "pwd") == 0)
-	 	ft_pwd();
+	 	status = ft_pwd();
 	else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
-		ft_echo(commands);
+		status = ft_echo(commands);
 	// else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
-	// 	ft_export();
+	// 	status = ft_export();
 	// else if (ft_strcmp(commands->cmd_name[0], "unset") == 0)
-	// 	ft_unset();
+	// 	status = ft_unset();
 	// else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
-	// 	ft_env();
+	// 	status = ft_env();
 	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)
-		ft_exit(commands);
+		status = ft_exit(commands);
+	exit(status);
 }
 char	*get_cmd_path(char *cmd)
 {
@@ -189,10 +191,10 @@ void	executer(t_command *commands, t_shell *shell)
 				close(pipe_fd[0]);
 			}
 			// execute the command
-			// if (current->is_builtin == true)
-			// 	exec_builtin(current);
-			// else
-			// {
+			if (current->is_builtin == true)
+				exec_builtin(current);
+			else
+			{
 				cmd_path = get_cmd_path(current->cmd_name[0]);
 				if (!cmd_path)
 				{
@@ -202,7 +204,7 @@ void	executer(t_command *commands, t_shell *shell)
 				execve(cmd_path, current->cmd_name, shell->env);
 				perror("execve");
 				exit(EXIT_FAILURE);
-			// }
+			}
 		}
 		else
 		{

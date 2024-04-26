@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/26 11:16:06 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 11:34:12 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,8 +144,8 @@ void					executer(t_command *commands, t_shell *shell);
 t_token					*remove_pipes(t_token *tokens, int id);
 
 /* builtins */
-void					ft_echo(t_command *commands);
-void					ft_pwd(void);
+int					ft_echo(t_command *commands);
+int					ft_pwd(void);
 int						ft_cd(t_command *commands);
 int						ft_exit(t_command *commands);
 

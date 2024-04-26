@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 13:33:34 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 11:16:19 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 11:34:35 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 // 	}
 // }
 
-void	ft_echo(t_command *commands)
+int	ft_echo(t_command *commands)
 {
     int i;
     bool n_flag = false;
@@ -79,5 +79,6 @@ void	ft_echo(t_command *commands)
 
     // Print a newline if -n flag is not set
     if (!n_flag)
-        ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	return (0);
 }
