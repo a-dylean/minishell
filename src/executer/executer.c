@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 14:52:43 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:57:32 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,27 +35,27 @@ void	exec_builtin(t_command *commands)
 }
 char	*get_cmd_path(char *cmd)
 {
-    char	**path_dirs;
-    char	*path_var;
-    char	*cmd_path;
-    int		i;
+	char	**path_dirs;
+	char	*path_var;
+	char	*cmd_path;
+	int		i;
 
-    path_var = getenv("PATH");
-    if (!path_var)
-        return (NULL);
-    path_dirs = ft_split(path_var, ':');
-    if (!path_dirs)
-        return (NULL);
-    i = 0;
-    while (path_dirs[i])
+	i = 0;
+	path_var = getenv("PATH");
+	if (!path_var)
+		return (NULL);
+	path_dirs = ft_split(path_var, ':');
+	if (!path_dirs)
+		return (NULL);
+	while (path_dirs[i])
     {
-        cmd_path = ft_strjoin(path_dirs[i], "/");
-        cmd_path = ft_strjoin(cmd_path, cmd);
-        if (access(cmd_path, X_OK) == 0)
-            return (cmd_path);
-        i++;
-    }
-    return (NULL);
+		cmd_path = ft_strjoin(path_dirs[i], "/");
+		cmd_path = ft_strjoin(cmd_path, cmd);
+		if (access(cmd_path, X_OK) == 0)
+			return (cmd_path);
+		i++;
+	}
+	return (NULL);
 }
 
 void	get_fd_in(t_token *redirections, t_shell *shell)
@@ -83,6 +83,16 @@ void	get_fd_in(t_token *redirections, t_shell *shell)
 	}
 }
 
+void	open_outfile(char *filename, t_shell *shell, int flags)
+{
+	if (shell->outfile_fd != -2)
+		close(shell->outfile_fd);
+	if (flags == GREAT)
+		shell->outfile_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else
+		shell->outfile_fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+}
+
 void	get_fd_out(t_token *redirections, t_shell *shell)
 {
 	t_token	*current;
@@ -90,23 +100,12 @@ void	get_fd_out(t_token *redirections, t_shell *shell)
 	current = redirections;
 	while (current)
 	{
-		if (current->type == GREAT)
+		if (current->next && current->next->type == FILENAME)
 		{
-			if (current->next && current->next->type == FILENAME)
-			{
-				if (shell->outfile_fd != -2)
-					close(shell->outfile_fd);
-				shell->outfile_fd = open(current->next->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			}
-		}
-		else if (current->type == GREATGREAT)
-		{
-			if (current->next && current->next->type == FILENAME)
-			{
-				if (shell->outfile_fd != -2)
-					close(shell->outfile_fd);
-				shell->outfile_fd = open(current->next->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			}
+			if (current->type == GREAT)
+				open_outfile(current->next->value, shell, GREAT);
+			else if (current->type == GREATGREAT)
+				open_outfile(current->next->value, shell, GREATGREAT);
 		}
 		if (shell->outfile_fd == -1)
 		{
