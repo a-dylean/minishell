@@ -54,6 +54,7 @@ void	pipe_and_fork(t_command *current, t_shell *shell)
 
 void	execute_command(t_command *current, t_shell *shell)
 {
+	signal(SIGQUIT, SIG_DFL);
 	if (current->is_builtin == true)
 		exec_builtin(current);
 	else

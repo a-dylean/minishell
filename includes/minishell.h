@@ -22,6 +22,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <signal.h>
 
 # define S_QUOTE '\''
 # define D_QUOTE '\"'
@@ -197,6 +198,9 @@ void					free_array(char **arr);
 int						str_is_empty_or_space_only(const char *str);
 int						count_chars(char *str, char c);
 int						char_is_separator(char c);
+
+/* signals */
+void					catch_sigint(int signum);
 
 /* tests */
 void					print_commands(t_command *commands);

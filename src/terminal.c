@@ -12,6 +12,8 @@
 
 #include "../includes/minishell.h"
 
+int			g_exit_code;
+
 int valid_quotes(char *str)
 {
     int i;
@@ -51,6 +53,19 @@ int	trim_and_verify_buffer(char *buffer)
 	return (EXIT_SUCCESS);
 }
 
+/* function that resets the readline user input prompt 
+for interactive signal handling */
+
+void	catch_sigint(int signum)
+{
+	(void)signum;
+	g_exit_code = signum;
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
 int	minishell_loop(t_shell *shell)
 {
 	char		*buffer;
@@ -59,6 +74,8 @@ int	minishell_loop(t_shell *shell)
 
 	buffer = NULL;
 	commands = NULL;
+	signal(SIGINT, catch_sigint);
+	signal(SIGQUIT, SIG_IGN);
 	while ((buffer = readline(PROMPT)))
 	{
 		if (trim_and_verify_buffer(buffer))

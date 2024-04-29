@@ -39,6 +39,7 @@ char	*get_cmd_path(char *cmd)
 
 void	wait_commands(t_shell *shell)
 {
+	signal(SIGINT, SIG_IGN);
 	while (errno != ECHILD)
 	{
 		if (wait(&shell->wstatus) == shell->last_pid)
@@ -49,4 +50,5 @@ void	wait_commands(t_shell *shell)
 				shell->exit_status = 128 + WTERMSIG(shell->wstatus);
 		}
 	}
+	signal(SIGINT, catch_sigint);
 }
