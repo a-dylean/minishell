@@ -66,6 +66,12 @@ void	catch_sigint(int signum)
 	rl_redisplay();
 }
 
+int non_interactive_behaviour(t_shell *shell, char *command)
+{
+	printf("Non interactive behaviour\n");
+	return (EXIT_SUCCESS);
+}
+
 int	minishell_loop(t_shell *shell)
 {
 	char		*buffer;

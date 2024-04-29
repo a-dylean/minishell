@@ -12,18 +12,52 @@
 
 #include "../includes/minishell.h"
 
+int invalid_arg(t_shell *shell, int argc, char **argv)
+{
+	if (argc != 1 && argc != 3)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd("wrong arguments\n", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
+	if (argc == 3)
+	{
+		shell->interactive = 0;
+		if (!argv[1] || (argv[1] && ft_strcmp(argv[1], "-c") != 0))
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd("invalid option\n", STDERR_FILENO);
+			return (EXIT_FAILURE);
+		}
+		else if (!argv[2] || (argv[2] && argv[2][0] == '\0'))
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd("no command provided\n", STDERR_FILENO);
+			return (EXIT_FAILURE);
+		}
+	}
+	else
+		shell->interactive = 1;
+	return (EXIT_SUCCESS);
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	t_shell shell;
-	
-	if (argc > 1 || argv[1])
+	(void)argc;
+	(void)argv;
+	if (invalid_arg(&shell, argc, argv) || init_shell(&shell, env))
+	// exit shell here, for now just prining msg and returning
 	{
-		ft_putstr_fd("minishell: no arguments needed\n", 2);
-		return (EXIT_FAILURE);
+		printf("!!! Error: invalid arguments\n");
+		return (shell.exit_status);
 	}
-	init_shell(&shell, env);
-	minishell_loop(&shell);
-	// free everything
-	// exit with correct exit code ?
+	if (shell.interactive)
+		minishell_loop(&shell);
+	else
+		non_interactive_behaviour(&shell, argv[2]);
+	if (isatty(STDIN_FILENO))
+		write(2, "exit\n", 6);
+	// exit_shell(&shell, g_exit_code);
 	return (0);
 }

@@ -69,6 +69,7 @@ typedef struct s_env
 
 typedef struct s_shell
 {
+	int					interactive;
 	struct t_command	*commands;
 	int					envless;
 	/*for executer below*/
@@ -156,9 +157,10 @@ void					remove_quotes(t_token *tokens);
 t_env					*init_env(char **env);
 
 /* executer */
-void					executer(t_command *commands, t_shell *shell);
-void					init_shell(t_shell *shell, char **env);
+int						init_shell(t_shell *shell, char **env);
 int						minishell_loop(t_shell *shell);
+int non_interactive_behaviour(t_shell *shell, char *command);
+void					executer(t_command *commands, t_shell *shell);
 void					executer(t_command *commands, t_shell *shell);
 void					has_no_filename(t_command *current, t_shell *shell, int prev_fd);
 void					open_and_redirect_fd(t_command *current, t_shell *shell);

@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-void init_shell(t_shell *shell, char **env)
+int init_shell(t_shell *shell, char **env)
 {
 	(void)env;
 	if (getenv("USER") == NULL)
@@ -32,6 +32,7 @@ void init_shell(t_shell *shell, char **env)
 	shell->heredoc = NULL;
 	shell->std_fds[0] = dup(STDIN_FILENO);
 	shell->std_fds[1] = dup(STDOUT_FILENO);
+	return (EXIT_SUCCESS);
 }
 
 t_token **init_tokens(void)
