@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 14:59:27 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 16:18:54 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/30 14:37:04 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	has_no_filename(t_command *current, t_shell *shell, int prev_fd)
 			exit(EXIT_FAILURE);
 		}
 	}
-	if (current->next && !current->redirections)
+	if (current->next && shell->outfile_fd == -2)
 	{
 		if (dup2(shell->pipe_fd[1], STDOUT_FILENO) == -1)
 		{

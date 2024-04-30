@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/26 17:05:45 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/30 13:35:04 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,9 +168,9 @@ char					*get_cmd_path(char *cmd);
 void					wait_commands(t_shell *shell);
 
 /* builtins */
-int						ft_echo(char **cmd);
+int						ft_echo(t_command *commands);
 int						ft_pwd(void);
-int						ft_cd(t_command *commands);
+int						ft_cd(t_command *commands, t_shell *shell);
 int						ft_exit(t_command *commands);
 
 /* linked lists*/

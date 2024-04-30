@@ -5,47 +5,57 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/23 13:33:34 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 17:14:02 by jlabonde         ###   ########.fr       */
+/*   Created: 2024/04/30 11:23:54 by jlabonde          #+#    #+#             */
+/*   Updated: 2024/04/30 11:24:49 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// we need to handle cases such as echo -n and echo -nnnnnnnnnnnnnnnnnn, which is also valid in bash
+static void	process_commands(t_command *commands, bool *n_flag, int *i)
+{
+	int	j;
 
-// int		check_echo_flag(char *flag)
-// {
-// 	int	i;
+	while (commands->cmd_name[*i] && commands->cmd_name[*i][0] == '-')
+	{
+		j = 1;
+		while (commands->cmd_name[*i][j] == 'n')
+			j++;
+		if (commands->cmd_name[*i][j] == '\0')
+			*n_flag = true;
+		else
+			break ;
+		(*i)++;
+	}
+}
 
-// 	i = 0;
-// 	while (flag[i])
-// 	{
-		
-// 	}
-// }
+static void	write_commands(t_command *commands, bool n_flag, int *i)
+{
+	while (commands->cmd_name[*i])
+	{
+		write(STDOUT_FILENO, commands->cmd_name[*i],
+			ft_strlen(commands->cmd_name[*i]));
+		if (commands->cmd_name[*i + 1])
+			write(STDOUT_FILENO, " ", 1);
+		(*i)++;
+	}
+	if (!n_flag)
+		write(STDOUT_FILENO, "\n", 1);
+}
 
-// void	ft_echo(t_command *commands)
-// {
-// 	bool	n_flag;
-// 	int		i;
+int	ft_echo(t_command *commands)
+{
+	bool	n_flag;
+	int		i;
 
-// 	n_flag = false;
-// 	i = 0;
-// 	if (!commands->cmd_name[1])
-// 	{
-// 		write(STDOUT_FILENO, "\n", 1);
-// 		return ;
-// 	}
-// 	else if (commands->cmd_name[1][0] == '-')
-// 	{
-// 		if (commands->cmd_name[1][1] && commands->cmd_name[1][1] == 'n')
-// 		{
-// 			if (commands->cmd_name[1][2] == '\0')
-// 				n_flag = true;
-// 			// else
-// 			// 	check_echo_flag(commands->cmd_name[1]);
-// 		}
-
-// 	}
-// }
+	n_flag = false;
+	i = 1;
+	if (!commands->cmd_name[i])
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		return (0);
+	}
+	process_commands(commands, &n_flag, &i);
+	write_commands(commands, n_flag, &i);
+	return (0);
+}

@@ -6,32 +6,46 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 17:08:16 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/30 14:01:08 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	exec_builtin(t_command *commands)
+void	exec_builtin(t_command *commands, t_shell *shell)
 {
-	int		status;
-
-	status = 0;
 	if (ft_strcmp(commands->cmd_name[0], "cd") == 0)
-		status = ft_cd(commands);
+		shell->exit_status = ft_cd(commands, shell);
 	else if (ft_strcmp(commands->cmd_name[0], "pwd") == 0)
-		status = ft_pwd();
-	// else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
-	// 	status = ft_echo(commands->cmd_name);
+		shell->exit_status = ft_pwd();
+	else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
+		shell->exit_status = ft_echo(commands);
 	// else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
-	// 	status = ft_export();
+	// 	shell->exit_status = ft_export();
 	// else if (ft_strcmp(commands->cmd_name[0], "unset") == 0)
-	// 	status = ft_unset();
+	// 	shell->exit_status = ft_unset();
 	// else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
-	// 	status = ft_env();
+	// 	shell->exit_status = ft_env();
 	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)
-		status = ft_exit(commands);
-	exit(status);
+		shell->exit_status = ft_exit(commands);
+	exit(shell->exit_status);
+}
+void	exec_single_builtin(t_command *commands, t_shell *shell)
+{
+	if (ft_strcmp(commands->cmd_name[0], "cd") == 0)
+		shell->exit_status = ft_cd(commands, shell);
+	else if (ft_strcmp(commands->cmd_name[0], "pwd") == 0)
+		shell->exit_status = ft_pwd();
+	else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
+		shell->exit_status = ft_echo(commands);
+	// else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
+	// 	shell->exit_status = ft_export();
+	// else if (ft_strcmp(commands->cmd_name[0], "unset") == 0)
+	// 	shell->exit_status = ft_unset();
+	// else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
+	// 	shell->exit_status = ft_env();
+	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)
+		shell->exit_status = ft_exit(commands);
 }
 
 void	pipe_and_fork(t_command *current, t_shell *shell)
@@ -56,14 +70,15 @@ void	execute_command(t_command *current, t_shell *shell)
 {
 	signal(SIGQUIT, SIG_DFL);
 	if (current->is_builtin == true)
-		exec_builtin(current);
+		exec_builtin(current, shell);
 	else
 	{
 		shell->cmd_path = get_cmd_path(current->cmd_name[0]);
 		if (!shell->cmd_path)
 		{
 			fprintf(stderr, "%s: command not found\n", current->cmd_name[0]);
-			exit(EXIT_FAILURE); // try to kill the process here instead of exit to tell the parent to stop
+			shell->exit_status = 127;
+			exit(shell->exit_status);
 		}
 		execve(shell->cmd_path, current->cmd_name, shell->env);
 		perror("execve");
@@ -94,19 +109,24 @@ void	executer(t_command *commands, t_shell *shell)
 
 	current = commands;
 	prev_fd = 0;
-	while (current)
+	if (!current->next && current->is_builtin == true)
+		exec_single_builtin(current, shell);
+	else
 	{
-		pipe_and_fork(current, shell);
-		if (shell->last_pid == 0) // child process
+		while (current)
 		{
-			has_no_filename(current, shell, prev_fd);
-			if (current->redirections)
-				open_and_redirect_fd(current, shell);
-			execute_command(current, shell);
+			pipe_and_fork(current, shell);
+			if (shell->last_pid == 0) // child process
+			{
+				if (current->redirections)
+					open_and_redirect_fd(current, shell);
+				has_no_filename(current, shell, prev_fd);
+				execute_command(current, shell);
+			}
+			else
+				prev_fd = handle_parent(current, shell, prev_fd);
+			current = current->next;
 		}
-		else
-			prev_fd = handle_parent(current, shell, prev_fd);
-		current = current->next;
 	}
 	wait_commands(shell);
 }

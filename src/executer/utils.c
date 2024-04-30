@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 15:50:09 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/30 16:38:55 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,15 @@ char	*get_cmd_path(char *cmd)
 	int		i;
 
 	i = 0;
+	if (access(cmd, X_OK) == 0)
+		return (cmd);
 	path_var = getenv("PATH");
 	if (!path_var)
 		return (NULL);
 	path_dirs = ft_split(path_var, ':');
 	if (!path_dirs)
 		return (NULL);
+	
 	while (path_dirs[i])
 	{
 		cmd_path = ft_strjoin(path_dirs[i], "/");
