@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 15:50:09 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/30 13:59:35 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,5 @@ void	wait_commands(t_shell *shell)
 			else
 				shell->exit_status = 128 + WTERMSIG(shell->wstatus);
 		}
-	}
+	}	
 }
