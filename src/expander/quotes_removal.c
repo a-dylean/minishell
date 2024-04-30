@@ -37,7 +37,7 @@ void	remove_unquoted_chars(t_token **token, char *new_value)
 {
 	if (ft_strlen((*token)->value) == 2)
 	{
-		new_value = ft_strdup("");
+		new_value = ft_strdup("\'\'");
 		(*token)->value = new_value;
 	}
 	else if ((*token)->quotes_status == DQUOTED)

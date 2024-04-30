@@ -96,9 +96,15 @@ void tokenize(char *str, t_shell *shell)
 int	lexer(t_shell *shell)
 {
 	if (!shell->input)
-		exit(0);
+		exit(EXIT_FAILURE);
 	else if (ft_strcmp(shell->input, "\0") == 0)
 		return (EXIT_FAILURE);
+	else if (!valid_quotes(shell->input))
+	{
+		free_shell(shell);
+		printf("Error: invalid quotes\n");
+		exit(EXIT_FAILURE);
+	}
 	else if (str_is_empty_or_space_only(shell->input))
 		return (EXIT_SUCCESS);
 	add_history(shell->input);
