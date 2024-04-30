@@ -6,13 +6,13 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:05:44 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 11:07:21 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:34:39 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int invalid_arg(t_shell *shell, int argc, char **argv)
+int	invalid_arg(t_shell *shell, int argc, char **argv)
 {
 	if (argc != 1 && argc != 3)
 	{

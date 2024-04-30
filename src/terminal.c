@@ -6,32 +6,32 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/30 17:30:09 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:32:10 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int			g_exit_code;
+int		g_exit_code;
 
-int valid_quotes(char *str)
+int	valid_quotes(char *str)
 {
-    int i;
-	int in_single_quote;
-    int in_double_quote;
-    
+	int	i;
+	int	in_single_quote;
+	int	in_double_quote;
+
 	i = 0;
 	in_single_quote = 0;
 	in_double_quote = 0;
-    while (str[i]) 
+	while (str[i])
 	{
-        if (str[i] == S_QUOTE && !in_double_quote)
-            in_single_quote = !in_single_quote;
-        else if (str[i] == D_QUOTE && !in_single_quote)
-            in_double_quote = !in_double_quote;
-        i++;
-    }
-    return !(in_single_quote || in_double_quote);
+		if (str[i] == S_QUOTE && !in_double_quote)
+			in_single_quote = !in_single_quote;
+		else if (str[i] == D_QUOTE && !in_single_quote)
+			in_double_quote = !in_double_quote;
+		i++;
+	}
+	return (!(in_single_quote || in_double_quote));
 }
 
 int	trim_and_verify_buffer(char *buffer)
@@ -53,7 +53,7 @@ int	trim_and_verify_buffer(char *buffer)
 	return (EXIT_SUCCESS);
 }
 
-/* function that resets the readline user input prompt 
+/* function that resets the readline user input prompt
 for interactive signal handling */
 
 void	catch_sigint(int signum)
@@ -66,7 +66,7 @@ void	catch_sigint(int signum)
 	rl_redisplay();
 }
 
-int non_interactive_behaviour(t_shell *shell, char *command)
+int	non_interactive_behaviour(t_shell *shell, char *command)
 {
 	(void)shell;
 	(void)command;
@@ -81,9 +81,9 @@ int	minishell_loop(t_shell *shell)
 		signal(SIGINT, catch_sigint);
 		signal(SIGQUIT, SIG_IGN);
 		shell->input = readline(PROMPT);
-		if (lexer(shell->input) == EXIT_SUCCESS && parser(shell) == EXIT_SUCCESS)
-			//g_exit_code = executer(shell);
-			g_exit_code = 0;
+		if (lexer(shell->input, shell) == EXIT_SUCCESS
+			&& parser(shell) == EXIT_SUCCESS)
+			g_exit_code = executer(shell);
 		else
 			g_exit_code = 1;
 		// free_data(shell, false);

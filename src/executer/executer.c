@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/30 17:30:58 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:09:48 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,30 +104,30 @@ int	handle_parent(t_command *current, t_shell *shell, int prev_fd)
 
 int	executer(t_shell *shell)
 {
-	// t_command	*current;
-	// int			prev_fd;
+	t_command	*current;
+	int			prev_fd;
 
-	// current = commands;
-	// prev_fd = 0;
-	// if (!current->next && current->is_builtin == true)
-	// 	exec_single_builtin(current, shell);
-	// else
-	// {
-	// 	while (current)
-	// 	{
-	// 		pipe_and_fork(current, shell);
-	// 		if (shell->last_pid == 0) // child process
-	// 		{
-	// 			if (current->redirections)
-	// 				open_and_redirect_fd(current, shell);
-	// 			has_no_filename(current, shell, prev_fd);
-	// 			execute_command(current, shell);
-	// 		}
-	// 		else
-	// 			prev_fd = handle_parent(current, shell, prev_fd);
-	// 		current = current->next;
-	// 	}
-	// }
+	current = shell->commands;
+	prev_fd = 0;
+	if (!current->next && current->is_builtin == true)
+		exec_single_builtin(current, shell);
+	else
+	{
+		while (current)
+		{
+			pipe_and_fork(current, shell);
+			if (shell->last_pid == 0) // child process
+			{
+				if (current->redirections)
+					open_and_redirect_fd(current, shell);
+				has_no_filename(current, shell, prev_fd);
+				execute_command(current, shell);
+			}
+			else
+				prev_fd = handle_parent(current, shell, prev_fd);
+			current = current->next;
+		}
+	}
 	wait_commands(shell);
 	return (shell->exit_status);
 }

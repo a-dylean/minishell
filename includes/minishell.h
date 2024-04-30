@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/30 17:46:46 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:35:25 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,18 @@ typedef struct s_token
 	struct s_token		*prev;
 }						t_token;
 
+typedef struct s_command
+{
+	char				**cmd_name;
+	char *delimiter; // store the delimiter ?
+	bool				is_builtin;
+	t_token				*redirections;
+	struct s_command	*next;
+	struct s_command	*prev;
+	// add delimiter and append data if needed
+	// add last or first command data if needed by pipex
+}						t_command;
+
 typedef struct s_env
 {
 	char				*var_name;
@@ -72,7 +84,7 @@ typedef struct s_shell
 	char				*input;
 	int					interactive;
 	t_token				*tokens;
-	struct t_command	*commands;
+	t_command			*commands;
 	int					envless;
 	/*for executer below*/
 	int					infile_fd;
@@ -99,21 +111,9 @@ typedef struct s_shell
 	// int				cmd_has_been_executed;
 }						t_shell;
 
-typedef struct s_command
-{
-	char				**cmd_name;
-	char *delimiter; // store the delimiter ?
-	bool				is_builtin;
-	t_token				*redirections;
-	struct s_command	*next;
-	struct s_command	*prev;
-	// add delimiter and append data if needed
-	// add last or first command data if needed by pipex
-}						t_command;
-
 /* lexer */
 int						valid_quotes(char *str);
-int						lexer(char *str);
+int						lexer(char *str, t_shell *shell);
 int						get_type(char *str);
 int						get_type(char *str);
 int						len_word(char *str, int i);
@@ -177,7 +177,7 @@ int						ft_exit(t_command *commands);
 /* linked lists*/
 t_command				*init_command(void);
 t_command				*get_last_command(t_command *head);
-void					add_command_back(t_command *commands,
+void					add_command_back(t_command **commands,
 							t_command *new_node);
 t_token					*create_token(char *value, int type);
 void					add_token_back(t_token **tokens, t_token *new_node);

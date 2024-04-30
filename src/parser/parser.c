@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/30 17:48:52 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/30 18:30:49 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,19 +151,15 @@ int	parser(t_shell *shell)
 	t_token	*temp;
 
 	temp = shell->tokens;
-	shell->commands = (struct t_command *)malloc(sizeof(t_command));
-	if (!shell->commands)
-		return (EXIT_FAILURE);
-	shell->commands = NULL;
 	while (temp)
 	{
 		if (no_pipe_in_list(temp) == 1)
 		{
-			add_command_back(shell->commands, get_command(shell->tokens,
+			add_command_back(&shell->commands, get_command(shell->tokens,
 					shell->commands, shell));
 			break ;
 		}
-		add_command_back(shell->commands, get_command(shell->tokens,
+		add_command_back(&shell->commands, get_command(shell->tokens,
 				shell->commands, shell));
 		shell->tokens = remove_pipes(shell->tokens,
 				count_tokens_before_pipe(shell->tokens));
@@ -171,6 +167,6 @@ int	parser(t_shell *shell)
 		if (temp)
 			temp = temp->next;
 	}
-	print_commands(shell->commands);
+	// print_commands(shell->commands);
 	return (EXIT_SUCCESS);
 }
