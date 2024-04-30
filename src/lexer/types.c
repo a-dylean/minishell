@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:35:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/23 14:59:49 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/30 16:29:37 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,16 @@ int	len_between_tokens(char *str, int i, char c)
 	return (0);
 }
 
-int	pipe_type(char *str, int i, int count)
-{
-	count = i;
-	while (str[count] == '|')
-		count++;
-	if (count - i == 2 || count - i == 1)
-		return (PIPE);
-	else
-		return (-1);
-}
+// int	pipe_type(char *str, int i, int count)
+// {
+// 	count = i;
+// 	while (str[count] == '|')
+// 		count++;
+// 	if (count - i == 2 || count - i == 1)
+// 		return (PIPE);
+// 	else
+// 		return (-1);
+// }
 
 // int	great_type(char *str, int i, int count)
 // {
@@ -101,7 +101,8 @@ int	get_type(char *str)
 	while (str[i])
 	{
 		if (str[i] == '|')
-			return (pipe_type(str, i, count));
+			return (PIPE);
+			// return (pipe_type(str, i, count));
 		else if (str[i] == '>')
 			return (check_redir_type(str, i, count, '>'));
 		else if (str[i] == '<')

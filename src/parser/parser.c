@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/26 17:16:23 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/30 16:27:50 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,27 +146,7 @@ t_command	*get_command(t_token *tokens, t_command **commands, t_shell *shell)
 	return (command);
 }
 
-void	assign_type_redirections(t_token *tokens)
-{
-	while (tokens)
-	{
-		if (tokens->type == GREAT && (tokens->next
-				&& tokens->next->type == WORD))
-			tokens->next->type = FILENAME;
-		else if (tokens->type == LESS && (tokens->next
-				&& tokens->next->type == WORD))
-			tokens->next->type = FILENAME;
-		else if (tokens->type == LESSLESS && (tokens->next
-				&& tokens->next->type == WORD))
-			tokens->next->type = DELIMITER;
-		else if (tokens->type == GREATGREAT && (tokens->next
-				&& tokens->next->type == WORD))
-			tokens->next->type = FILENAME;
-		tokens = tokens->next;
-	}
-}
-
-t_command *parser(t_token *tokens, t_shell *shell)
+t_command	*parser(t_token *tokens, t_shell *shell)
 {
 	t_command	**commands;
 	t_token		*temp;
@@ -176,7 +156,7 @@ t_command *parser(t_token *tokens, t_shell *shell)
 	if (!commands)
 		exit(EXIT_FAILURE);
 	*commands = NULL;
-	assign_type_redirections(tokens); // check if we can call this function earlier (in lexer)
+	// assign_type_redirections(tokens);
 	while (temp)
 	{
 		if (no_pipe_in_list(temp) == 1)
@@ -192,4 +172,3 @@ t_command *parser(t_token *tokens, t_shell *shell)
 	}
 	return (*commands);
 }
-

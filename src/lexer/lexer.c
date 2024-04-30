@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/26 14:13:20 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/30 16:30:22 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,21 @@ int	count_spaces(char *str, int i)
 	return (len);
 }
 
+void	assign_type_redirections(t_token *tokens)
+{
+	while (tokens)
+	{
+		if ((tokens->type == GREAT || tokens->type == LESS
+				|| tokens->type == GREATGREAT) && (tokens->next
+				&& tokens->next->type == WORD))
+			tokens->next->type = FILENAME;
+		else if (tokens->type == LESSLESS && (tokens->next
+				&& tokens->next->type == WORD))
+			tokens->next->type = DELIMITER;
+		tokens = tokens->next;
+	}
+}
+
 int	*lexer(char *str, t_token **tokens)
 {
 	int		i;
@@ -74,6 +89,13 @@ int	*lexer(char *str, t_token **tokens)
 		if (substr)
 			free(substr);
 		i += j;
+	}
+	assign_type_redirections(*tokens);
+	t_token *temp = *tokens;
+	while (temp)
+	{
+		printf("Token: %s\nToken type: %d\n", temp->value, temp->type);
+		temp = temp->next;
 	}
 	// assign type to redirections here ? (not in parser)
 	// maybe return tokens array and not just exit status ?
