@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   terminal.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 17:17:30 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/30 14:43:56 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ void	catch_sigint(int signum)
 
 int non_interactive_behaviour(t_shell *shell, char *command)
 {
+	(void)shell;
+	(void)command;
 	printf("Non interactive behaviour\n");
 	return (EXIT_SUCCESS);
 }
