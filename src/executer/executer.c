@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/30 11:36:32 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/30 12:19:38 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,10 @@ void	executer(t_command *commands, t_shell *shell)
 		pipe_and_fork(current, shell);
 		if (shell->last_pid == 0) // child process
 		{
-			has_no_filename(current, shell, prev_fd);
+			
 			if (current->redirections)
 				open_and_redirect_fd(current, shell);
+			has_no_filename(current, shell, prev_fd);
 			execute_command(current, shell);
 		}
 		else
