@@ -65,6 +65,24 @@ void	free_tokens(t_token **tokens)
 	*tokens = NULL;
 }
 
+void	free_commands(t_command **commands)
+{
+	t_command	*temp;
+	t_command	*current;
+
+	if (!*commands)
+		return ;
+	current = *commands;
+	while (current)
+	{
+		temp = current->next;
+		free_array(current->cmd_name);
+		free(current);
+		current = temp;
+	}
+	*commands = NULL;
+}
+
 t_token	*clear_one(t_token **tokens)
 {
 	if ((*tokens) && (*tokens)->value)

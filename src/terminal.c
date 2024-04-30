@@ -81,13 +81,13 @@ int	minishell_loop(t_shell *shell)
 		signal(SIGINT, catch_sigint);
 		signal(SIGQUIT, SIG_IGN);
 		shell->input = readline(PROMPT);
-		if (lexer(shell->input, shell) == EXIT_SUCCESS
+		if (lexer(shell) == EXIT_SUCCESS
 			&& parser(shell) == EXIT_SUCCESS)
 			g_exit_code = executer(shell);
 		else
 			g_exit_code = 1;
-		// free_data(shell, false);
+		free_shell(shell);
+		// clear_shell_history(t_shell *shell);
 	}
-	rl_clear_history();
 	return (EXIT_SUCCESS);
 }

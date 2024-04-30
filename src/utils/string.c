@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-int	str_is_empty_or_space_only(const char *str)
+int	str_is_empty_or_space_only(char *str)
 {
 	int i;
 	

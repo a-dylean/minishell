@@ -113,7 +113,7 @@ typedef struct s_shell
 
 /* lexer */
 int						valid_quotes(char *str);
-int						lexer(char *str, t_shell *shell);
+int						lexer(t_shell *shell);
 int						get_type(char *str);
 int						get_type(char *str);
 int						len_word(char *str, int i);
@@ -195,10 +195,13 @@ int						syntax_error_in_token(char *token);
 int						undefined_behavior_error(char *str);
 
 /* utils */
+void					free_shell(t_shell *shell);
+void					clear_shell_history(t_shell *shell);
+void					free_commands(t_command **commands);
 t_token					**init_tokens(void);
 char					**init_array(int size);
 void					free_array(char **arr);
-int						str_is_empty_or_space_only(const char *str);
+int						str_is_empty_or_space_only(char *str);
 int						count_chars(char *str, char c);
 int						char_is_separator(char c);
 

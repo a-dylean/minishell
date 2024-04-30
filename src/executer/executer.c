@@ -107,6 +107,8 @@ int	executer(t_shell *shell)
 	t_command	*current;
 	int			prev_fd;
 
+	if (shell == NULL || shell->commands == NULL)
+        return -1;
 	current = shell->commands;
 	prev_fd = 0;
 	if (!current->next && current->is_builtin == true)

@@ -45,7 +45,7 @@ int init_shell(t_shell *shell, char **env)
 		shell->envless = 0;
 		shell->env_head = init_env(env);
 		shell->user_name = getenv("USER");
-		shell->env = env;
+ 		shell->env = env;
 	}
 	shell->tokens = *init_tokens();
 	shell->commands = *init_commands();

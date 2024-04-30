@@ -64,7 +64,7 @@ void	assign_type_redirections(t_token *tokens)
 	}
 }
 
-int	lexer(char *str, t_shell *shell)
+void tokenize(char *str, t_shell *shell)
 {
 	int		i;
 	int		j;
@@ -82,7 +82,7 @@ int	lexer(char *str, t_shell *shell)
 		else
 			j = len_word(str, i);
 		if (j < 0)
-			return (0);
+			return ;
 		substr = ft_substr(str, i, j);
 		if (substr != NULL)
 			add_token_back(&shell->tokens, create_token(substr, get_type(substr)));
@@ -90,6 +90,19 @@ int	lexer(char *str, t_shell *shell)
 			free(substr);
 		i += j;
 	}
+
+}
+
+int	lexer(t_shell *shell)
+{
+	if (!shell->input)
+		exit(0);
+	else if (ft_strcmp(shell->input, "\0") == 0)
+		return (EXIT_FAILURE);
+	else if (str_is_empty_or_space_only(shell->input))
+		return (EXIT_SUCCESS);
+	add_history(shell->input);
+	tokenize(shell->input, shell);
 	assign_type_redirections(shell->tokens);
 	if (!check_syntax(shell->tokens))
 		return (EXIT_SUCCESS);
