@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/30 16:30:22 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/30 17:12:20 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,19 @@ void	assign_type_redirections(t_token *tokens)
 	}
 }
 
-int	*lexer(char *str, t_token **tokens)
+int	lexer(char *str)
 {
 	int		i;
 	int		j;
 	char	*substr;
+	t_token	**tokens;
 
 	i = 0;
 	j = 0;
+	tokens = init_tokens();
+	if (!tokens)
+	//free here
+		return (0);
 	while (str[i])
 	{
 		i += count_spaces(str, i);
@@ -82,7 +87,7 @@ int	*lexer(char *str, t_token **tokens)
 		else
 			j = len_word(str, i);
 		if (j < 0)
-			return (NULL);
+			return (0);
 		substr = ft_substr(str, i, j);
 		if (substr != NULL)
 			add_token_back(tokens, create_token(substr, get_type(substr)));
@@ -97,7 +102,7 @@ int	*lexer(char *str, t_token **tokens)
 		printf("Token: %s\nToken type: %d\n", temp->value, temp->type);
 		temp = temp->next;
 	}
-	// assign type to redirections here ? (not in parser)
-	// maybe return tokens array and not just exit status ?
-	return (EXIT_SUCCESS);
+	if (!check_syntax(*tokens))
+		return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/30 13:35:04 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/30 17:46:46 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <signal.h>
 
 # define S_QUOTE '\''
 # define D_QUOTE '\"'
@@ -69,7 +69,9 @@ typedef struct s_env
 
 typedef struct s_shell
 {
+	char				*input;
 	int					interactive;
+	t_token				*tokens;
 	struct t_command	*commands;
 	int					envless;
 	/*for executer below*/
@@ -111,11 +113,8 @@ typedef struct s_command
 
 /* lexer */
 int						valid_quotes(char *str);
-int						*lexer(char *str, t_token **tokens);
+int						lexer(char *str);
 int						get_type(char *str);
-int						pipe_type(char *str, int i, int count);
-// int						great_type(char *str, int i, int count);
-// int						less_type(char *str, int i, int count);
 int						get_type(char *str);
 int						len_word(char *str, int i);
 int						len_between_quotes(char *str, int i, char c);
@@ -126,7 +125,7 @@ void					assign_type_redirections(t_token *tokens);
 
 /* parser */
 int						check_syntax(t_token *tokens);
-t_command				*parser(t_token *tokens, t_shell *shell);
+int						parser(t_shell *shell);
 int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
 t_token					**init_redirections(void);
@@ -159,11 +158,13 @@ t_env					*init_env(char **env);
 /* executer */
 int						init_shell(t_shell *shell, char **env);
 int						minishell_loop(t_shell *shell);
-int non_interactive_behaviour(t_shell *shell, char *command);
-void					executer(t_command *commands, t_shell *shell);
-void					executer(t_command *commands, t_shell *shell);
-void					has_no_filename(t_command *current, t_shell *shell, int prev_fd);
-void					open_and_redirect_fd(t_command *current, t_shell *shell);
+int						non_interactive_behaviour(t_shell *shell,
+							char *command);
+int						executer(t_shell *shell);
+void					has_no_filename(t_command *current, t_shell *shell,
+							int prev_fd);
+void					open_and_redirect_fd(t_command *current,
+							t_shell *shell);
 char					*get_cmd_path(char *cmd);
 void					wait_commands(t_shell *shell);
 
@@ -176,7 +177,7 @@ int						ft_exit(t_command *commands);
 /* linked lists*/
 t_command				*init_command(void);
 t_command				*get_last_command(t_command *head);
-void					add_command_back(t_command **commands,
+void					add_command_back(t_command *commands,
 							t_command *new_node);
 t_token					*create_token(char *value, int type);
 void					add_token_back(t_token **tokens, t_token *new_node);

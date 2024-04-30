@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/30 16:39:10 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/30 17:48:52 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ bool	is_builtin(char *cmd)
 	return (false);
 }
 
-t_command	*get_command(t_token *tokens, t_command **commands, t_shell *shell)
+t_command	*get_command(t_token *tokens, t_command *commands, t_shell *shell)
 {
 	t_command	*command;
 
@@ -135,7 +135,7 @@ t_command	*get_command(t_token *tokens, t_command **commands, t_shell *shell)
 	expander(tokens, shell);
 	tokens = get_cmd_from_tokens(tokens, command);
 	if (tokens)
-		handle_redirections(tokens, command, commands);
+		handle_redirections(tokens, command, &commands);
 	if (command->cmd_name == NULL && command->redirections == NULL)
 	{
 		free(command);
@@ -146,29 +146,31 @@ t_command	*get_command(t_token *tokens, t_command **commands, t_shell *shell)
 	return (command);
 }
 
-t_command	*parser(t_token *tokens, t_shell *shell)
+int	parser(t_shell *shell)
 {
-	t_command	**commands;
-	t_token		*temp;
+	t_token	*temp;
 
-	temp = tokens;
-	commands = (t_command **)malloc(sizeof(t_command));
-	if (!commands)
-		exit(EXIT_FAILURE);
-	*commands = NULL;
-	// assign_type_redirections(tokens);
+	temp = shell->tokens;
+	shell->commands = (struct t_command *)malloc(sizeof(t_command));
+	if (!shell->commands)
+		return (EXIT_FAILURE);
+	shell->commands = NULL;
 	while (temp)
 	{
 		if (no_pipe_in_list(temp) == 1)
 		{
-			add_command_back(commands, get_command(tokens, commands, shell));
+			add_command_back(shell->commands, get_command(shell->tokens,
+					shell->commands, shell));
 			break ;
 		}
-		add_command_back(commands, get_command(tokens, commands, shell));
-		tokens = remove_pipes(tokens, count_tokens_before_pipe(tokens));
-		temp = tokens;
+		add_command_back(shell->commands, get_command(shell->tokens,
+				shell->commands, shell));
+		shell->tokens = remove_pipes(shell->tokens,
+				count_tokens_before_pipe(shell->tokens));
+		temp = shell->tokens;
 		if (temp)
 			temp = temp->next;
 	}
-	return (*commands);
+	print_commands(shell->commands);
+	return (EXIT_SUCCESS);
 }

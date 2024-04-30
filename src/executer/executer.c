@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/30 14:01:08 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/04/30 17:30:58 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,31 +102,32 @@ int	handle_parent(t_command *current, t_shell *shell, int prev_fd)
 	return (prev_fd);
 }
 
-void	executer(t_command *commands, t_shell *shell)
+int	executer(t_shell *shell)
 {
-	t_command	*current;
-	int			prev_fd;
+	// t_command	*current;
+	// int			prev_fd;
 
-	current = commands;
-	prev_fd = 0;
-	if (!current->next && current->is_builtin == true)
-		exec_single_builtin(current, shell);
-	else
-	{
-		while (current)
-		{
-			pipe_and_fork(current, shell);
-			if (shell->last_pid == 0) // child process
-			{
-				if (current->redirections)
-					open_and_redirect_fd(current, shell);
-				has_no_filename(current, shell, prev_fd);
-				execute_command(current, shell);
-			}
-			else
-				prev_fd = handle_parent(current, shell, prev_fd);
-			current = current->next;
-		}
-	}
+	// current = commands;
+	// prev_fd = 0;
+	// if (!current->next && current->is_builtin == true)
+	// 	exec_single_builtin(current, shell);
+	// else
+	// {
+	// 	while (current)
+	// 	{
+	// 		pipe_and_fork(current, shell);
+	// 		if (shell->last_pid == 0) // child process
+	// 		{
+	// 			if (current->redirections)
+	// 				open_and_redirect_fd(current, shell);
+	// 			has_no_filename(current, shell, prev_fd);
+	// 			execute_command(current, shell);
+	// 		}
+	// 		else
+	// 			prev_fd = handle_parent(current, shell, prev_fd);
+	// 		current = current->next;
+	// 	}
+	// }
 	wait_commands(shell);
+	return (shell->exit_status);
 }

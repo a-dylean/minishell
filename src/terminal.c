@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/30 16:38:34 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/30 17:30:09 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,31 +76,17 @@ int non_interactive_behaviour(t_shell *shell, char *command)
 
 int	minishell_loop(t_shell *shell)
 {
-	char		*buffer;
-	t_token		**tokens;
-	t_command	*commands;
-
-	buffer = NULL;
-	commands = NULL;
-	signal(SIGINT, catch_sigint);
-	signal(SIGQUIT, SIG_IGN);
-	while ((buffer = readline(PROMPT)))
+	while (1)
 	{
-		if (trim_and_verify_buffer(buffer))
-			continue ;
-		tokens = init_tokens();
-		if (!tokens)
-			return (EXIT_FAILURE); // we need to free stuff here
-		lexer(buffer, tokens);
-		if (!check_syntax(*tokens))
-			commands = parser(*tokens, shell);
-		if (!commands)
-		{
-			// free the tokens list
-			return (EXIT_FAILURE);
-		}
-		executer(commands, shell);
-		free_in_terminal(tokens, buffer);
+		signal(SIGINT, catch_sigint);
+		signal(SIGQUIT, SIG_IGN);
+		shell->input = readline(PROMPT);
+		if (lexer(shell->input) == EXIT_SUCCESS && parser(shell) == EXIT_SUCCESS)
+			//g_exit_code = executer(shell);
+			g_exit_code = 0;
+		else
+			g_exit_code = 1;
+		// free_data(shell, false);
 	}
 	rl_clear_history();
 	return (EXIT_SUCCESS);
