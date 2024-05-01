@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/30 18:35:25 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/01 14:32:40 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 // # define PROMPT "\033[1;90m minishell $> \033[0m" // grey
 # define PROMPT "\033[1;35mminishell$> \033[0m"
 
-int		g_exit_code;
+extern int		g_exit_code;
 
 /* enums */
 typedef enum s_type

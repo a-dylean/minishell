@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:05:44 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/30 18:34:39 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/01 14:32:51 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	g_exit_code;
 
 int	invalid_arg(t_shell *shell, int argc, char **argv)
 {
