@@ -27,7 +27,8 @@
 # define S_QUOTE '\''
 # define D_QUOTE '\"'
 // # define PROMPT "\033[1;90m minishell $> \033[0m" // grey
-# define PROMPT "\033[1;35mminishell$> \033[0m"
+// # define PROMPT "\033[1;35mminishell$> \033[0m"
+# define PROMPT "\001\e[0m\e[35m\002minishell$> \001\e[0m\002"
 
 extern int		g_exit_code;
 
