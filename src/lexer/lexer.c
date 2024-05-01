@@ -53,8 +53,7 @@ void	assign_type_redirections(t_token *tokens)
 {
 	while (tokens)
 	{
-		if ((tokens->type == GREAT || tokens->type == LESS
-				|| tokens->type == GREATGREAT) && (tokens->next
+		if ((tokens->type >= LESS && tokens->type <= GREATGREAT) && (tokens->next
 				&& tokens->next->type == WORD))
 			tokens->next->type = FILENAME;
 		else if (tokens->type == LESSLESS && (tokens->next
@@ -103,7 +102,6 @@ int	lexer(t_shell *shell)
 	{
 		// free_shell(shell);
 		printf("Error: invalid quotes\n");
-		exit(EXIT_FAILURE);
 	}
 	else if (str_is_empty_or_space_only(shell->input))
 		return (EXIT_SUCCESS);

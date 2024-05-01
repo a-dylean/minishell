@@ -21,19 +21,16 @@ int	syntax_error_in_token(char *token)
 	return (1);
 }
 
+int syntax_error_eof(void)
+{
+	ft_putstr_fd("minishell: syntax error: unexpected end of file\n", STDERR_FILENO);
+	return (1);
+}
+
 int	undefined_behavior_error(char *str)
 {
 	ft_putstr_fd("minishell: undefined behavior caused by ", STDERR_FILENO);
 	ft_putstr_fd(str, STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
 	return (1);
-}
-
-int free_in_terminal(t_token **tokens, char *buffer)
-{
-	(void)tokens;
-	// if (tokens && *tokens)
-	// 	free_tokens(tokens);
-	free(buffer);
-	return (EXIT_SUCCESS);
 }

@@ -26,8 +26,6 @@
 
 # define S_QUOTE '\''
 # define D_QUOTE '\"'
-// # define PROMPT "\033[1;90m minishell $> \033[0m" // grey
-// # define PROMPT "\033[1;35mminishell$> \033[0m"
 # define PROMPT "\001\e[0m\e[35m\002minishell$> \001\e[0m\002"
 
 extern int		g_exit_code;
@@ -190,12 +188,10 @@ t_token					*clear_one(t_token **tokens);
 int						stack_len(t_token *tokens);
 int						len_command(t_command *command);
 
-/* free */
-int						free_in_terminal(t_token **tokens, char *buffer);
-
 /* errors */
 int						syntax_error_in_token(char *token);
 int						undefined_behavior_error(char *str);
+int syntax_error_eof(void);
 
 /* utils */
 void					exit_shell(t_shell *shell, int exit_code);
