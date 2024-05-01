@@ -199,7 +199,6 @@ int						undefined_behavior_error(char *str);
 /* utils */
 void					exit_shell(t_shell *shell, int exit_code);
 void					free_shell(t_shell *shell);
-void					clear_shell_history(t_shell *shell);
 void					free_commands(t_command **commands);
 t_token					**init_tokens(void);
 char					**init_array(int size);

@@ -66,7 +66,7 @@ int	minishell_loop(t_shell *shell)
 		else
 			g_exit_code = 1;
 		free_shell(shell);
-		// clear_shell_history(t_shell *shell);
+		rl_clear_history();
 	}
 	return (EXIT_SUCCESS);
 }
