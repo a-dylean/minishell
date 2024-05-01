@@ -44,20 +44,14 @@ int	invalid_arg(t_shell *shell, int argc, char **argv)
 int	main(int argc, char **argv, char **env)
 {
 	t_shell shell;
-	(void)argc;
-	(void)argv;
-	if (invalid_arg(&shell, argc, argv) || init_shell(&shell, env))
-	// exit shell here, for now just prining msg and returning
-	{
-		printf("!!! Error: invalid arguments\n");
-		return (shell.exit_status);
-	}
+	if (init_shell(&shell, env) || invalid_arg(&shell, argc, argv))
+		exit_shell(NULL, EXIT_FAILURE);
 	if (shell.interactive)
 		minishell_loop(&shell);
 	else
 		non_interactive_behaviour(&shell, argv[2]);
 	if (isatty(STDIN_FILENO))
 		write(2, "exit\n", 6);
-	// exit_shell(&shell, g_exit_code);
+	exit_shell(&shell, g_exit_code);
 	return (0);
 }

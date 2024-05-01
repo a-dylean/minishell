@@ -101,7 +101,7 @@ int	lexer(t_shell *shell)
 		return (EXIT_FAILURE);
 	else if (!valid_quotes(shell->input))
 	{
-		free_shell(shell);
+		// free_shell(shell);
 		printf("Error: invalid quotes\n");
 		exit(EXIT_FAILURE);
 	}

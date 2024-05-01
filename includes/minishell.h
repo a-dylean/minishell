@@ -29,6 +29,8 @@
 // # define PROMPT "\033[1;90m minishell $> \033[0m" // grey
 # define PROMPT "\033[1;35mminishell$> \033[0m"
 
+int		g_exit_code;
+
 /* enums */
 typedef enum s_type
 {
@@ -195,6 +197,7 @@ int						syntax_error_in_token(char *token);
 int						undefined_behavior_error(char *str);
 
 /* utils */
+void					exit_shell(t_shell *shell, int exit_code);
 void					free_shell(t_shell *shell);
 void					clear_shell_history(t_shell *shell);
 void					free_commands(t_command **commands);

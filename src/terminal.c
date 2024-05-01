@@ -12,8 +12,6 @@
 
 #include "../includes/minishell.h"
 
-int		g_exit_code;
-
 int	valid_quotes(char *str)
 {
 	int	i;
@@ -33,25 +31,6 @@ int	valid_quotes(char *str)
 	}
 	return (!(in_single_quote || in_double_quote));
 }
-
-// int	trim_and_verify_buffer(char *buffer)
-// {
-// 	buffer = ft_strtrim(buffer, " ");
-// 	if (!buffer || buffer[0] == '\0')
-// 	{
-// 		free(buffer);
-// 		return (EXIT_FAILURE);
-// 	}
-// 	else if (!valid_quotes(buffer))
-// 	{
-// 		printf("Error: invalid quotes\n");
-// 		free(buffer);
-// 		return (EXIT_FAILURE);
-// 	}
-// 	add_history(buffer);
-// 	free(buffer);
-// 	return (EXIT_SUCCESS);
-// }
 
 /* function that resets the readline user input prompt
 for interactive signal handling */

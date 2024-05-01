@@ -36,7 +36,6 @@ t_command **init_commands(void)
 
 int init_shell(t_shell *shell, char **env)
 {
-	(void)env;
 	if (getenv("USER") == NULL)
 		// initialize shell with no env
 		printf("USER not found in environment\n");
@@ -47,8 +46,10 @@ int init_shell(t_shell *shell, char **env)
 		shell->user_name = getenv("USER");
  		shell->env = env;
 	}
-	shell->tokens = *init_tokens();
-	shell->commands = *init_commands();
+	// shell->tokens = *init_tokens();
+	// shell->commands = *init_commands();
+	shell->tokens = NULL;
+	shell->commands = NULL;
 	shell->infile_fd = -2;
 	shell->outfile_fd = -2;
 	shell->prev_fd = 0;
