@@ -35,9 +35,16 @@ char	*remove_char(char *str, char c)
 
 void	remove_unquoted_chars(t_token **token, char *new_value)
 {
-	if (ft_strlen((*token)->value) == 2)
+	// if (ft_strlen((*token)->value) == 2)
+	// {
+	// 	new_value = ft_strdup("\'\'");
+	// 	(*token)->value = new_value;
+	// }
+	// else 
+	if ((*token)->quotes_status == NONE)
 	{
-		new_value = ft_strdup("\'\'");
+		new_value = remove_char((*token)->value, D_QUOTE);
+		new_value = remove_char(new_value, S_QUOTE);
 		(*token)->value = new_value;
 	}
 	else if ((*token)->quotes_status == DQUOTED)
@@ -61,8 +68,7 @@ void	remove_quotes(t_token *tokens)
 	new_value = NULL;
 	while (temp)
 	{
-		if (temp->quotes_status != NONE)
-			remove_unquoted_chars(&temp, new_value);
+		remove_unquoted_chars(&temp, new_value);
 		temp = temp->next;
 	}
 	free(new_value);
