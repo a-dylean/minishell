@@ -44,5 +44,5 @@ int count_chars(char *str, char c)
 
 int	char_is_separator(char c)
 {
-	return (c == '$' || c == ' ' || c == '=' || c == '\0');
+	return (c == '$' || c == ' ' || c == '=' || c == '\0' || c == D_QUOTE || c == S_QUOTE);
 }
