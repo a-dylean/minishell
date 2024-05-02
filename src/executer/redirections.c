@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 14:59:27 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/01 13:12:42 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:56:05 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,6 @@ void	get_fd_out(t_token *redirections, t_shell *shell)
 			perror(current->next->value);
 			exit(EXIT_FAILURE);
 		}
-		long i = 0;
-		while (i < 5000000)
-			i++;
 		current = current->next;
 	}
 }
@@ -97,7 +94,7 @@ void	open_and_redirect_fd(t_command *current, t_shell *shell)
 /*if the command has no specified infile or outfile, it is redirected*/
 void	has_no_filename(t_command *current, t_shell *shell, int prev_fd)
 {
-	if (prev_fd != 0)
+	if (prev_fd != 0 && shell->infile_fd == -2) // here, adding  && shell->infile_fd == -2 solves the issue for cat <missing | cat <"./test_files/infile"
 	{
 		if (dup2(prev_fd, STDIN_FILENO) == -1)
 		{
