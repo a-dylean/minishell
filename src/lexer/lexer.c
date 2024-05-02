@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/02 11:58:31 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:22:10 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,21 @@ void tokenize(char *str, t_shell *shell)
 		i += j;
 	}
 }
+
+// void tokenize(char *str, t_shell *shell)
+// {
+// 	int		i;
+// 	char **tokens;
+
+// 	i = 0;
+// 	tokens = ft_split(str, ' ');
+// 	while (tokens[i])
+// 	{
+// 		if (tokens[i] != NULL)
+// 			add_token_back(&shell->tokens, create_token(tokens[i], get_type(tokens[i])));
+// 		i++;
+// 	}
+// }
 
 int	lexer(t_shell *shell)
 {

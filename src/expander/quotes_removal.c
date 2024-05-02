@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 18:34:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/25 18:41:35 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:21:02 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,16 @@ char	*remove_char(char *str, char c)
 
 void	remove_unquoted_chars(t_token **token, char *new_value)
 {
-	// if (ft_strlen((*token)->value) == 2)
-	// {
-	// 	new_value = ft_strdup("\'\'");
-	// 	(*token)->value = new_value;
-	// }
-	// else 
-	if ((*token)->quotes_status == NONE)
+	if ((ft_strcmp((*token)->value,
+				"''") == 0 || ft_strcmp((*token)->value, "\"\"") == 0))
+	{
+		if ((*token)->prev == NULL || (*token)->prev->type == PIPE)
+			new_value = ft_strdup("''");
+		else
+			new_value = ft_strdup("");
+		(*token)->value = new_value;
+	}
+	else if ((*token)->quotes_status == NONE)
 	{
 		new_value = remove_char((*token)->value, D_QUOTE);
 		new_value = remove_char(new_value, S_QUOTE);
