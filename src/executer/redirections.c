@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 14:59:27 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/02 14:56:05 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:06:18 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,16 @@ void	get_fd_out(t_token *redirections, t_shell *shell)
 
 void	open_and_redirect_fd(t_command *current, t_shell *shell)
 {
-	get_fd_in(current->redirections, shell);
-	get_fd_out(current->redirections, shell);
+	if (current->redirections->type == GREAT || current->redirections->type == GREATGREAT) 
+	{
+		get_fd_out(current->redirections, shell);
+		get_fd_in(current->redirections, shell);
+	}
+	else
+	{
+		get_fd_in(current->redirections, shell);
+		get_fd_out(current->redirections, shell);
+	}
 	if (shell->infile_fd != -2)
 	{
 		if (dup2(shell->infile_fd, STDIN_FILENO) == -1)

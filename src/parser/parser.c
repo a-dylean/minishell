@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/30 18:30:49 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:03:34 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,6 @@ int	parser(t_shell *shell)
 		if (temp)
 			temp = temp->next;
 	}
-	// print_commands(shell->commands);
+	//print_commands(shell->commands);
 	return (EXIT_SUCCESS);
 }
