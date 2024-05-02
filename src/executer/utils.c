@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/02 15:25:02 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:00:03 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,18 @@ char	*get_cmd_path(char *cmd, t_shell *shell)
 	struct stat path_stat;
 
 	i = 0;
+	if (ft_strncmp(cmd, "./", 2) == 0 || ft_strncmp(cmd, "/", 1) == 0)
+	{
+		stat(cmd, &path_stat);
+		if (!S_ISDIR(path_stat.st_mode))
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(cmd, STDERR_FILENO);
+			ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+			shell->exit_status = 127;
+			return (cmd);
+		}
+	}
 	if (ft_strchr(cmd, '/') != NULL)
 	{
 		stat(cmd, &path_stat);
@@ -30,7 +42,7 @@ char	*get_cmd_path(char *cmd, t_shell *shell)
 			ft_putstr_fd(cmd, STDERR_FILENO);
 			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
 			shell->exit_status = 126;
-			return (NULL);
+			return (cmd);
 		}
 		else if (access(cmd, X_OK) == 0)
 			return (cmd);
