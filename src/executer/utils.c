@@ -3,32 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/30 16:38:55 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:25:02 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*get_cmd_path(char *cmd)
+char	*get_cmd_path(char *cmd, t_shell *shell)
 {
 	char	**path_dirs;
 	char	*path_var;
 	char	*cmd_path;
 	int		i;
+	struct stat path_stat;
 
 	i = 0;
-	if (access(cmd, X_OK) == 0)
-		return (cmd);
+	if (ft_strchr(cmd, '/') != NULL)
+	{
+		stat(cmd, &path_stat);
+		if (S_ISDIR(path_stat.st_mode))
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(cmd, STDERR_FILENO);
+			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+			shell->exit_status = 126;
+			return (NULL);
+		}
+		else if (access(cmd, X_OK) == 0)
+			return (cmd);
+		else
+			return (NULL);
+	}
 	path_var = getenv("PATH");
 	if (!path_var)
 		return (NULL);
 	path_dirs = ft_split(path_var, ':');
 	if (!path_dirs)
 		return (NULL);
-	
 	while (path_dirs[i])
 	{
 		cmd_path = ft_strjoin(path_dirs[i], "/");
