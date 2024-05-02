@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 14:59:27 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/30 14:37:04 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/01 13:12:42 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,9 @@ void	get_fd_out(t_token *redirections, t_shell *shell)
 			perror(current->next->value);
 			exit(EXIT_FAILURE);
 		}
+		long i = 0;
+		while (i < 5000000)
+			i++;
 		current = current->next;
 	}
 }
