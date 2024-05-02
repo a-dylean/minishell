@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/01 14:32:40 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:52:54 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ extern int		g_exit_code;
 /* enums */
 typedef enum s_type
 {
+	SPACES,
 	WORD,
 	PIPE,
 	LESS,
@@ -41,6 +42,7 @@ typedef enum s_type
 	LESSLESS,
 	FILENAME,
 	DELIMITER,
+	END
 }						t_type;
 
 typedef enum s_quotes
