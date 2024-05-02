@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/02 15:21:30 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:20:19 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,7 @@ int						len_command(t_command *command);
 /* errors */
 int						syntax_error_in_token(char *token);
 int						undefined_behavior_error(char *str);
-int syntax_error_eof(void);
+int 					syntax_error_eof(void);
 
 /* utils */
 void					exit_shell(t_shell *shell, int exit_code);
@@ -203,6 +203,7 @@ void					free_array(char **arr);
 int						str_is_empty_or_space_only(char *str);
 int						count_chars(char *str, char c);
 int						char_is_separator(char c);
+void					write_error(char *cmd, char *error);
 
 /* signals */
 void					catch_sigint(int signum);

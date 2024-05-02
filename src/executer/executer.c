@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/02 16:00:31 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:19:20 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,19 +74,17 @@ void	execute_command(t_command *current, t_shell *shell)
 	else
 	{
 		shell->cmd_path = get_cmd_path(current->cmd_name[0], shell);
-		if (shell->exit_status == 126 || shell->exit_status == 127)
+		if ((!shell->cmd_path && shell->exit_status == 126) || shell->exit_status == 127)
 			return ;
 		if (!shell->cmd_path)
 		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(current->cmd_name[0], STDERR_FILENO);
-			ft_putstr_fd(": command not found\n", STDERR_FILENO);
+			write_error(current->cmd_name[0], "command not found");
 			shell->exit_status = 127;
 			exit(shell->exit_status);
 		}
 		execve(shell->cmd_path, current->cmd_name, shell->env);
 		perror("execve");
-		exit(EXIT_FAILURE);
+		exit(shell->exit_status);
 	}
 }
 

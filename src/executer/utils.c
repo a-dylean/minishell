@@ -6,11 +6,39 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/02 16:00:03 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/02 16:19:30 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+char	*check_if_directory(char *cmd, t_shell *shell)
+{
+	struct stat path_stat;
+
+	stat(cmd, &path_stat);
+	if (S_ISDIR(path_stat.st_mode))
+	{
+		write_error(cmd, "Is a directory");
+		shell->exit_status = 126;
+		return (NULL);
+	}
+	else if (access(cmd, X_OK) == 0)
+		return (cmd);
+	if (!S_ISDIR(path_stat.st_mode))
+	{
+		if (access(cmd, F_OK) == -1)
+		{
+			write_error(cmd, "No such file or directory");
+			shell->exit_status = 127;
+		}
+		else
+			shell->exit_status = 126;
+		return (cmd);
+	}
+	else
+		return (NULL);
+}
 
 char	*get_cmd_path(char *cmd, t_shell *shell)
 {
@@ -18,37 +46,10 @@ char	*get_cmd_path(char *cmd, t_shell *shell)
 	char	*path_var;
 	char	*cmd_path;
 	int		i;
-	struct stat path_stat;
 
 	i = 0;
-	if (ft_strncmp(cmd, "./", 2) == 0 || ft_strncmp(cmd, "/", 1) == 0)
-	{
-		stat(cmd, &path_stat);
-		if (!S_ISDIR(path_stat.st_mode))
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(cmd, STDERR_FILENO);
-			ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
-			shell->exit_status = 127;
-			return (cmd);
-		}
-	}
 	if (ft_strchr(cmd, '/') != NULL)
-	{
-		stat(cmd, &path_stat);
-		if (S_ISDIR(path_stat.st_mode))
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			ft_putstr_fd(cmd, STDERR_FILENO);
-			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
-			shell->exit_status = 126;
-			return (cmd);
-		}
-		else if (access(cmd, X_OK) == 0)
-			return (cmd);
-		else
-			return (NULL);
-	}
+		return (check_if_directory(cmd, shell));
 	path_var = getenv("PATH");
 	if (!path_var)
 		return (NULL);
