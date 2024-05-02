@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/30 18:09:48 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:41:10 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	exec_builtin(t_command *commands, t_shell *shell)
 	// else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
 	// 	shell->exit_status = ft_env();
 	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)
-		shell->exit_status = ft_exit(commands);
+		ft_exit(commands, shell);
 	exit(shell->exit_status);
 }
 void	exec_single_builtin(t_command *commands, t_shell *shell)
@@ -45,7 +45,7 @@ void	exec_single_builtin(t_command *commands, t_shell *shell)
 	// else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
 	// 	shell->exit_status = ft_env();
 	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)
-		shell->exit_status = ft_exit(commands);
+		ft_exit(commands, shell);
 }
 
 void	pipe_and_fork(t_command *current, t_shell *shell)
