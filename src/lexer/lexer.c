@@ -6,22 +6,22 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/30 18:33:27 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/02 11:58:31 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// int	len_between_quotes(char *str, int i, char quote)
-// {
-// 	int	len;
+int	len_between_quotes(char *str, int i, char quote)
+{
+	int	len;
 
-// 	len = 1;
-// 	while (str[i + len] != quote && str[i + len])	
-// 		len++;
-// 	len++;
-// 	return (len);
-// }
+	len = 1;
+	while (str[i + len] != quote && str[i + len])	
+		len++;
+	len++;
+	return (len);
+}
 
 int	len_word(char *str, int i)
 {
@@ -73,10 +73,9 @@ void tokenize(char *str, t_shell *shell)
 	while (str[i])
 	{
 		i += count_spaces(str, i);
-		// if (str[i] == S_QUOTE || str[i] == D_QUOTE)
-		// 	j = len_between_quotes(str, i, str[i]);
-		// else 
-		if (ft_strchr("|<>", str[i]))
+		if (str[i] == S_QUOTE || str[i] == D_QUOTE)
+			j = len_between_quotes(str, i, str[i]);
+		else if (ft_strchr("|<>", str[i]))
 			j = len_between_tokens(str, i, str[i]);
 		else
 			j = len_word(str, i);
@@ -89,7 +88,6 @@ void tokenize(char *str, t_shell *shell)
 			free(substr);
 		i += j;
 	}
-
 }
 
 int	lexer(t_shell *shell)
@@ -100,7 +98,6 @@ int	lexer(t_shell *shell)
 		return (EXIT_FAILURE);
 	else if (!valid_quotes(shell->input))
 	{
-		// free_shell(shell);
 		printf("Error: invalid quotes\n");
 		return (EXIT_FAILURE);
 	}
