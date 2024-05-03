@@ -131,9 +131,7 @@ int						check_syntax(t_token *tokens);
 int						parser(t_shell *shell);
 int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
-t_token					**init_redirections(void);
-void					handle_redirections(t_token *tokens, t_command *command,
-							t_command **commands);
+void					handle_redirections(t_token *tokens, t_command *command);
 void					delete_next_type(t_token **tokens, int type);
 t_token					*remove_pipes(t_token *tokens, int id);
 

@@ -13,7 +13,7 @@
 #include "../includes/minishell.h"
 
 
-void	handle_redirections(t_token *tokens, t_command *command, t_command **commands)
+void	handle_redirections(t_token *tokens, t_command *command)
 {
 	t_token	*temp;
 	t_token	*redirections;
@@ -22,7 +22,7 @@ void	handle_redirections(t_token *tokens, t_command *command, t_command **comman
 	redirections = NULL;
 	temp = tokens;
 	next = NULL;
-	if ((*commands) && temp->type == PIPE && temp->next)
+	if (temp->type == PIPE && temp->next)
 		temp = temp->next;
 	while (temp && temp->type != PIPE)
 	{

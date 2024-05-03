@@ -41,9 +41,9 @@ void	set_quotes_status(t_token *tokens)
 	{
 		in_single_quotes = 0;
 		in_double_quotes = 0;
-		if (temp->value[0] == S_QUOTE && !in_double_quotes)
+		if (temp->value && temp->value[0] == S_QUOTE && !in_double_quotes)
 			in_single_quotes = !in_single_quotes;
-		else if (temp->value[0] == D_QUOTE && !in_single_quotes)
+		else if (temp->value && temp->value[0] == D_QUOTE && !in_single_quotes)
 			in_double_quotes = !in_double_quotes;
 		if (in_single_quotes)
 			temp->quotes_status = SQUOTED;
@@ -66,7 +66,7 @@ void	perform_expansion(t_token *tokens, t_shell *shell)
 		if (temp->type == WORD || temp->type == FILENAME)
 		{
 			i = -1;
-			while (temp->value[++i])
+			while (temp->value && temp->value[++i])
 			{
 				if (temp->value[i] == '$' && temp->value[i + 1] != '\0'
 					&& !char_is_separator(temp->value[i + 1])

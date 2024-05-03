@@ -33,48 +33,33 @@ char	*remove_char(char *str, char c)
 	return (str);
 }
 
-void	remove_unquoted_chars(t_token **token, char *new_value)
+void remove_unquoted_chars(t_token **token)
 {
 	if ((*token)->value == NULL)
 		return ;
-	if ((ft_strcmp((*token)->value,
-				"''") == 0 || ft_strcmp((*token)->value, "\"\"") == 0))
+	if ((*token)->quotes_status == NONE)
 	{
-		if ((*token)->prev == NULL || (*token)->prev->type == PIPE)
-			new_value = ft_strdup("''");
-		else
-			new_value = ft_strdup("");
-		(*token)->value = new_value;
-	}
-	else if ((*token)->quotes_status == NONE)
-	{
-		new_value = remove_char((*token)->value, D_QUOTE);
-		new_value = remove_char(new_value, S_QUOTE);
-		(*token)->value = new_value;
+		(*token)->value = remove_char((*token)->value, D_QUOTE);
+		(*token)->value = remove_char((*token)->value, S_QUOTE);
 	}
 	else if ((*token)->quotes_status == DQUOTED)
 	{
-		new_value = remove_char((*token)->value, D_QUOTE);
-		(*token)->value = new_value;
+		(*token)->value = remove_char((*token)->value, D_QUOTE);
 	}
 	else if ((*token)->quotes_status == SQUOTED)
 	{
-		new_value = remove_char((*token)->value, S_QUOTE);
-		(*token)->value = new_value;
+		(*token)->value = remove_char((*token)->value, S_QUOTE);
 	}
 }
 
 void	remove_quotes(t_token *tokens)
 {
 	t_token	*temp;
-	char	*new_value;
 
 	temp = tokens;
-	new_value = NULL;
 	while (temp)
 	{
-		remove_unquoted_chars(&temp, new_value);
+		remove_unquoted_chars(&temp);
 		temp = temp->next;
 	}
-	free(new_value);
 }
