@@ -19,9 +19,18 @@ t_token	*create_token(char *value, int type)
 
 	token = malloc(sizeof(t_token));
 	if (!token)
-		exit(EXIT_FAILURE);
+		return (NULL);
 	token->id = id++;
-	token->value = ft_strdup(value);
+	token->value = NULL;
+	if (value)
+	{
+		token->value = ft_strdup(value);
+		if (!token->value)
+		{
+			free(token);
+			return (NULL);
+		}
+	}
 	token->type = type;
 	token->quotes_status = NONE;
 	token->next = NULL;
@@ -58,7 +67,8 @@ void	free_tokens(t_token **tokens)
 	while (current)
 	{
 		temp = current->next;
-		free(current->value);
+		if (current->value)
+			free(current->value);
 		free(current);
 		current = temp;
 	}

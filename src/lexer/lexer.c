@@ -62,32 +62,90 @@ void	assign_type_redirections(t_token *tokens)
 	}
 }
 
-void tokenize(char *str, t_shell *shell)
+char	*ft_strndup(char *s, int n)
+{
+	char	*res;
+	int		len;
+	int		i;
+
+	len = ft_strlen(s);
+	if (len == 0)
+		return (NULL);
+	res = (char *)malloc(sizeof(char) * (n + 1));
+	if (!res)
+		return (NULL);
+	i = 0;
+	while (s[i] != '\0' && i < n)
+	{
+		res[i] = s[i];
+		i++;
+	}
+	res[i] = '\0';
+	return (res);
+}
+
+int	get_token_size(char *str)
+{
+	int	type;
+	int	i;
+
+	if (!str)
+		return (-1);
+	type = get_type(str);
+	if (type == GREATGREAT || type == LESSLESS)
+		return (2);
+	if (type == PIPE || type == LESS || type == GREAT)
+		return (1);
+	i = 0;
+	while (str[i] && !ft_isspace(str[i]) && str[i] != '|' && str[i] != '<' && str[i] != '>')
+	{
+		if ((str[i] == D_QUOTE || str[i] == S_QUOTE) && str[i + 1] != '\0')
+			i += ft_strchr(&str[i + 1], str[i]) - &str[i] + 1;
+		else
+			i++;
+	}
+	return (i);
+}
+char *get_token(char *str)
+{
+	char	*token_value;
+	int		len;
+
+	len = get_token_size(str);
+	if (len == -1)
+		return (NULL);
+	token_value = ft_strndup(str, len);
+	if (!token_value)
+		return (NULL);
+	return (token_value);
+}
+
+t_token *tokenize(char *str, t_shell *shell)
 {
 	int		i;
-	int		j;
 	char	*substr;
+	t_token	*new_token;
 
 	i = 0;
-	j = 0;
-	while (str[i])
+	while (*str)
 	{
-		i += count_spaces(str, i);
-		if (str[i] == S_QUOTE || str[i] == D_QUOTE)
-			j = len_between_quotes(str, i, str[i]);
-		else if (ft_strchr("|<>", str[i]))
-			j = len_between_tokens(str, i, str[i]);
+		if (ft_isspace(*str))
+			str++;
 		else
-			j = len_word(str, i);
-		if (j < 0)
-			return ;
-		substr = ft_substr(str, i, j);
-		if (substr != NULL)
-			add_token_back(&shell->tokens, create_token(substr, get_type(substr)));
-		if (substr)
+		{
+			substr = get_token(str);
+			if (!substr)
+				return (free_tokens(&shell->tokens), NULL);
+			new_token = create_token(substr, get_type(substr));
+			if (!new_token)
+				return (free(substr), free_tokens(&shell->tokens), NULL);
+			add_token_back(&shell->tokens, new_token);
+			str += ft_strlen(substr);
 			free(substr);
-		i += j;
+			i++;
+		}
 	}
+	return (shell->tokens);
 }
 
 int	lexer(t_shell *shell)
@@ -104,7 +162,9 @@ int	lexer(t_shell *shell)
 	else if (str_is_empty_or_space_only(shell->input))
 		return (EXIT_SUCCESS);
 	add_history(shell->input);
-	tokenize(shell->input, shell);
+	shell->tokens = tokenize(shell->input, shell);
+	if (!shell->tokens)
+		return (EXIT_FAILURE);
 	assign_type_redirections(shell->tokens);
 	if (!check_syntax(shell->tokens))
 		return (EXIT_SUCCESS);

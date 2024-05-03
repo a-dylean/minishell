@@ -198,6 +198,7 @@ int syntax_error_eof(void);
 /* utils */
 void					exit_shell(t_shell *shell, int exit_code);
 void					free_shell(t_shell *shell);
+void free_env(t_env *env);
 void					free_commands(t_command **commands);
 t_token					**init_tokens(void);
 char					**init_array(int size);
