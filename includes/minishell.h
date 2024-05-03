@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/03 15:16:39 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/03 18:03:35 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,12 @@ typedef struct s_shell
 	/*end*/
 	char				*prompt;
 	char				*heredoc;
-	//t_env				*env_head;
 	int					exit_status;
+	char				*prev_dir;
+	char				*cur_dir;
 	int					std_fds[2];
 	char				*user_name;
+	//t_env				*env_head;
 	// char			**cmd_paths;
 	// char			*prev_prompt;
 	// int				exec_on_pipe;
