@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/03 17:07:51 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/03 17:15:38 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,13 @@ char	*check_if_directory(char *cmd, t_shell *shell)
 		return (NULL);
 }
 
-char	*get_cmd_path(char *cmd, t_shell *shell)
+char	*search_executable_cmd(char **path_dirs, char *cmd)
 {
-	char	**path_dirs;
-	char	*path_var;
 	char	*cmd_path;
 	char	*temp;
 	int		i;
 
 	i = 0;
-	if (ft_strchr(cmd, '/') != NULL)
-		return (check_if_directory(cmd, shell));
-	path_var = getenv("PATH");
-	if (!path_var)
-		return (NULL);
-	path_dirs = ft_split(path_var, ':');
-	if (!path_dirs)
-		return (NULL);
 	while (path_dirs[i])
 	{
 		temp = ft_strjoin(path_dirs[i], "/");
@@ -73,6 +63,22 @@ char	*get_cmd_path(char *cmd, t_shell *shell)
 	}
 	free_array(path_dirs);
 	return (NULL);
+}
+
+char	*get_cmd_path(char *cmd, t_shell *shell)
+{
+	char	**path_dirs;
+	char	*path_var;
+
+	if (ft_strchr(cmd, '/') != NULL)
+		return (check_if_directory(cmd, shell));
+	path_var = getenv("PATH");
+	if (!path_var)
+		return (NULL);
+	path_dirs = ft_split(path_var, ':');
+	if (!path_dirs)
+		return (NULL);
+	return (search_executable_cmd(path_dirs, cmd));
 }
 
 void	wait_commands(t_shell *shell)
