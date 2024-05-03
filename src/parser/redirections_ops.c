@@ -38,5 +38,5 @@ void	handle_redirections(t_token *tokens, t_command *command)
 			temp = temp->next;
 	}
 	command->redirections = redirections;
-	free_tokens(&redirections);
+	// HANDLE FREE MAYBE AT EXIT free_tokens(&redirections);
 }
