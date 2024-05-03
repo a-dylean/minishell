@@ -59,6 +59,7 @@ void	perform_expansion(t_token *tokens, t_shell *shell)
 {
 	t_token	*temp;
 	int		i;
+	char *new_value;
 
 	temp = tokens;
 	while (temp)
@@ -72,7 +73,11 @@ void	perform_expansion(t_token *tokens, t_shell *shell)
 					&& !char_is_separator(temp->value[i + 1])
 					&& (temp->quotes_status == NONE
 						|| temp->quotes_status == DQUOTED))
-					temp->value = get_value_after_expansion(temp->value, shell);
+						{
+							new_value = get_value_after_expansion(temp->value, shell);
+							free(temp->value);
+							temp->value = new_value;
+						}
 				if (!temp || !temp->value)
 					break ;
 			}

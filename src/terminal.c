@@ -62,8 +62,8 @@ int	minishell_loop(t_shell *shell)
 		shell->input = readline(PROMPT);
 		if (lexer(shell) == EXIT_SUCCESS && parser(shell) == EXIT_SUCCESS)
 			// print_commands(shell->commands);
-			// g_exit_code = 0;
-			g_exit_code = executer(shell);
+			g_exit_code = 0;
+			// g_exit_code = executer(shell);
 		else
 			g_exit_code = 1;
 		free_shell(shell);
