@@ -21,15 +21,11 @@ t_token	*create_token(char *value, int type)
 	if (!token)
 		return (NULL);
 	token->id = id++;
-	token->value = NULL;
-	if (value)
+	token->value = ft_strdup(value);
+	if (!token->value)
 	{
-		token->value = ft_strdup(value);
-		if (!token->value)
-		{
-			free(token);
-			return (NULL);
-		}
+		free(token);
+		return (NULL);
 	}
 	token->type = type;
 	token->quotes_status = NONE;

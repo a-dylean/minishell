@@ -35,6 +35,8 @@ char	*remove_char(char *str, char c)
 
 void	remove_unquoted_chars(t_token **token, char *new_value)
 {
+	if ((*token)->value == NULL)
+		return ;
 	if ((ft_strcmp((*token)->value,
 				"''") == 0 || ft_strcmp((*token)->value, "\"\"") == 0))
 	{

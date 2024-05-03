@@ -12,28 +12,6 @@
 
 #include "../includes/minishell.h"
 
-t_token **init_tokens(void)
-{
-	t_token **tokens;
-
-	tokens = (t_token **)malloc(sizeof(t_token));
-	if (!tokens)
-		return (NULL);
-	*tokens = NULL;
-	return (tokens);
-}
-
-t_command **init_commands(void)
-{
-	t_command **commands;
-
-	commands = (t_command **)malloc(sizeof(t_command));
-	if (!commands)
-		return (NULL);
-	*commands = NULL;
-	return (commands);
-}
-
 int init_shell(t_shell *shell, char **env)
 {
 	if (getenv("USER") == NULL)

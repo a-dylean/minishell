@@ -25,7 +25,7 @@ char	*get_value_after_expansion(char *token, t_shell *shell)
 	buffer = get_buffer_value(token, buffer, shell);
 	new_token = get_value_from_buffer(buffer);
 	if (!new_token)
-		return (NULL);
+		return (free(buffer), NULL);
 	free(buffer);
 	return (new_token);
 }
