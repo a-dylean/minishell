@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/03 15:12:20 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/03 16:20:50 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,30 @@ void	create_heredoc(t_token *redirections, t_shell *shell)
 		perror("open");
 		return ;
 	}
-	while ((line = readline("> ")) != NULL && ft_strcmp(line, redirections->next->value) != 0)
-	{
+	while ((line = readline("> ")) != NULL)
+	{	
+		if (ft_strcmp(line, redirections->next->value) == 0)
+			break ;
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
 	}
 	free(line);
 	close(fd);
+}
+
+int	check_if_other_heredoc(t_token *current)
+{
+	t_token	*tmp;
+
+	tmp = current->next;
+	while (tmp)
+	{
+		if (tmp->type == LESSLESS)
+			return (1);
+		tmp = tmp->next;
+	}
+	return (0);
 }
 
 void	handle_heredoc(t_token *redirections, t_shell *shell)
@@ -80,12 +96,12 @@ void	handle_heredoc(t_token *redirections, t_shell *shell)
 	current = redirections;
 	while (current)
 	{
-		if (current->type == LESSLESS)
+		if (current->type == LESSLESS && check_if_other_heredoc(current) == 0)
 		{
 			if (shell->heredoc)
 				free(shell->heredoc);
 			shell->heredoc = create_filename();
-			create_heredoc(redirections, shell);
+			create_heredoc(current, shell);
 			if (!shell->heredoc)
 				return ;
 		}
