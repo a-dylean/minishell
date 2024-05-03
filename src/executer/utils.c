@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/02 16:19:30 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/03 17:07:51 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ char	*get_cmd_path(char *cmd, t_shell *shell)
 	char	**path_dirs;
 	char	*path_var;
 	char	*cmd_path;
+	char	*temp;
 	int		i;
 
 	i = 0;
@@ -58,12 +59,19 @@ char	*get_cmd_path(char *cmd, t_shell *shell)
 		return (NULL);
 	while (path_dirs[i])
 	{
-		cmd_path = ft_strjoin(path_dirs[i], "/");
-		cmd_path = ft_strjoin(cmd_path, cmd);
+		temp = ft_strjoin(path_dirs[i], "/");
+		cmd_path = ft_strjoin(temp, cmd);
 		if (access(cmd_path, X_OK) == 0)
+		{
+			free(temp);
+			free_array(path_dirs);
 			return (cmd_path);
+		}
+		free(cmd_path);
+		free(temp);
 		i++;
 	}
+	free_array(path_dirs);
 	return (NULL);
 }
 
