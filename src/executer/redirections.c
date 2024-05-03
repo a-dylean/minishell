@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 14:59:27 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/02 15:06:18 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:14:17 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,32 @@ void	get_fd_in(t_token *redirections, t_shell *shell)
 	t_token	*current;
 
 	current = redirections;
-	while (current)
+	if (shell->heredoc)
 	{
-		if (current->type == LESS || current->type == LESSLESS)
+		if (shell->infile_fd != -2)
+			close(shell->infile_fd);
+		shell->infile_fd = open(shell->heredoc, O_RDONLY);
+	}
+	else
+	{
+		while (current)
 		{
-			if (current->next && current->next->type == FILENAME)
+			if (current->next && (current->next->type == FILENAME))
 			{
-				if (shell->infile_fd != -2)
-					close(shell->infile_fd);
-				shell->infile_fd = open(current->next->value, O_RDONLY);
+				if (current->type == LESS)
+				{
+					if (shell->infile_fd != -2)
+						close(shell->infile_fd);
+					shell->infile_fd = open(current->next->value, O_RDONLY);
+				}
 			}
+			if (shell->infile_fd == -1)
+			{
+				perror(current->next->value);
+				exit(EXIT_FAILURE);
+			}
+			current = current->next;
 		}
-		if (shell->infile_fd == -1)
-		{
-			perror(current->next->value);
-			exit(EXIT_FAILURE);
-		}
-		current = current->next;
 	}
 }
 

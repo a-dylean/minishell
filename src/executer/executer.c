@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/02 16:39:49 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/03 14:42:57 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	pipe_and_fork(t_command *current, t_shell *shell)
 			exit(EXIT_FAILURE);
 		}
 	}
+	if (current->redirections)
+		handle_heredoc(current->redirections, shell);
 	shell->last_pid = fork();
 	if (shell->last_pid == -1)
 	{

@@ -6,14 +6,13 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/02 16:31:12 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:16:39 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "../libft/libft.h"
-# include "../pipex/pipex.h"
 # include <errno.h>
 # include <limits.h>
 # include <readline/history.h>
@@ -23,6 +22,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
 
 # define S_QUOTE '\''
 # define D_QUOTE '\"'
@@ -99,7 +100,7 @@ typedef struct s_shell
 	/*end*/
 	char				*prompt;
 	char				*heredoc;
-	t_env				*env_head;
+	//t_env				*env_head;
 	int					exit_status;
 	int					std_fds[2];
 	char				*user_name;
@@ -168,6 +169,9 @@ void					open_and_redirect_fd(t_command *current,
 							t_shell *shell);
 char					*get_cmd_path(char *cmd, t_shell *shell);
 void					wait_commands(t_shell *shell);
+
+/* heredoc */
+void					handle_heredoc(t_token *redirections, t_shell *shell);
 
 /* builtins */
 int						ft_echo(t_command *commands);
