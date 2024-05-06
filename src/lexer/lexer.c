@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/02 11:58:31 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:00:43 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void tokenize(char *str, t_shell *shell)
 			return ;
 		substr = ft_substr(str, i, j);
 		if (substr != NULL)
-			add_token_back(&shell->tokens, create_token(substr, get_type(substr)));
+			add_token_back(&shell->tokens, create_token(substr, get_type(substr), NONE));
 		if (substr)
 			free(substr);
 		i += j;

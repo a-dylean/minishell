@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/25 18:41:55 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:26:39 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ void	set_quotes_status(t_token *tokens)
 		if (temp->value[0] == S_QUOTE && !in_double_quotes)
 			in_single_quotes = !in_single_quotes;
 		else if (temp->value[0] == D_QUOTE && !in_single_quotes)
+			in_double_quotes = !in_double_quotes;
+		else if (temp->type == DELIMITER && ft_strchr(temp->value, S_QUOTE) && !in_double_quotes) // done to handle cases like cat << ho"la"
+			in_single_quotes = !in_single_quotes;
+		else if (temp->type == DELIMITER && ft_strchr(temp->value, D_QUOTE) && !in_single_quotes)
 			in_double_quotes = !in_double_quotes;
 		if (in_single_quotes)
 			temp->quotes_status = SQUOTED;

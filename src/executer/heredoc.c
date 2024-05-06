@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 10:43:01 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:44:33 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	create_heredoc(t_token *redirections, t_shell *shell)
 {
 	int		fd;
 	char	*line;
+	t_token	tmp = {0};
 
 	fd = open(shell->heredoc, O_RDWR | O_CREAT, 0666);
 	if (fd == -1)
@@ -69,9 +70,18 @@ void	create_heredoc(t_token *redirections, t_shell *shell)
 	{	
 		if (ft_strcmp(line, redirections->next->value) == 0)
 			break ;
-		write(fd, line, ft_strlen(line));
+		tmp.value = line;
+		if (redirections->next->quotes_status == NONE)
+			perform_expansion(&tmp, shell);
+		if (tmp.value)
+			write(fd, tmp.value, ft_strlen(tmp.value));
 		write(fd, "\n", 1);
 		free(line);
+		if (tmp.value != line)
+		{
+			free(tmp.value);
+			tmp.value = NULL;
+		}
 	}
 	free(line);
 	close(fd);
