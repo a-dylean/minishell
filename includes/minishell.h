@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 12:39:13 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:28:23 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define D_QUOTE '\"'
 # define PROMPT "\001\e[0m\e[35m\002minishell$> \001\e[0m\002"
 
-extern int		g_exit_code;
+extern int				g_exit_code;
 
 /* enums */
 typedef enum s_type
@@ -131,7 +131,8 @@ int						check_syntax(t_token *tokens);
 int						parser(t_shell *shell);
 int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
-void					handle_redirections(t_token *tokens, t_command *command);
+void					handle_redirections(t_token *tokens,
+							t_command *command);
 void					delete_next_type(t_token **tokens, int type);
 t_token					*remove_pipes(t_token *tokens, int id);
 
@@ -174,6 +175,7 @@ int						ft_echo(t_command *commands);
 int						ft_pwd(void);
 int						ft_cd(t_command *commands, t_shell *shell);
 int						ft_exit(t_command *commands);
+int					ft_env(t_shell *shell);
 
 /* linked lists*/
 t_command				*init_command(void);
@@ -191,12 +193,12 @@ int						len_command(t_command *command);
 /* errors */
 int						syntax_error_in_token(char *token);
 int						undefined_behavior_error(char *str);
-int syntax_error_eof(void);
+int						syntax_error_eof(void);
 
 /* utils */
 void					exit_shell(t_shell *shell, int exit_code);
 void					free_shell(t_shell *shell);
-void free_env(t_env *env);
+void					free_env(t_env *env);
 void					free_commands(t_command **commands);
 char					**init_array(int size);
 void					free_array(char **arr);

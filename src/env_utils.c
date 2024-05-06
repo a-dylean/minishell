@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 15:38:36 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 13:17:08 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:35:50 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,7 @@ t_env	*init_env(char **env)
 	// t_env *tmp = head;
 	// while (tmp)
 	// {
-	// 	printf("var_name: %s\n", tmp->var_name);
-	// 	printf("value: %s\n", tmp->value);
+	// 	printf("%s=%s\n", tmp->var_name, tmp->value);
 	// 	tmp = tmp->next;
 	// }
 	return (head);
