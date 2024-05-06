@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 13:44:33 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/06 14:55:58 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ void	create_heredoc(t_token *redirections, t_shell *shell)
 			tmp.value = NULL;
 		}
 	}
-	free(line);
+	if (line)
+		free(line);
 	close(fd);
 }
 

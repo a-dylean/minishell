@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 14:44:55 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/06 14:47:41 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ t_token *tokenize(char *str, t_shell *shell)
 			substr = get_token(str);
 			if (!substr)
 				return (free_tokens(&shell->tokens), NULL);
-			new_token = create_token(substr, get_type(substr));
+			new_token = create_token(substr, get_type(substr), NONE);
 			if (!new_token)
 				return (free(substr), free_tokens(&shell->tokens), NULL);
 			add_token_back(&shell->tokens, new_token);

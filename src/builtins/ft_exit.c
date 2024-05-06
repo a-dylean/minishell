@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:43:34 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/02 16:30:56 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/06 15:02:53 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	get_exit_code(t_command *commands, char *arg, t_shell *shell)
 	if (errno == ERANGE)
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
+		// ft_putstr_fd("") add the problamatic argument here
 		write_error("exit", "numeric argument required");
 		shell->exit_status = 2;
 	}
@@ -27,7 +28,7 @@ static void	get_exit_code(t_command *commands, char *arg, t_shell *shell)
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
 		write_error("exit", "too many arguments");
-		shell->exit_status = 1;
+		shell->exit_status = 1; // should give back the prompt instead of exiting
 	}
 	else
 	{
