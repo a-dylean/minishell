@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/02 15:52:54 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 12:39:13 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,6 @@ void					exit_shell(t_shell *shell, int exit_code);
 void					free_shell(t_shell *shell);
 void free_env(t_env *env);
 void					free_commands(t_command **commands);
-t_token					**init_tokens(void);
 char					**init_array(int size);
 void					free_array(char **arr);
 int						str_is_empty_or_space_only(char *str);

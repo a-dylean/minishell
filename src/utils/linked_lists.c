@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/24 12:53:23 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 12:18:40 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	free_commands(t_command **commands)
 	{
 		temp = current->next;
 		free_array(current->cmd_name);
+		free_tokens(&(current->redirections));
 		free(current);
 		current = temp;
 	}

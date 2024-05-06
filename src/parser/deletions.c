@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   deletions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 17:18:34 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/23 17:20:10 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/06 12:38:40 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+/* functions in this file are no longer used - double check ! */
 
 t_token	*remove_first_pipe(t_token *tokens, int id)
 {

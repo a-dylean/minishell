@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/30 18:30:49 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 12:33:22 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ int	count_not_null_tokens(t_token *tokens)
 	}
 	return (count);
 }
-char **get_cmd_array_from_tokens(t_token *tokens)
+char	**get_cmd_array_from_tokens(t_token *tokens)
 {
-	char **array;
+	char	**array;
 	int		i;
 
 	i = 0;
@@ -102,40 +102,10 @@ t_token	*get_next_pipe(t_token *token)
 	return (NULL);
 }
 
-// int	parser(t_shell *shell)
-// {
-// 	t_token	*temp;
-// 	t_command *new_command;
-
-// 	temp = shell->tokens;
-// 	shell->commands = NULL;
-// 	while (temp)
-// 	{
-// 		if (no_pipe_in_list(temp) == 1)
-// 		{
-// 			new_command = get_command(shell->tokens, shell->commands, shell);
-// 			if (!new_command)
-// 				return (free_commands(&shell->commands), -1);
-// 			add_command_back(&shell->commands, new_command);
-// 			break ;
-// 		}
-// 		new_command = get_command(temp, shell->commands, shell);
-// 		if (!new_command)
-// 			return (free_commands(&shell->commands), -1);
-// 		add_command_back(&shell->commands, new_command);
-// 		shell->tokens = remove_pipes(shell->tokens,
-// 				count_tokens_before_pipe(shell->tokens));
-// 		temp = shell->tokens;
-// 		if (temp)
-// 			temp = temp->next;
-// 	}
-// 	// print_commands(shell->commands);
-// 	return (EXIT_SUCCESS);
-// }
 int	parser(t_shell *shell)
 {
-	t_token	*temp;
-	t_command *new_command;
+	t_token		*temp;
+	t_command	*new_command;
 
 	temp = shell->tokens;
 	shell->commands = NULL;
@@ -149,10 +119,9 @@ int	parser(t_shell *shell)
 			add_command_back(&shell->commands, new_command);
 			temp = get_next_pipe(temp);
 			if (!temp)
-				break ;	
+				break ;
 		}
 		temp = temp->next;
 	}
-	// print_commands(shell->commands);
 	return (EXIT_SUCCESS);
 }

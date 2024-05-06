@@ -6,11 +6,11 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:22:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/30 18:18:00 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 12:35:01 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"  
+#include "../includes/minishell.h"
 
 t_command	*init_command(void)
 {
@@ -36,21 +36,21 @@ t_command	*get_last_command(t_command *head)
 
 void	add_command_back(t_command **commands, t_command *new_node)
 {
-    t_command	*temp;
+	t_command	*temp;
 
-    if (!new_node)
-        return ;
-    if (*commands && new_node)
-    {
-        temp = get_last_command(*commands);
-        temp->next = new_node;
-        new_node->prev = temp;  // Add this line
-        new_node->next = NULL;
-    }
-    else
-    {
-        *commands = new_node;
-        (*commands)->next = NULL;
-        (*commands)->prev = NULL;  // Add this line
-    }
+	if (!new_node)
+		return ;
+	if (*commands && new_node)
+	{
+		temp = get_last_command(*commands);
+		temp->next = new_node;
+		new_node->prev = temp;
+		new_node->next = NULL;
+	}
+	else
+	{
+		*commands = new_node;
+		(*commands)->next = NULL;
+		(*commands)->prev = NULL;
+	}
 }
