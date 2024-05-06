@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 15:38:36 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/22 16:58:59 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:17:08 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ t_env	*init_env_node(char *str)
 	t_env	*env_node;
 
 	env_node = malloc(sizeof(t_env));
-	if (env_node == NULL)
-		exit(EXIT_FAILURE);
+	if (!env_node)
+		return (NULL);
 	split = ft_split(str, '=');
 	env_node->var_name = ft_strdup(split[0]);
 	env_node->value = get_env_value(str, split[0]);
@@ -88,18 +88,34 @@ t_env	*init_env(char **env)
 		add_back_env_var(head, init_env_node(env[i]));
 		i++;
 	}
+	// printing env list
+	// t_env *tmp = head;
+	// while (tmp)
+	// {
+	// 	printf("var_name: %s\n", tmp->var_name);
+	// 	printf("value: %s\n", tmp->value);
+	// 	tmp = tmp->next;
+	// }
 	return (head);
 }
 
-void free_env(t_env *env)
+void	free_env_node(t_env *env)
 {
-    t_env *tmp;
+	free(env->var_name);
+	free(env->value);
+	free(env);
+}
 
-    while (env)
-    {
-        tmp = env;
-        env = env->next;
-        free(tmp->value);
-        free(tmp);
-    }
+void	free_env(t_env *env)
+{
+	t_env	*current;
+	t_env	*next;
+
+	current = env;
+	while (current)
+	{
+		next = current->next;
+		free_env_node(current);
+		current = next;
+	}
 }
