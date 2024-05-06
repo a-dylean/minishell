@@ -1,6 +1,6 @@
 NAME = minishell
 
-CC = cc -g
+CC = cc -g 
 # for debugging -g -fsanitize=address
 CFLAGS = -Wall -Wextra -Werror
 

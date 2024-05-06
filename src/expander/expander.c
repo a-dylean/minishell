@@ -25,7 +25,7 @@ char	*get_value_after_expansion(char *token, t_shell *shell)
 	buffer = get_buffer_value(token, buffer, shell);
 	new_token = get_value_from_buffer(buffer);
 	if (!new_token)
-		return (NULL);
+		return (free(buffer), NULL);
 	free(buffer);
 	return (new_token);
 }
@@ -41,9 +41,9 @@ void	set_quotes_status(t_token *tokens)
 	{
 		in_single_quotes = 0;
 		in_double_quotes = 0;
-		if (temp->value[0] == S_QUOTE && !in_double_quotes)
+		if (temp->value && temp->value[0] == S_QUOTE && !in_double_quotes)
 			in_single_quotes = !in_single_quotes;
-		else if (temp->value[0] == D_QUOTE && !in_single_quotes)
+		else if (temp->value && temp->value[0] == D_QUOTE && !in_single_quotes)
 			in_double_quotes = !in_double_quotes;
 		else if (temp->type == DELIMITER && ft_strchr(temp->value, S_QUOTE) && !in_double_quotes) // done to handle cases like cat << ho"la"
 			in_single_quotes = !in_single_quotes;
@@ -63,6 +63,7 @@ void	perform_expansion(t_token *tokens, t_shell *shell)
 {
 	t_token	*temp;
 	int		i;
+	char *new_value;
 
 	temp = tokens;
 	while (temp)
@@ -70,13 +71,17 @@ void	perform_expansion(t_token *tokens, t_shell *shell)
 		if (temp->type == WORD || temp->type == FILENAME)
 		{
 			i = -1;
-			while (temp->value[++i])
+			while (temp->value && temp->value[++i])
 			{
 				if (temp->value[i] == '$' && temp->value[i + 1] != '\0'
 					&& !char_is_separator(temp->value[i + 1])
 					&& (temp->quotes_status == NONE
 						|| temp->quotes_status == DQUOTED))
-					temp->value = get_value_after_expansion(temp->value, shell);
+						{
+							new_value = get_value_after_expansion(temp->value, shell);
+							free(temp->value);
+							temp->value = new_value;
+						}
 				if (!temp || !temp->value)
 					break ;
 			}

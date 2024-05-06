@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 12:57:21 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/06 14:46:42 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,14 @@ t_token	*create_token(char *value, int type, int quotes_status)
 
 	token = malloc(sizeof(t_token));
 	if (!token)
-		exit(EXIT_FAILURE);
+		return (NULL);
 	token->id = id++;
 	token->value = ft_strdup(value);
+	if (!token->value)
+	{
+		free(token);
+		return (NULL);
+	}
 	token->type = type;
 	token->quotes_status = quotes_status;
 	token->next = NULL;
@@ -58,7 +63,8 @@ void	free_tokens(t_token **tokens)
 	while (current)
 	{
 		temp = current->next;
-		free(current->value);
+		if (current->value)
+			free(current->value);
 		free(current);
 		current = temp;
 	}
@@ -77,6 +83,7 @@ void	free_commands(t_command **commands)
 	{
 		temp = current->next;
 		free_array(current->cmd_name);
+		free_tokens(&(current->redirections));
 		free(current);
 		current = temp;
 	}

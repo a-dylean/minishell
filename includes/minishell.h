@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 12:57:40 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/06 14:43:30 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,9 +132,7 @@ int						check_syntax(t_token *tokens);
 int						parser(t_shell *shell);
 int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
-t_token					**init_redirections(void);
-void					handle_redirections(t_token *tokens, t_command *command,
-							t_command **commands);
+void					handle_redirections(t_token *tokens, t_command *command);
 void					delete_next_type(t_token **tokens, int type);
 t_token					*remove_pipes(t_token *tokens, int id);
 
@@ -204,8 +202,8 @@ int 					syntax_error_eof(void);
 /* utils */
 void					exit_shell(t_shell *shell, int exit_code);
 void					free_shell(t_shell *shell);
+void free_env(t_env *env);
 void					free_commands(t_command **commands);
-t_token					**init_tokens(void);
 char					**init_array(int size);
 void					free_array(char **arr);
 int						str_is_empty_or_space_only(char *str);

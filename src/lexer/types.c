@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:35:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/30 16:29:37 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/02 15:22:46 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,43 +25,6 @@ int	len_between_tokens(char *str, int i, char c)
 	}
 	return (0);
 }
-
-// int	pipe_type(char *str, int i, int count)
-// {
-// 	count = i;
-// 	while (str[count] == '|')
-// 		count++;
-// 	if (count - i == 2 || count - i == 1)
-// 		return (PIPE);
-// 	else
-// 		return (-1);
-// }
-
-// int	great_type(char *str, int i, int count)
-// {
-// 	count = i;
-// 	while (str[count] == '>')
-// 		count++;
-// 	if (count - i == 2)
-// 		return (GREATGREAT);
-// 	else if (count - i == 1)
-// 		return (GREAT);
-// 	else
-// 		return (-1);
-// }
-
-// int	less_type(char *str, int i, int count)
-// {
-// 	count = i;
-// 	while (str[count] == '<')
-// 		count++;
-// 	if (count - i == 2)
-// 		return (LESSLESS);
-// 	else if (count - i == 1)
-// 		return (LESS);
-// 	else
-// 		return (-1);
-// }
 
 int	check_redir_type(char *str, int i, int count, char ch)
 {
@@ -102,7 +65,6 @@ int	get_type(char *str)
 	{
 		if (str[i] == '|')
 			return (PIPE);
-			// return (pipe_type(str, i, count));
 		else if (str[i] == '>')
 			return (check_redir_type(str, i, count, '>'));
 		else if (str[i] == '<')

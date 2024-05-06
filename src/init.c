@@ -6,33 +6,11 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:28:00 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/03 18:03:50 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/06 14:43:53 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-t_token **init_tokens(void)
-{
-	t_token **tokens;
-
-	tokens = (t_token **)malloc(sizeof(t_token));
-	if (!tokens)
-		return (NULL);
-	*tokens = NULL;
-	return (tokens);
-}
-
-t_command **init_commands(void)
-{
-	t_command **commands;
-
-	commands = (t_command **)malloc(sizeof(t_command));
-	if (!commands)
-		return (NULL);
-	*commands = NULL;
-	return (commands);
-}
 
 int init_shell(t_shell *shell, char **env)
 {
@@ -42,7 +20,7 @@ int init_shell(t_shell *shell, char **env)
 	else
 	{
 		shell->envless = 0;
-		//shell->env_head = init_env(env);
+		// shell->env_head = init_env(env);
 		shell->user_name = getenv("USER");
  		shell->env = env;
 	}
