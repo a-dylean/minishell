@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 12:08:21 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/06 15:32:09 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,11 @@ void	pipe_and_fork(t_command *current, t_shell *shell)
 void	execute_command(t_command *current, t_shell *shell)
 {
 	signal(SIGQUIT, SIG_DFL);
+	if (!current->cmd_name[0])
+	{
+		shell->exit_status = 0;
+		exit(shell->exit_status);
+	}
 	if (current->is_builtin == true)
 		exec_builtin(current, shell);
 	else
