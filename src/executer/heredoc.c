@@ -6,29 +6,11 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 14:55:58 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/06 15:33:55 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-// void	handle_heredoc(t_token *redirections, t_shell *shell)
-// {
-// 	(void)shell;
-// 	char *line;
-// 	int tmp_fd = open("tmp_heredoc", O_RDWR | O_CREAT, 0666);
-// 	while ((line = readline("> ")) != NULL)
-// 	{
-// 		if (strcmp(line, redirections->next->value) == 0)
-// 			break;
-// 		write(tmp_fd, line, strlen(line));
-// 		write(tmp_fd, "\n", 1);
-// 	}
-//     close(tmp_fd);
-//     tmp_fd = open("tmp_heredoc", O_RDONLY);
-// 	// dup2(tmp_fd, STDIN_FILENO);
-// 	close(tmp_fd);
-// }
 
 void	create_filename(t_shell *shell)
 {
