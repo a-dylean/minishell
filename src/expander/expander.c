@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 13:26:39 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/06 17:16:11 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,11 @@ void	set_quotes_status(t_token *tokens)
 			in_single_quotes = !in_single_quotes;
 		else if (temp->value && temp->value[0] == D_QUOTE && !in_single_quotes)
 			in_double_quotes = !in_double_quotes;
-		else if (temp->type == DELIMITER && ft_strchr(temp->value, S_QUOTE) && !in_double_quotes) // done to handle cases like cat << ho"la"
+		else if (temp->type == DELIMITER && ft_strchr(temp->value, S_QUOTE)
+			&& !in_double_quotes) // done to handle cases like cat << ho"la"
 			in_single_quotes = !in_single_quotes;
-		else if (temp->type == DELIMITER && ft_strchr(temp->value, D_QUOTE) && !in_single_quotes)
+		else if (temp->type == DELIMITER && ft_strchr(temp->value, D_QUOTE)
+			&& !in_single_quotes)
 			in_double_quotes = !in_double_quotes;
 		if (in_single_quotes)
 			temp->quotes_status = SQUOTED;
@@ -59,11 +61,17 @@ void	set_quotes_status(t_token *tokens)
 	}
 }
 
+int	valid_expansion(char c, char next_c, int quotes_status)
+{
+	return (c == '$' && next_c != '\0' && !char_is_separator(next_c)
+		&& (quotes_status == NONE || quotes_status == DQUOTED));
+}
+
 void	perform_expansion(t_token *tokens, t_shell *shell)
 {
 	t_token	*temp;
 	int		i;
-	char *new_value;
+	char	*new_value;
 
 	temp = tokens;
 	while (temp)
@@ -73,15 +81,13 @@ void	perform_expansion(t_token *tokens, t_shell *shell)
 			i = -1;
 			while (temp->value && temp->value[++i])
 			{
-				if (temp->value[i] == '$' && temp->value[i + 1] != '\0'
-					&& !char_is_separator(temp->value[i + 1])
-					&& (temp->quotes_status == NONE
-						|| temp->quotes_status == DQUOTED))
-						{
-							new_value = get_value_after_expansion(temp->value, shell);
-							free(temp->value);
-							temp->value = new_value;
-						}
+				if (valid_expansion(temp->value[i], temp->value[i + 1],
+						temp->quotes_status))
+				{
+					new_value = get_value_after_expansion(temp->value, shell);
+					free(temp->value);
+					temp->value = new_value;
+				}
 				if (!temp || !temp->value)
 					break ;
 			}
@@ -91,10 +97,33 @@ void	perform_expansion(t_token *tokens, t_shell *shell)
 	}
 }
 
+void	handle_delimiters(t_token *tokens)
+{
+	t_token	*temp;
+	t_token	*prev;
+	int		i;
+
+	temp = tokens;
+	prev = NULL;
+	i = 0;
+	while (temp)
+	{
+		if (temp->value[i] == S_QUOTE || temp->value[i] == D_QUOTE)
+			// {
+			// 	if (prev && prev->type == WORD)
+			// 		prev->type = FILENAME;
+			// 	temp->type = WORD;
+			// }
+			prev = temp;
+		temp = temp->next;
+	}
+}
+
 int	expander(t_token *tokens, t_shell *shell)
 {
 	set_quotes_status(tokens);
 	perform_expansion(tokens, shell);
+	handle_delimiters(tokens);
 	remove_quotes(tokens);
 	return (0);
 }

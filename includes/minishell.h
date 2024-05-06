@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 15:53:45 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 15:57:53 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ typedef struct s_shell
 	char				*cur_dir;
 	int					std_fds[2];
 	char				*user_name;
-	//t_env				*env_head;
+	t_env				*env_head;
 	// char			**cmd_paths;
 	// char			*prev_prompt;
 	// int				exec_on_pipe;
