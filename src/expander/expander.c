@@ -67,6 +67,32 @@ int	valid_expansion(char c, char next_c, int quotes_status)
 		&& (quotes_status == NONE || quotes_status == DQUOTED));
 }
 
+char *handle_delimiters(char *word) 
+{
+    bool in_quotes = false;
+    char *result = malloc(strlen(word) + 1);
+    if (!result) {
+        return NULL;
+    }
+
+    int j = 0;
+    for (int i = 0; word[i] != '\0'; i++) {
+        if (word[i] == '"') {
+            in_quotes = !in_quotes;
+        } else if (!in_quotes && (word[i] == '\\' || word[i] == '$' || word[i] == '`')) {
+            result[j++] = '\\';
+            result[j++] = word[i];
+        } else if (word[i] == '\\' && word[i + 1] == '\n') {
+            i++;  // Ignore \newline
+        } else {
+            result[j++] = word[i];
+        }
+    }
+
+    result[j] = '\0';  // Null-terminate the result string
+    return result;
+}
+
 void	perform_expansion(t_token *tokens, t_shell *shell)
 {
 	t_token	*temp;
@@ -92,38 +118,22 @@ void	perform_expansion(t_token *tokens, t_shell *shell)
 					break ;
 			}
 		}
+		else if (temp->type == DELIMITER)
+		{
+			temp->value = handle_delimiters(temp->value);
+		}
 		if (temp)
 			temp = temp->next;
 	}
 }
 
-void	handle_delimiters(t_token *tokens)
-{
-	t_token	*temp;
-	t_token	*prev;
-	int		i;
 
-	temp = tokens;
-	prev = NULL;
-	i = 0;
-	while (temp)
-	{
-		if (temp->value[i] == S_QUOTE || temp->value[i] == D_QUOTE)
-			// {
-			// 	if (prev && prev->type == WORD)
-			// 		prev->type = FILENAME;
-			// 	temp->type = WORD;
-			// }
-			prev = temp;
-		temp = temp->next;
-	}
-}
 
 int	expander(t_token *tokens, t_shell *shell)
 {
 	set_quotes_status(tokens);
 	perform_expansion(tokens, shell);
-	handle_delimiters(tokens);
+	// handle_delimiters(tokens);
 	remove_quotes(tokens);
 	return (0);
 }
