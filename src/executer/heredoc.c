@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/03 16:20:50 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/06 10:43:01 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,26 +30,28 @@
 // 	close(tmp_fd);
 // }
 
-char	*create_filename(void)
+void	create_filename(t_shell *shell)
 {
 	char	*temp_file;
 	int		fd;
+	static int i = 0;
 
-	temp_file = ft_strjoin("/tmp/minishell_heredoc_", ft_itoa(getpid())); // might have to change, since we can have multiple heredoc in the same PID
+	temp_file = ft_strjoin("/tmp/minishell_heredoc_", ft_itoa(getpid()) + i);
 	if (!temp_file)
 	{
 		perror("ft_strjoin");
-		return NULL;
+		return ;
 	}
-	fd = open(temp_file, O_RDWR | O_CREAT, 0666);
+	fd = open(temp_file, O_RDWR | O_CREAT | O_TRUNC, 0666);
+	i++;
 	if (fd == -1)
 	{
 		free(temp_file);
 		perror("open");
-		return NULL;
+		return ;
 	}
 	close(fd);
-	return (temp_file);
+	shell->heredoc = temp_file;
 }
 
 void	create_heredoc(t_token *redirections, t_shell *shell)
@@ -96,11 +98,11 @@ void	handle_heredoc(t_token *redirections, t_shell *shell)
 	current = redirections;
 	while (current)
 	{
-		if (current->type == LESSLESS && check_if_other_heredoc(current) == 0)
+		if (current->type == LESSLESS)
 		{
 			if (shell->heredoc)
 				free(shell->heredoc);
-			shell->heredoc = create_filename();
+			create_filename(shell);
 			create_heredoc(current, shell);
 			if (!shell->heredoc)
 				return ;

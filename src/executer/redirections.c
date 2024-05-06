@@ -6,11 +6,23 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 14:59:27 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/03 15:14:17 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/06 10:55:04 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	get_heredoc_as_fd_in(t_shell *shell)
+{
+	if (shell->infile_fd != -2)
+		close(shell->infile_fd);
+	shell->infile_fd = open(shell->heredoc, O_RDONLY);
+	if (unlink(shell->heredoc) == -1)
+	{
+		perror("unlink");
+		exit(EXIT_FAILURE);
+	}
+}
 
 void	get_fd_in(t_token *redirections, t_shell *shell)
 {
@@ -18,11 +30,7 @@ void	get_fd_in(t_token *redirections, t_shell *shell)
 
 	current = redirections;
 	if (shell->heredoc)
-	{
-		if (shell->infile_fd != -2)
-			close(shell->infile_fd);
-		shell->infile_fd = open(shell->heredoc, O_RDONLY);
-	}
+		get_heredoc_as_fd_in(shell);
 	else
 	{
 		while (current)
