@@ -3,41 +3,83 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/30 16:38:55 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 12:10:16 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*get_cmd_path(char *cmd)
+char	*check_if_directory(char *cmd, t_shell *shell)
 {
-	char	**path_dirs;
-	char	*path_var;
+	struct stat path_stat;
+
+	stat(cmd, &path_stat);
+	if (S_ISDIR(path_stat.st_mode))
+	{
+		write_error(cmd, "Is a directory");
+		shell->exit_status = 126;
+		exit(shell->exit_status);
+	}
+	else if (access(cmd, X_OK) == 0)
+		return (cmd);
+	if (!S_ISDIR(path_stat.st_mode))
+	{
+		if (access(cmd, F_OK) == -1)
+		{
+			write_error(cmd, "No such file or directory");
+			shell->exit_status = 127;
+			exit(shell->exit_status);
+		}
+		else
+			shell->exit_status = 126;
+		return (cmd);
+	}
+	else
+		return (NULL);
+}
+
+char	*search_executable_cmd(char **path_dirs, char *cmd)
+{
 	char	*cmd_path;
+	char	*temp;
 	int		i;
 
 	i = 0;
-	if (access(cmd, X_OK) == 0)
-		return (cmd);
+	while (path_dirs[i])
+	{
+		temp = ft_strjoin(path_dirs[i], "/");
+		cmd_path = ft_strjoin(temp, cmd);
+		if (access(cmd_path, X_OK) == 0)
+		{
+			free(temp);
+			free_array(path_dirs);
+			return (cmd_path);
+		}
+		free(cmd_path);
+		free(temp);
+		i++;
+	}
+	free_array(path_dirs);
+	return (NULL);
+}
+
+char	*get_cmd_path(char *cmd, t_shell *shell)
+{
+	char	**path_dirs;
+	char	*path_var;
+
+	if (ft_strchr(cmd, '/') != NULL)
+		return (check_if_directory(cmd, shell));
 	path_var = getenv("PATH");
 	if (!path_var)
 		return (NULL);
 	path_dirs = ft_split(path_var, ':');
 	if (!path_dirs)
 		return (NULL);
-	
-	while (path_dirs[i])
-	{
-		cmd_path = ft_strjoin(path_dirs[i], "/");
-		cmd_path = ft_strjoin(cmd_path, cmd);
-		if (access(cmd_path, X_OK) == 0)
-			return (cmd_path);
-		i++;
-	}
-	return (NULL);
+	return (search_executable_cmd(path_dirs, cmd));
 }
 
 void	wait_commands(t_shell *shell)

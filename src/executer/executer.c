@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 13:29:51 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 15:54:47 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	exec_builtin(t_command *commands, t_shell *shell)
 	else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
 		shell->exit_status = ft_env(shell);
 	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)
-		shell->exit_status = ft_exit(commands);
+		ft_exit(commands, shell);
 	exit(shell->exit_status);
 }
 void	exec_single_builtin(t_command *commands, t_shell *shell)
@@ -45,7 +45,7 @@ void	exec_single_builtin(t_command *commands, t_shell *shell)
 	else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
 		shell->exit_status = ft_env(shell);
 	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)
-		shell->exit_status = ft_exit(commands);
+		ft_exit(commands, shell);
 }
 
 void	pipe_and_fork(t_command *current, t_shell *shell)
@@ -58,6 +58,8 @@ void	pipe_and_fork(t_command *current, t_shell *shell)
 			exit(EXIT_FAILURE);
 		}
 	}
+	if (current->redirections)
+		handle_heredoc(current->redirections, shell);
 	shell->last_pid = fork();
 	if (shell->last_pid == -1)
 	{
@@ -69,20 +71,25 @@ void	pipe_and_fork(t_command *current, t_shell *shell)
 void	execute_command(t_command *current, t_shell *shell)
 {
 	signal(SIGQUIT, SIG_DFL);
+	if (!current->cmd_name[0])
+	{
+		shell->exit_status = 0;
+		exit(shell->exit_status);
+	}
 	if (current->is_builtin == true)
 		exec_builtin(current, shell);
 	else
 	{
-		shell->cmd_path = get_cmd_path(current->cmd_name[0]);
+		shell->cmd_path = get_cmd_path(current->cmd_name[0], shell);
 		if (!shell->cmd_path)
 		{
-			fprintf(stderr, "%s: command not found\n", current->cmd_name[0]);
+			write_error(current->cmd_name[0], "command not found");
 			shell->exit_status = 127;
 			exit(shell->exit_status);
 		}
 		execve(shell->cmd_path, current->cmd_name, shell->env);
 		perror("execve");
-		exit(EXIT_FAILURE);
+		exit(shell->exit_status);
 	}
 }
 
@@ -111,7 +118,7 @@ int	executer(t_shell *shell)
         return -1;
 	current = shell->commands;
 	prev_fd = 0;
-	if (!current->next && current->is_builtin == true)
+	if (!current->next && current->is_builtin == true && !current->redirections)
 		exec_single_builtin(current, shell);
 	else
 	{

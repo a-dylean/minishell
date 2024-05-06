@@ -6,14 +6,13 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 13:28:23 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 15:53:45 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "../libft/libft.h"
-# include "../pipex/pipex.h"
 # include <errno.h>
 # include <limits.h>
 # include <readline/history.h>
@@ -23,6 +22,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
 
 # define S_QUOTE '\''
 # define D_QUOTE '\"'
@@ -33,7 +34,6 @@ extern int				g_exit_code;
 /* enums */
 typedef enum s_type
 {
-	SPACES,
 	WORD,
 	PIPE,
 	LESS,
@@ -42,7 +42,6 @@ typedef enum s_type
 	LESSLESS,
 	FILENAME,
 	DELIMITER,
-	END
 }						t_type;
 
 typedef enum s_quotes
@@ -101,10 +100,12 @@ typedef struct s_shell
 	/*end*/
 	char				*prompt;
 	char				*heredoc;
-	t_env				*env_head;
 	int					exit_status;
+	char				*prev_dir;
+	char				*cur_dir;
 	int					std_fds[2];
 	char				*user_name;
+	//t_env				*env_head;
 	// char			**cmd_paths;
 	// char			*prev_prompt;
 	// int				exec_on_pipe;
@@ -153,6 +154,8 @@ int						env_var_exists(char *env_var);
 void					expand_to_exit_status(char *token, char *buffer, int *j,
 							t_shell *shell);
 void					remove_quotes(t_token *tokens);
+void					perform_expansion(t_token *tokens, t_shell *shell);
+void					set_quotes_status(t_token *tokens);
 
 /* env */
 t_env					*init_env(char **env);
@@ -167,14 +170,17 @@ void					has_no_filename(t_command *current, t_shell *shell,
 							int prev_fd);
 void					open_and_redirect_fd(t_command *current,
 							t_shell *shell);
-char					*get_cmd_path(char *cmd);
+char					*get_cmd_path(char *cmd, t_shell *shell);
 void					wait_commands(t_shell *shell);
+
+/* heredoc */
+void					handle_heredoc(t_token *redirections, t_shell *shell);
 
 /* builtins */
 int						ft_echo(t_command *commands);
 int						ft_pwd(void);
 int						ft_cd(t_command *commands, t_shell *shell);
-int						ft_exit(t_command *commands);
+void					ft_exit(t_command *commands, t_shell *shell);
 int					ft_env(t_shell *shell);
 
 /* linked lists*/
@@ -182,7 +188,7 @@ t_command				*init_command(void);
 t_command				*get_last_command(t_command *head);
 void					add_command_back(t_command **commands,
 							t_command *new_node);
-t_token					*create_token(char *value, int type);
+t_token					*create_token(char *value, int type, int quotes_status);
 void					add_token_back(t_token **tokens, t_token *new_node);
 void					free_tokens(t_token **tokens);
 void					del_first(t_token **tokens);
@@ -193,7 +199,7 @@ int						len_command(t_command *command);
 /* errors */
 int						syntax_error_in_token(char *token);
 int						undefined_behavior_error(char *str);
-int						syntax_error_eof(void);
+int 					syntax_error_eof(void);
 
 /* utils */
 void					exit_shell(t_shell *shell, int exit_code);
@@ -205,6 +211,7 @@ void					free_array(char **arr);
 int						str_is_empty_or_space_only(char *str);
 int						count_chars(char *str, char c);
 int						char_is_separator(char c);
+void					write_error(char *cmd, char *error);
 
 /* signals */
 void					catch_sigint(int signum);

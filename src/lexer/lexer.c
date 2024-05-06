@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/02 16:20:59 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 15:22:29 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	get_token_size(char *str)
 	if (type == PIPE || type == LESS || type == GREAT)
 		return (1);
 	i = 0;
-	while (str[i] && !ft_isspace(str[i]) && str[i] != '|' && str[i] != '<' && str[i] != '>')
+	while (str[i] && !ft_isspace(str[i]) && str[i] != '|')
 	{
 		if ((str[i] == D_QUOTE || str[i] == S_QUOTE) && str[i + 1] != '\0')
 			i += ft_strchr(&str[i + 1], str[i]) - &str[i] + 1;
@@ -136,7 +136,7 @@ t_token *tokenize(char *str, t_shell *shell)
 			substr = get_token(str);
 			if (!substr)
 				return (free_tokens(&shell->tokens), NULL);
-			new_token = create_token(substr, get_type(substr));
+			new_token = create_token(substr, get_type(substr), NONE);
 			if (!new_token)
 				return (free(substr), free_tokens(&shell->tokens), NULL);
 			add_token_back(&shell->tokens, new_token);

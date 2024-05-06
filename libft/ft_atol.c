@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:28:24 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/23 11:28:25 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/02 12:34:55 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,7 @@ long	ft_atol(const char *str)
 		ret = (ret * 10) + (str[i] - '0');
 		i++;
 	}
+	if (i == 0)
+		errno = ERANGE;
 	return (ret * sign);
 }

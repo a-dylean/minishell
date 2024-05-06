@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_removal.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 18:34:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/02 15:21:02 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 14:44:03 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*remove_char(char *str, char c)
 
 	i = 0;
 	j = 0;
+	if (!str)
+		return (NULL);
 	while (str[i])
 	{
 		if (str[i] == c)

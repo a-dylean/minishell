@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   linked_lists.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 12:18:40 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/06 14:46:42 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_token	*create_token(char *value, int type)
+t_token	*create_token(char *value, int type, int quotes_status)
 {
 	t_token	*token;
 	static int id = 0;
@@ -28,7 +28,7 @@ t_token	*create_token(char *value, int type)
 		return (NULL);
 	}
 	token->type = type;
-	token->quotes_status = NONE;
+	token->quotes_status = quotes_status;
 	token->next = NULL;
 	token->prev = NULL;
 	return (token);
