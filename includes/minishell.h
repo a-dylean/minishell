@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 11:42:25 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 13:13:32 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ void					handle_heredoc(t_token *redirections, t_shell *shell);
 
 /* builtins */
 int						ft_echo(t_command *commands);
-int						ft_pwd(void);
+int						ft_pwd(t_command *commands);
 int						ft_cd(t_command *commands, t_shell *shell);
 void					ft_exit(t_command *commands, t_shell *shell);
 

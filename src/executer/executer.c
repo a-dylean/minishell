@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 12:48:33 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 13:13:57 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	exec_builtin(t_command *commands, t_shell *shell)
 	if (ft_strcmp(commands->cmd_name[0], "cd") == 0)
 		shell->exit_status = ft_cd(commands, shell);
 	else if (ft_strcmp(commands->cmd_name[0], "pwd") == 0)
-		shell->exit_status = ft_pwd();
+		shell->exit_status = ft_pwd(commands);
 	else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
 		shell->exit_status = ft_echo(commands);
 	// else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
@@ -35,7 +35,7 @@ void	exec_single_builtin(t_command *commands, t_shell *shell)
 	if (ft_strcmp(commands->cmd_name[0], "cd") == 0)
 		shell->exit_status = ft_cd(commands, shell);
 	else if (ft_strcmp(commands->cmd_name[0], "pwd") == 0)
-		shell->exit_status = ft_pwd();
+		shell->exit_status = ft_pwd(commands);
 	else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
 		shell->exit_status = ft_echo(commands);
 	// else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
