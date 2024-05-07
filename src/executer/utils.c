@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 12:10:16 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 12:25:08 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,17 @@ char	*check_if_directory(char *cmd, t_shell *shell)
 {
 	struct stat path_stat;
 
-	stat(cmd, &path_stat);
+	if (stat(cmd, &path_stat) == -1)
+	{
+		perror(cmd);
+		shell->exit_status = 1;
+		free_and_exit_shell(shell, shell->exit_status);
+	}
 	if (S_ISDIR(path_stat.st_mode))
 	{
 		write_error(cmd, "Is a directory");
 		shell->exit_status = 126;
-		exit(shell->exit_status);
+		free_and_exit_shell(shell, shell->exit_status);
 	}
 	else if (access(cmd, X_OK) == 0)
 		return (cmd);
@@ -31,7 +36,7 @@ char	*check_if_directory(char *cmd, t_shell *shell)
 		{
 			write_error(cmd, "No such file or directory");
 			shell->exit_status = 127;
-			exit(shell->exit_status);
+			free_and_exit_shell(shell, shell->exit_status);
 		}
 		else
 			shell->exit_status = 126;

@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 11:49:03 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 12:27:42 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ void	execute_command(t_command *current, t_shell *shell)
 			free_and_exit_shell(shell, shell->exit_status);
 		}
 		execve(shell->cmd_path, current->cmd_name, shell->env);
-		perror("execve");
-		exit(shell->exit_status);
+		perror(shell->cmd_path);
+		free(shell->cmd_path);
 	}
 }
 
