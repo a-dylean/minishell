@@ -19,6 +19,16 @@ void	free_shell(t_shell *shell)
 			free(shell->input);
 			shell->input = NULL;
 		}
+		if (shell->prev_dir)
+		{
+			free(shell->prev_dir);
+			shell->prev_dir = NULL;
+		}
+		if (shell->cur_dir)
+		{
+			free(shell->cur_dir);
+			shell->cur_dir = NULL;
+		}
 		if (shell->tokens)
 			free_tokens(&(shell->tokens));
 		if (shell->commands)
