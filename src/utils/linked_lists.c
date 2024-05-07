@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 14:46:42 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 16:38:47 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ void	free_commands(t_command **commands)
 	while (current)
 	{
 		temp = current->next;
-		free_array(current->cmd_name);
+		if (current->cmd_name)
+			free_array(current->cmd_name);
 		free_tokens(&(current->redirections));
 		free(current);
 		current = temp;
