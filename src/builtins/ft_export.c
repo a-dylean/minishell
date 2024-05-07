@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:03 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 16:29:23 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/07 16:39:38 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ int	valid_for_export(char *str)
 
 int	ft_export(t_shell *shell)
 {
+	if (shell->commands->cmd_name[1] == NULL)
+	{
+		ft_env(shell);
+		return (EXIT_SUCCESS);
+	}
 	if (!valid_for_export(shell->commands->cmd_name[1]))
 		add_back_env_var(shell->env_head,
 			init_env_node(shell->commands->cmd_name[1]));
