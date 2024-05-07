@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:28:00 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 15:53:55 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:00:44 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,16 @@ int init_shell(t_shell *shell, char **env)
 	}
 	shell->tokens = NULL;
 	shell->commands = NULL;
+	shell->last_pid = -2;
 	shell->infile_fd = -2;
 	shell->outfile_fd = -2;
+	shell->pipe_fd[0] = -2;
+	shell->pipe_fd[1] = -2;
 	shell->prev_fd = 0;
 	shell->exit_status = 0;
 	shell->prev_dir = NULL;
 	shell->cur_dir = NULL;
 	shell->heredoc = NULL;
-	shell->std_fds[0] = dup(STDIN_FILENO);
-	shell->std_fds[1] = dup(STDOUT_FILENO);
 	return (EXIT_SUCCESS);
 }
 

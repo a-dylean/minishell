@@ -6,16 +6,21 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:10:39 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/04/26 11:34:18 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 13:14:38 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_pwd(void) // works with absolut path for now. Needs to work with relative path
+int	ft_pwd(t_command *commands)
 {
 	char	cwd[4096]; // = PATH_MAX on the system (getconf -a PATH_MAX)
 
+	if (commands->cmd_name[1] && commands->cmd_name[1][0] && commands->cmd_name[1][0] == '-')
+	{
+		write_error(commands->cmd_name[1], "invalid option");
+		return (2);
+	}
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		perror("pwd");
 	ft_putstr_fd(cwd, STDOUT_FILENO);

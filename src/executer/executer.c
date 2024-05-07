@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 15:54:47 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:00:57 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	exec_builtin(t_command *commands, t_shell *shell)
 	if (ft_strcmp(commands->cmd_name[0], "cd") == 0)
 		shell->exit_status = ft_cd(commands, shell);
 	else if (ft_strcmp(commands->cmd_name[0], "pwd") == 0)
-		shell->exit_status = ft_pwd();
+		shell->exit_status = ft_pwd(commands);
 	else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
 		shell->exit_status = ft_echo(commands);
 	// else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
@@ -28,14 +28,14 @@ void	exec_builtin(t_command *commands, t_shell *shell)
 		shell->exit_status = ft_env(shell);
 	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)
 		ft_exit(commands, shell);
-	exit(shell->exit_status);
+	free_and_exit_shell(shell, shell->exit_status);
 }
 void	exec_single_builtin(t_command *commands, t_shell *shell)
 {
 	if (ft_strcmp(commands->cmd_name[0], "cd") == 0)
 		shell->exit_status = ft_cd(commands, shell);
 	else if (ft_strcmp(commands->cmd_name[0], "pwd") == 0)
-		shell->exit_status = ft_pwd();
+		shell->exit_status = ft_pwd(commands);
 	else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
 		shell->exit_status = ft_echo(commands);
 	// else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
@@ -74,7 +74,7 @@ void	execute_command(t_command *current, t_shell *shell)
 	if (!current->cmd_name[0])
 	{
 		shell->exit_status = 0;
-		exit(shell->exit_status);
+		free_and_exit_shell(shell, shell->exit_status);
 	}
 	if (current->is_builtin == true)
 		exec_builtin(current, shell);
@@ -85,11 +85,11 @@ void	execute_command(t_command *current, t_shell *shell)
 		{
 			write_error(current->cmd_name[0], "command not found");
 			shell->exit_status = 127;
-			exit(shell->exit_status);
+			free_and_exit_shell(shell, shell->exit_status);
 		}
 		execve(shell->cmd_path, current->cmd_name, shell->env);
-		perror("execve");
-		exit(shell->exit_status);
+		perror(shell->cmd_path);
+		free(shell->cmd_path);
 	}
 }
 

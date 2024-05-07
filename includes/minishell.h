@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 13:46:52 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:00:33 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ typedef struct s_shell
 	t_token				*tokens;
 	t_command			*commands;
 	int					envless;
-	/*for executer below*/
 	int					infile_fd;
 	int					outfile_fd;
 	int					prev_fd;
@@ -97,13 +96,11 @@ typedef struct s_shell
 	int					wstatus;
 	char				*cmd_path;
 	char				**env;
-	/*end*/
 	char				*prompt;
 	char				*heredoc;
 	int					exit_status;
 	char				*prev_dir;
 	char				*cur_dir;
-	int					std_fds[2];
 	char				*user_name;
 	t_env				*env_head;
 	// char			**cmd_paths;
@@ -178,7 +175,7 @@ void					handle_heredoc(t_token *redirections, t_shell *shell);
 
 /* builtins */
 int						ft_echo(t_command *commands);
-int						ft_pwd(void);
+int						ft_pwd(t_command *commands);
 int						ft_cd(t_command *commands, t_shell *shell);
 void					ft_exit(t_command *commands, t_shell *shell);
 int					ft_env(t_shell *shell);
@@ -202,7 +199,7 @@ int						undefined_behavior_error(char *str);
 int 					syntax_error_eof(void);
 
 /* utils */
-void					exit_shell(t_shell *shell, int exit_code);
+void					free_and_exit_shell(t_shell *shell, int exit_code);
 void					free_shell(t_shell *shell);
 void					free_env(t_env *env);
 void					free_commands(t_command **commands);
