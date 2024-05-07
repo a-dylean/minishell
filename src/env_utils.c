@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 15:38:36 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 13:35:50 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/07 16:07:25 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,6 @@ t_env	*init_env(char **env)
 		add_back_env_var(head, init_env_node(env[i]));
 		i++;
 	}
-	// printing env list
-	// t_env *tmp = head;
-	// while (tmp)
-	// {
-	// 	printf("%s=%s\n", tmp->var_name, tmp->value);
-	// 	tmp = tmp->next;
-	// }
 	return (head);
 }
 
