@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 14:59:27 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 10:55:04 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 11:26:44 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void	open_and_redirect_fd(t_command *current, t_shell *shell)
 			perror("dup2");
 			exit(EXIT_FAILURE);
 		}
+		close(shell->infile_fd);
 	}
 	if (shell->outfile_fd != -2)
 	{
@@ -114,6 +115,7 @@ void	open_and_redirect_fd(t_command *current, t_shell *shell)
 			perror("dup2");
 			exit(EXIT_FAILURE);
 		}
+		close(shell->outfile_fd);
 	}
 }
 /*if the command has no specified infile or outfile, it is redirected*/
@@ -126,6 +128,7 @@ void	has_no_filename(t_command *current, t_shell *shell, int prev_fd)
 			perror("dup2");
 			exit(EXIT_FAILURE);
 		}
+		close(prev_fd);
 	}
 	if (current->next && shell->outfile_fd == -2)
 	{
