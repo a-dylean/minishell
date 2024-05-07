@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 12:27:42 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 12:48:33 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	execute_command(t_command *current, t_shell *shell)
 	if (!current->cmd_name[0])
 	{
 		shell->exit_status = 0;
-		exit(shell->exit_status);
+		free_and_exit_shell(shell, shell->exit_status);
 	}
 	if (current->is_builtin == true)
 		exec_builtin(current, shell);
