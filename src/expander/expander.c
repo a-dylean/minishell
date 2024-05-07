@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 17:16:11 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/07 13:43:58 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,31 +67,10 @@ int	valid_expansion(char c, char next_c, int quotes_status)
 		&& (quotes_status == NONE || quotes_status == DQUOTED));
 }
 
-char *handle_delimiters(char *word) 
-{
-    bool in_quotes = false;
-    char *result = malloc(strlen(word) + 1);
-    if (!result) {
-        return NULL;
-    }
+// char *handle_delimiters(char *word)
+// {
 
-    int j = 0;
-    for (int i = 0; word[i] != '\0'; i++) {
-        if (word[i] == '"') {
-            in_quotes = !in_quotes;
-        } else if (!in_quotes && (word[i] == '\\' || word[i] == '$' || word[i] == '`')) {
-            result[j++] = '\\';
-            result[j++] = word[i];
-        } else if (word[i] == '\\' && word[i + 1] == '\n') {
-            i++;  // Ignore \newline
-        } else {
-            result[j++] = word[i];
-        }
-    }
-
-    result[j] = '\0';  // Null-terminate the result string
-    return result;
-}
+// }
 
 void	perform_expansion(t_token *tokens, t_shell *shell)
 {
@@ -118,16 +97,10 @@ void	perform_expansion(t_token *tokens, t_shell *shell)
 					break ;
 			}
 		}
-		else if (temp->type == DELIMITER)
-		{
-			temp->value = handle_delimiters(temp->value);
-		}
-		if (temp)
+		// if (temp)
 			temp = temp->next;
 	}
 }
-
-
 
 int	expander(t_token *tokens, t_shell *shell)
 {
