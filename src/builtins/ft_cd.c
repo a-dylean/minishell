@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:44:36 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 11:57:12 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 17:01:12 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	init_directories(t_shell *shell)
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		perror("pwd");
+	return ;
 	shell->cur_dir = ft_strdup(cwd);
 }
 
