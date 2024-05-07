@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 14:20:48 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 14:30:12 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ typedef struct s_shell
 	char				*prev_dir;
 	char				*cur_dir;
 	char				*user_name;
-	t_env				*env_head;
+	// t_env				*env_head;
 }						t_shell;
 
 /* lexer */
