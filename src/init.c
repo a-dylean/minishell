@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:28:00 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 14:43:53 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 10:42:29 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ int init_shell(t_shell *shell, char **env)
 	shell->prev_dir = NULL;
 	shell->cur_dir = NULL;
 	shell->heredoc = NULL;
-	shell->std_fds[0] = dup(STDIN_FILENO);
-	shell->std_fds[1] = dup(STDOUT_FILENO);
 	return (EXIT_SUCCESS);
 }
 

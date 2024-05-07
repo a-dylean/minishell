@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 14:43:30 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 10:42:34 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ typedef struct s_shell
 	int					exit_status;
 	char				*prev_dir;
 	char				*cur_dir;
-	int					std_fds[2];
 	char				*user_name;
 	//t_env				*env_head;
 	// char			**cmd_paths;
