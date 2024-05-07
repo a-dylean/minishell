@@ -6,13 +6,23 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:43:34 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 15:02:53 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 11:49:46 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	get_exit_code(t_command *commands, char *arg, t_shell *shell)
+static void	compute_exit_status(long stat, t_shell *shell)
+{
+	if (stat > 255)
+		stat = stat % 256;
+	else if (stat < 0)
+		stat = (stat % 256) + 256;
+	ft_putstr_fd("exit\n", STDOUT_FILENO);
+	shell->exit_status = stat;
+}
+
+static int	get_exit_status(t_command *commands, char *arg, t_shell *shell)
 {
 	long stat;
 
@@ -28,24 +38,22 @@ static void	get_exit_code(t_command *commands, char *arg, t_shell *shell)
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
 		write_error("exit", "too many arguments");
-		shell->exit_status = 1; // should give back the prompt instead of exiting
+		shell->exit_status = 1;
+		return (1);
 	}
 	else
-	{
-		if (stat > 255)
-			stat = stat % 256;
-		else if (stat < 0)
-			stat = (stat % 256) + 256;
-		ft_putstr_fd("exit\n", STDOUT_FILENO);
-		shell->exit_status = stat;
-	}
+		compute_exit_status(stat, shell);
+	return (0);
 }
 // we need to add functions handling the freeing of the commands structure
 void	ft_exit(t_command *commands, t_shell *shell)
 {
-	if (commands->cmd_name[1]) // there is a number after exit, we need to exit with that number
-		get_exit_code(commands, commands->cmd_name[1], shell);
+	if (commands->cmd_name[1])
+	{
+		if (get_exit_status(commands, commands->cmd_name[1], shell) == 1)
+			return ;
+	}
 	else // means there is no number after exit
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
-	exit(shell->exit_status); // here, it should exit with the last commands exit status
+	free_and_exit_shell(shell, shell->exit_status);
 }

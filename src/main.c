@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:05:44 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/02 16:23:32 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 11:43:15 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ int	main(int argc, char **argv, char **env)
 {
 	t_shell shell;
 	if (init_shell(&shell, env) || invalid_arg(&shell, argc, argv))
-		exit_shell(NULL, EXIT_FAILURE);
+		free_and_exit_shell(NULL, EXIT_FAILURE);
 	if (shell.interactive)
 		minishell_loop(&shell);
 	else
 		non_interactive_behaviour(&shell, argv[2]);
 	if (isatty(STDIN_FILENO))
 		write(2, "exit\n", 6);
-	exit_shell(&shell, g_exit_code);
+	free_and_exit_shell(&shell, g_exit_code);
 	return (0);
 }

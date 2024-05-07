@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 15:57:53 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/07 16:56:14 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <unistd.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
+# include <unistd.h>
 
 # define S_QUOTE '\''
 # define D_QUOTE '\"'
@@ -88,7 +88,6 @@ typedef struct s_shell
 	t_token				*tokens;
 	t_command			*commands;
 	int					envless;
-	/*for executer below*/
 	int					infile_fd;
 	int					outfile_fd;
 	int					prev_fd;
@@ -97,13 +96,11 @@ typedef struct s_shell
 	int					wstatus;
 	char				*cmd_path;
 	char				**env;
-	/*end*/
 	char				*prompt;
 	char				*heredoc;
 	int					exit_status;
 	char				*prev_dir;
 	char				*cur_dir;
-	int					std_fds[2];
 	char				*user_name;
 	t_env				*env_head;
 	// char			**cmd_paths;
@@ -159,6 +156,8 @@ void					set_quotes_status(t_token *tokens);
 
 /* env */
 t_env					*init_env(char **env);
+t_env					*init_env_node(char *str);
+void					add_back_env_var(t_env *head, t_env *new);
 
 /* executer */
 int						init_shell(t_shell *shell, char **env);
@@ -178,10 +177,12 @@ void					handle_heredoc(t_token *redirections, t_shell *shell);
 
 /* builtins */
 int						ft_echo(t_command *commands);
-int						ft_pwd(void);
+int						ft_pwd(t_command *commands);
 int						ft_cd(t_command *commands, t_shell *shell);
 void					ft_exit(t_command *commands, t_shell *shell);
-int					ft_env(t_shell *shell);
+int						ft_env(t_shell *shell);
+int						ft_export(t_shell *shell);
+int						ft_unset(t_shell *shell);
 
 /* linked lists*/
 t_command				*init_command(void);
@@ -199,10 +200,10 @@ int						len_command(t_command *command);
 /* errors */
 int						syntax_error_in_token(char *token);
 int						undefined_behavior_error(char *str);
-int 					syntax_error_eof(void);
+int						syntax_error_eof(void);
 
 /* utils */
-void					exit_shell(t_shell *shell, int exit_code);
+void					free_and_exit_shell(t_shell *shell, int exit_code);
 void					free_shell(t_shell *shell);
 void					free_env(t_env *env);
 void					free_commands(t_command **commands);
