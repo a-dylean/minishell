@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:44:36 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 10:04:29 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 11:51:56 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	ft_cd(t_command *commands, t_shell *shell)
 {
 	if (shell->cur_dir == NULL)
 		init_directories(shell);
-	if (commands->cmd_name[2])
+	if (commands->cmd_name[0] && commands->cmd_name[1] && commands->cmd_name[2])
 	{
 		write_error("cd", "too many arguments");
 		return (1);

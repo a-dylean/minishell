@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:43:34 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 10:15:43 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 11:49:46 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ static int	get_exit_status(t_command *commands, char *arg, t_shell *shell)
 // we need to add functions handling the freeing of the commands structure
 void	ft_exit(t_command *commands, t_shell *shell)
 {
-	int	exit_status;
-
 	if (commands->cmd_name[1])
 	{
 		if (get_exit_status(commands, commands->cmd_name[1], shell) == 1)
@@ -57,7 +55,5 @@ void	ft_exit(t_command *commands, t_shell *shell)
 	}
 	else // means there is no number after exit
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
-	exit_status = shell->exit_status;
-	free_shell(shell);
-	exit(exit_status); // here, it should exit with the last commands exit status
+	free_and_exit_shell(shell, shell->exit_status);
 }

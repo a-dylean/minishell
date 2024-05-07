@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 11:36:25 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 11:49:03 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	exec_builtin(t_command *commands, t_shell *shell)
 	// 	shell->exit_status = ft_env();
 	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)
 		ft_exit(commands, shell);
-	exit(shell->exit_status);
+	free_and_exit_shell(shell, shell->exit_status);
 }
 void	exec_single_builtin(t_command *commands, t_shell *shell)
 {
@@ -85,7 +85,7 @@ void	execute_command(t_command *current, t_shell *shell)
 		{
 			write_error(current->cmd_name[0], "command not found");
 			shell->exit_status = 127;
-			exit(shell->exit_status);
+			free_and_exit_shell(shell, shell->exit_status);
 		}
 		execve(shell->cmd_path, current->cmd_name, shell->env);
 		perror("execve");

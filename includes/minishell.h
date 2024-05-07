@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 10:42:34 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 11:42:25 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ int						undefined_behavior_error(char *str);
 int 					syntax_error_eof(void);
 
 /* utils */
-void					exit_shell(t_shell *shell, int exit_code);
+void					free_and_exit_shell(t_shell *shell, int exit_code);
 void					free_shell(t_shell *shell);
 void free_env(t_env *env);
 void					free_commands(t_command **commands);

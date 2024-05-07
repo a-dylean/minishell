@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-void	exit_shell(t_shell *shell, int exit_code)
+void	free_and_exit_shell(t_shell *shell, int exit_code)
 {
 	if (shell)
 	{
