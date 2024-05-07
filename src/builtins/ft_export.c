@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:03 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 15:38:40 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/07 16:29:23 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,15 @@ int	valid_for_export(char *str)
 	i++;
 	while (str[i])
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
+		if (!ft_isalnum(str[i]) && str[i] != '_' && str[i] != '=')
 		{
 			printf("minishell: export: `%s': not a valid identifier\n", str);
 			return (EXIT_FAILURE);
 		}
 		i++;
 	}
+	if (!ft_strchr(str, '='))
+		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 

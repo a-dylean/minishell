@@ -39,3 +39,4 @@ void	free_shell(t_shell *shell)
         //     free_env((shell->env_head));   
 	}
 }
+
