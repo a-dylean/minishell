@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:03 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 16:39:38 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/07 18:56:22 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	valid_for_export(char *str)
 	i = 0;
 	if (!ft_isalpha(str[i]) && str[i] != '_')
 	{
-		printf("minishell: export: `%s': not a valid identifier\n", str);
+		write_error("export" , "not a valid identifier");
 		return (EXIT_FAILURE);
 	}
 	i++;
@@ -27,7 +27,7 @@ int	valid_for_export(char *str)
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_' && str[i] != '=')
 		{
-			printf("minishell: export: `%s': not a valid identifier\n", str);
+			// write_error("export", "not a valid identifier");
 			return (EXIT_FAILURE);
 		}
 		i++;
@@ -45,7 +45,10 @@ int	ft_export(t_shell *shell)
 		return (EXIT_SUCCESS);
 	}
 	if (!valid_for_export(shell->commands->cmd_name[1]))
+	{
 		add_back_env_var(shell->env_head,
 			init_env_node(shell->commands->cmd_name[1]));
-	return (EXIT_SUCCESS);
+		return (EXIT_SUCCESS);
+	}
+	return (EXIT_FAILURE);
 }
