@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 15:00:57 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:41:07 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ void	exec_single_builtin(t_command *commands, t_shell *shell)
 		shell->exit_status = ft_pwd(commands);
 	else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
 		shell->exit_status = ft_echo(commands);
-	// else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
-	// 	shell->exit_status = ft_export();
-	// else if (ft_strcmp(commands->cmd_name[0], "unset") == 0)
-	// 	shell->exit_status = ft_unset();
+	else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
+		shell->exit_status = ft_export(shell);
+	else if (ft_strcmp(commands->cmd_name[0], "unset") == 0)
+		shell->exit_status = ft_unset(shell);
 	else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
 		shell->exit_status = ft_env(shell);
 	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)

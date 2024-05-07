@@ -6,15 +6,15 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:03 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 14:58:05 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:38:40 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int valid_for_export(char *str)
+int	valid_for_export(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!ft_isalpha(str[i]) && str[i] != '_')
@@ -23,7 +23,7 @@ int valid_for_export(char *str)
 		return (EXIT_FAILURE);
 	}
 	i++;
-	while (str[i] != '\0')
+	while (str[i])
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 		{
@@ -35,11 +35,10 @@ int valid_for_export(char *str)
 	return (EXIT_SUCCESS);
 }
 
-int ft_export(char *str, t_shell *shell)
+int	ft_export(t_shell *shell)
 {
-	(void)str;
-	(void)shell;
-	// if (valid_for_export(str))
-	// 	add_token_back(&shell->env_head, create);
+	if (!valid_for_export(shell->commands->cmd_name[1]))
+		add_back_env_var(shell->env_head,
+			init_env_node(shell->commands->cmd_name[1]));
 	return (EXIT_SUCCESS);
 }
