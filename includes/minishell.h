@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 13:13:32 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 14:20:48 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ typedef struct s_shell
 	t_token				*tokens;
 	t_command			*commands;
 	int					envless;
-	/*for executer below*/
 	int					infile_fd;
 	int					outfile_fd;
 	int					prev_fd;
@@ -97,21 +96,13 @@ typedef struct s_shell
 	int					wstatus;
 	char				*cmd_path;
 	char				**env;
-	/*end*/
 	char				*prompt;
 	char				*heredoc;
 	int					exit_status;
 	char				*prev_dir;
 	char				*cur_dir;
 	char				*user_name;
-	//t_env				*env_head;
-	// char			**cmd_paths;
-	// char			*prev_prompt;
-	// int				exec_on_pipe;
-	// struct termios	mirror_termios;
-	// char			*trimmed_prompt;
-	// char			*terminal_prompt;
-	// int				cmd_has_been_executed;
+	t_env				*env_head;
 }						t_shell;
 
 /* lexer */
