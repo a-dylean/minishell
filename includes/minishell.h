@@ -157,6 +157,7 @@ void					set_quotes_status(t_token *tokens);
 t_env					*init_env(char **env);
 t_env					*init_env_node(char *str);
 void					add_back_env_var(t_env *head, t_env *new);
+char	*get_env_value(char *str, char *var_name);
 
 /* executer */
 int						init_shell(t_shell *shell, char **env);

@@ -56,6 +56,32 @@ int	valid_for_export(char *str)
     return (0);
 }
 
+
+void handle_export(char *str, t_shell *shell)
+{
+	t_env *tmp;
+	char **split;
+	
+	split = ft_split(str, '=');
+	tmp = shell->env_head;
+	if (!env_var_exists(split[0], shell))
+		add_back_env_var(shell->env_head, init_env_node(str));
+	else
+	{
+		while(tmp)
+		{
+			if (ft_strcmp(tmp->var_name, split[0]) == 0)
+			{
+				free(tmp->value);
+				tmp->value = get_env_value(str, split[0]);
+				break;
+			}
+			tmp = tmp->next;
+		}
+	}
+	free_array(split);
+}
+
 int	ft_export(char **cmd, t_shell *shell)
 {
     int i;
@@ -71,10 +97,7 @@ int	ft_export(char **cmd, t_shell *shell)
     {
         exit_code = valid_for_export(cmd[i]);
         if (exit_code == 0)
-        {
-            add_back_env_var(shell->env_head,
-                init_env_node(cmd[i]));
-        }
+			handle_export(cmd[i], shell);
         else if (exit_code == 1)
             return (1);
         i++;
