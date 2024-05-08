@@ -27,21 +27,3 @@ char	*get_env_from_str(char *str)
 		return (env_var);
 	return (NULL);
 }
-
-/* function that checks if env var exists in env list */
-
-int	env_var_exists(char *env_var, t_shell *shell)
-{
-	char	*env_var_value;
-
-	if (env_var == NULL)
-		return (0);
-	env_var_value = ft_getenv(shell->env_head, env_var);
-	if (env_var_value)
-	{
-		free(env_var_value);
-		return (1);
-	}
-	free(env_var_value);
-	return (0);
-}

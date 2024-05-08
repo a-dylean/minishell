@@ -82,7 +82,7 @@ void	handle_expansion(char *token, int (*indexes)[2], char *buffer, t_shell *she
 	char *tmp;
 
     env_var = get_env_from_str(&token[*indexes[0]]);
-    if (env_var_exists(env_var, shell))
+    if (var_exists(shell->env_head, env_var))
     {
         env_var_value = ft_getenv(shell->env_head, env_var);
         tmp = env_var_value;

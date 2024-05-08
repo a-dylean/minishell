@@ -23,7 +23,7 @@ int	calculate_expansion_size(char *token, int *i, t_shell *shell)
 
 	buffer_size = 0;
 	env_var = get_env_from_str(&token[*i]);
-	if (env_var_exists(env_var, shell))
+	if (var_exists(shell->env_head, env_var))
 	{
 		env_var_value = ft_getenv(shell->env_head, env_var);
 		if (env_var_value)

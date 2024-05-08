@@ -71,7 +71,7 @@ void handle_export(char *str, t_shell *shell)
 	
 	split = ft_split(str, '=');
 	tmp = shell->env_head;
-	if (!env_var_exists(split[0], shell))
+	if (!var_exists(shell->env_head, split[0]))
 		add_back_env_var(shell->env_head, init_env_node(str));
 	else
 	{

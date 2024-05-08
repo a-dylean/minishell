@@ -146,7 +146,6 @@ void					handle_expansion(char *token, int (*index)[2], char *buffer,
 							t_shell *shell);
 int						calculate_buffer_size(char *token, t_shell *shell);
 char					*get_env_from_str(char *str);
-int						env_var_exists(char *env_var, t_shell *shell);
 void					expand_to_exit_status(char *token, char *buffer, int *j,
 							t_shell *shell);
 void					remove_quotes(t_token *tokens);
@@ -186,6 +185,7 @@ int						ft_unset(char **cmd, t_shell *shell);
 
 /* builins utils*/
 int is_valid_identifier(char *str);
+int	var_exists(t_env *env_head, char *var_name);
 
 /* linked lists*/
 t_command				*init_command(void);
