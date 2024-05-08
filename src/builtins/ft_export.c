@@ -27,9 +27,22 @@ int is_valid_identifier(char *str)
     return (1);
 }
 
+int is_valid_env_value(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isprint(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	valid_for_export(char *str)
 {
-    int	i;
     char **split;
     
 	if (!ft_strchr(str, '='))
@@ -41,30 +54,19 @@ int	valid_for_export(char *str)
 		}
 		return (-1);
 	}
-	if (ft_strcmp(str, "=") == 0)
+	split = ft_split(str, '=');
+	if (ft_strcmp(str, "=") == 0 || !is_valid_identifier(split[0]))
 	{
-        write_error("export" , "not a valid identifier");
-        return (1);
-    }
-    split = ft_split(str, '=');
-    if (!is_valid_identifier(split[0]))
-    {
         write_error("export" , "not a valid identifier");
         return (1);
     }
     if (!split[1])
         return (0);
-    i = 0;
-    while (split[1][i])
-    {
-        if (!ft_isprint(split[1][i]))
-            return (1);
-        i++;
-    }
+    if (!is_valid_env_value(split[1]))
+		return (1);
 	free_array(split);
     return (0);
 }
-
 
 void handle_export(char *str, t_shell *shell)
 {
