@@ -19,7 +19,7 @@ char	*get_value_after_expansion(char *token, t_shell *shell)
 	char	*new_token;
 	char	*buffer;
 
-	buffer = init_buffer(token);
+	buffer = init_buffer(token, shell);
 	if (!buffer)
 		return (NULL);
 	buffer = get_buffer_value(token, buffer, shell);

@@ -138,16 +138,15 @@ t_token					*remove_pipes(t_token *tokens, int id);
 int						expander(t_token *tokens, t_shell *shell);
 char					*get_value_after_expansion(char *token, t_shell *shell);
 char					*get_value_from_buffer(char buffer[]);
-int						calculate_buffer_size(char *token);
-int						calculate_expansion_size(char *token, int *i);
-char					*init_buffer(char *token);
+int	calculate_expansion_size(char *token, int *i, t_shell *shell);
+char					*init_buffer(char *token, t_shell *shell);
 char					*get_buffer_value(char *token, char *buffer,
 							t_shell *shell);
-void					handle_expansion(char *token, int *i, char *buffer,
-							int *j);
-int						calculate_buffer_size(char *token);
+void					handle_expansion(char *token, int (*index)[2], char *buffer,
+							t_shell *shell);
+int						calculate_buffer_size(char *token, t_shell *shell);
 char					*get_env_from_str(char *str);
-int						env_var_exists(char *env_var);
+int						env_var_exists(char *env_var, t_shell *shell);
 void					expand_to_exit_status(char *token, char *buffer, int *j,
 							t_shell *shell);
 void					remove_quotes(t_token *tokens);
@@ -213,6 +212,7 @@ int						str_is_empty_or_space_only(char *str);
 int						count_chars(char *str, char c);
 int						char_is_separator(char c);
 void					write_error(char *cmd, char *error);
+char	*ft_getenv(t_env *env_list, char *key);
 
 /* signals */
 void					catch_sigint(int signum);

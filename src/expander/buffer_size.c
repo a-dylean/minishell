@@ -15,7 +15,7 @@
 /* function that calculates the size of the expansion
 that will be added to the buffer */
 
-int	calculate_expansion_size(char *token, int *i)
+int	calculate_expansion_size(char *token, int *i, t_shell *shell)
 {
 	int		buffer_size;
 	char	*env_var_value;
@@ -23,9 +23,9 @@ int	calculate_expansion_size(char *token, int *i)
 
 	buffer_size = 0;
 	env_var = get_env_from_str(&token[*i]);
-	if (env_var_exists(env_var))
+	if (env_var_exists(env_var, shell))
 	{
-		env_var_value = getenv(env_var);
+		env_var_value = ft_getenv(shell->env_head, env_var);
 		if (env_var_value)
 			buffer_size += ft_strlen(env_var_value);
 	}
@@ -39,7 +39,7 @@ int	calculate_expansion_size(char *token, int *i)
 
 /* function that calculates the size of the buffer needed for the new token */
 
-int	calculate_buffer_size(char *token)
+int	calculate_buffer_size(char *token, t_shell *shell)
 {
 	int	i;
 	int	buffer_size;
@@ -54,7 +54,7 @@ int	calculate_buffer_size(char *token)
 			i++;
 		}
 		else
-			buffer_size += calculate_expansion_size(token, &i);
+			buffer_size += calculate_expansion_size(token, &i, shell);
 	}
 	return (buffer_size + 1);
 }
