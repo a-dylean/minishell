@@ -68,23 +68,6 @@ char	*ft_getenv(t_env *env_list, char *key)
 	return (NULL);
 }
 
-// char	*search_env_var(t_data *data, char *var)
-// {
-// 	char	*str;
-// 	int		i;
-// 	int		len;
-
-// 	i = 0;
-// 	len = ft_strlen(var);
-// 	while (data->env[i])
-// 	{
-// 		if (ft_strncmp(data->env[i], var, len) == 0)
-// 			break ;
-// 		i++;
-// 	}
-// 	str = ft_strdup(data->env[i] + len);
-// 	return (str);
-// }
 /* function that copies the env value to the buffer if it exists
 and if it doesn't it doesn't copy anything ($$ is not handeled the bash
 way (returning PID) because it's not in the subject) */
@@ -116,7 +99,7 @@ void	handle_expansion(char *token, int (*indexes)[2], char *buffer, t_shell *she
 char	*get_buffer_value(char *token, char *buffer, t_shell *shell)
 {
 	int	indexes[2];
-	
+
 	indexes[0] = 0;
 	indexes[1] = 0;
 	while (token[indexes[0]])

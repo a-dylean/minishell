@@ -21,7 +21,7 @@ void	exec_builtin(t_command *commands, t_shell *shell)
 	else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
 		shell->exit_status = ft_echo(commands);
 	else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
-		shell->exit_status = ft_export(shell);
+		shell->exit_status = ft_export(commands->cmd_name, shell);
 	else if (ft_strcmp(commands->cmd_name[0], "unset") == 0)
 		shell->exit_status = ft_unset(shell);
 	else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
@@ -39,7 +39,7 @@ void	exec_single_builtin(t_command *commands, t_shell *shell)
 	else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
 		shell->exit_status = ft_echo(commands);
 	else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
-		shell->exit_status = ft_export(shell);
+		shell->exit_status = ft_export(commands->cmd_name, shell);
 	else if (ft_strcmp(commands->cmd_name[0], "unset") == 0)
 		shell->exit_status = ft_unset(shell);
 	else if (ft_strcmp(commands->cmd_name[0], "env") == 0)

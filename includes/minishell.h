@@ -180,7 +180,7 @@ int						ft_pwd(t_command *commands);
 int						ft_cd(t_command *commands, t_shell *shell);
 void					ft_exit(t_command *commands, t_shell *shell);
 int						ft_env(t_shell *shell);
-int						ft_export(t_shell *shell);
+int						ft_export(char **cmd, t_shell *shell);
 int						ft_unset(t_shell *shell);
 
 /* linked lists*/

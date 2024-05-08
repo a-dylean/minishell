@@ -12,43 +12,72 @@
 
 #include "../../includes/minishell.h"
 
-int	valid_for_export(char *str)
+int is_valid_identifier(char *str) 
 {
-	int	i;
-
-	i = 0;
-	if (!ft_isalpha(str[i]) && str[i] != '_')
+    int i;
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+        return 0;
+    i = 1;
+    while (str[i]) 
 	{
-		write_error("export" , "not a valid identifier");
-		return (EXIT_FAILURE);
-	}
-	i++;
-	while (str[i])
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_' && str[i] != '=')
-		{
-			// write_error("export", "not a valid identifier");
-			return (EXIT_FAILURE);
-		}
-		i++;
-	}
-	if (!ft_strchr(str, '='))
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+        if (!ft_isalnum(str[i]) && str[i] != '_')
+            return 0;
+        i++;
+    }
+    return (1);
 }
 
-int	ft_export(t_shell *shell)
+int	valid_for_export(char *str)
 {
-	if (shell->commands->cmd_name[1] == NULL)
+    int	i;
+    char **split;
+    
+	if (ft_strcmp(str, "=") == 0)
 	{
-		ft_env(shell);
-		return (EXIT_SUCCESS);
-	}
-	if (!valid_for_export(shell->commands->cmd_name[1]))
-	{
-		add_back_env_var(shell->env_head,
-			init_env_node(shell->commands->cmd_name[1]));
-		return (EXIT_SUCCESS);
-	}
-	return (EXIT_FAILURE);
+        write_error("export" , "not a valid identifier");
+        return (1);
+    }
+    split = ft_split(str, '=');
+    if (!is_valid_identifier(split[0]))
+    {
+        write_error("export" , "not a valid identifier");
+        return (1);
+    }
+    if (!split[1])
+        return (0);
+    i = 0;
+    while (split[1][i])
+    {
+        if (!ft_isprint(split[1][i]))
+            return (1);
+        i++;
+    }
+	free_array(split);
+    return (0);
+}
+
+int	ft_export(char **cmd, t_shell *shell)
+{
+    int i;
+    int exit_code;
+
+    if (!cmd[1])
+    {
+        ft_env(shell);
+        return (0);
+    }
+    i = 1;
+    while (cmd[i])
+    {
+        exit_code = valid_for_export(cmd[i]);
+        if (exit_code == 0)
+        {
+            add_back_env_var(shell->env_head,
+                init_env_node(cmd[i]));
+        }
+        else if (exit_code == 1)
+            return (1);
+        i++;
+    }
+    return (0);
 }
