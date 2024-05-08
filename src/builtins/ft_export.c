@@ -48,10 +48,7 @@ int	valid_for_export(char *str)
 	if (!ft_strchr(str, '='))
 	{
 		if (!is_valid_identifier(str))
-		{
-			write_error("export" , "not a valid identifier");
-			return (1);
-		}
+			return (write_error("export" , "not a valid identifier"), 1);
 		return (-1);
 	}
 	split = ft_split(str, '=');
@@ -61,11 +58,10 @@ int	valid_for_export(char *str)
         return (1);
     }
     if (!split[1])
-        return (0);
+		return (free_array(split), 0);
     if (!is_valid_env_value(split[1]))
 		return (1);
-	free_array(split);
-    return (0);
+    return (free_array(split), 0);
 }
 
 void handle_export(char *str, t_shell *shell)
