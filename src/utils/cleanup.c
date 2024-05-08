@@ -35,8 +35,6 @@ void	free_shell(t_shell *shell)
 			free_tokens(&(shell->tokens));
 		if (shell->commands)
 			free_commands(&(shell->commands));
-		// if (shell->env_head)
-        //     free_env((shell->env_head));   
 	}
 }
 
