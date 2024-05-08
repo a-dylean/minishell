@@ -101,7 +101,7 @@ int	ft_cd(t_command *commands, t_shell *shell)
 	}
 	if (!commands->cmd_name[1])
 	{
-		if (chdir(getenv("HOME")) == -1)
+		if (chdir(ft_getenv(shell->env_head, "HOME")) == -1)
 		{
 			ft_putstr_fd("minishell: cd :", STDERR_FILENO);
 			perror("");

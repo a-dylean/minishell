@@ -79,7 +79,7 @@ char	*get_cmd_path(char *cmd, t_shell *shell)
 
 	if (ft_strchr(cmd, '/') != NULL)
 		return (check_if_directory(cmd, shell));
-	path_var = getenv("PATH");
+	path_var = ft_getenv(shell->env_head, "PATH");
 	if (!path_var)
 		return (NULL);
 	path_dirs = ft_split(path_var, ':');
