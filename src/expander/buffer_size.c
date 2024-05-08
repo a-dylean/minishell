@@ -28,6 +28,7 @@ int	calculate_expansion_size(char *token, int *i, t_shell *shell)
 		env_var_value = ft_getenv(shell->env_head, env_var);
 		if (env_var_value)
 			buffer_size += ft_strlen(env_var_value);
+		free(env_var_value);
 	}
 	if (env_var)
 		*i += ft_strlen(env_var) + 1;

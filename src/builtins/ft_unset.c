@@ -66,6 +66,5 @@ int	ft_unset(char **cmd, t_shell *shell)
 			delete_env_var(shell->env_head, shell->commands->cmd_name[i]);
 		i++;
 	}
-	
 	return (EXIT_SUCCESS);
 }
