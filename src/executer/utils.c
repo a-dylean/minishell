@@ -74,18 +74,23 @@ char	*search_executable_cmd(char **path_dirs, char *cmd)
 
 char	*get_cmd_path(char *cmd, t_shell *shell)
 {
-	char	**path_dirs;
-	char	*path_var;
+    char	**path_dirs;
+    char	*path_var;
 
-	if (ft_strchr(cmd, '/') != NULL)
-		return (check_if_directory(cmd, shell));
-	path_var = ft_getenv(shell->env_head, "PATH");
-	if (!path_var)
-		return (NULL);
-	path_dirs = ft_split(path_var, ':');
-	if (!path_dirs)
-		return (NULL);
-	return (search_executable_cmd(path_dirs, cmd));
+    //added protection
+	if (!cmd || !shell)
+        return NULL;
+    if (ft_strchr(cmd, '/') != NULL)
+        return (check_if_directory(cmd, shell));
+    path_var = ft_getenv(shell->env_head, "PATH");
+    if (!path_var)
+        return (NULL);
+    path_dirs = ft_split(path_var, ':');
+    if (!path_dirs)
+	//added free here
+         return (free(path_var), NULL);
+    free(path_var);
+    return (search_executable_cmd(path_dirs, cmd));
 }
 
 void	wait_commands(t_shell *shell)
