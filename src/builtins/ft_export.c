@@ -32,6 +32,15 @@ int	valid_for_export(char *str)
     int	i;
     char **split;
     
+	if (!ft_strchr(str, '='))
+	{
+		if (!is_valid_identifier(str))
+		{
+			write_error("export" , "not a valid identifier");
+			return (1);
+		}
+		return (-1);
+	}
 	if (ft_strcmp(str, "=") == 0)
 	{
         write_error("export" , "not a valid identifier");
