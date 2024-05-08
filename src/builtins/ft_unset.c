@@ -51,11 +51,21 @@ void	delete_env_var(t_env *env_head, char *var_name)
 	}
 }
 
-int	ft_unset(t_shell *shell)
+int	ft_unset(char **cmd, t_shell *shell)
 {
-	if (shell->commands->cmd_name[1] == NULL)
+	int i;
+
+	if (!cmd[1])
 		return (EXIT_SUCCESS);
-	if (var_exists(shell->env_head, shell->commands->cmd_name[1]))
-		delete_env_var(shell->env_head, shell->commands->cmd_name[1]);
+	i = 1;
+	while (cmd[i])
+	{
+		if (!is_valid_identifier(cmd[i]))
+			return (write_error("unset", "not a valid identifier"), 1);
+		if (var_exists(shell->env_head, shell->commands->cmd_name[i]))
+			delete_env_var(shell->env_head, shell->commands->cmd_name[i]);
+		i++;
+	}
+	
 	return (EXIT_SUCCESS);
 }

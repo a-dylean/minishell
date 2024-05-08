@@ -44,13 +44,16 @@ char	*get_value_from_buffer(char buffer[])
 void	expand_to_exit_status(char *token, char *buffer, int *j, t_shell *shell)
 {
 	char	*exit_status;
+	char *tmp;
 
 	exit_status = ft_itoa(shell->exit_status);
+	tmp = exit_status;
 	while (*exit_status)
 	{
 		buffer[(*j)++] = *exit_status;
 		exit_status++;
 	}
+	free(tmp);
 	token++;
 }
 

@@ -182,7 +182,10 @@ int						ft_cd(t_command *commands, t_shell *shell);
 void					ft_exit(t_command *commands, t_shell *shell);
 int						ft_env(t_shell *shell);
 int						ft_export(char **cmd, t_shell *shell);
-int						ft_unset(t_shell *shell);
+int						ft_unset(char **cmd, t_shell *shell);
+
+/* builins utils*/
+int is_valid_identifier(char *str);
 
 /* linked lists*/
 t_command				*init_command(void);
