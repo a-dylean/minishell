@@ -74,24 +74,27 @@ way (returning PID) because it's not in the subject) */
 
 void	handle_expansion(char *token, int (*indexes)[2], char *buffer, t_shell *shell)
 {
-	char	*env_var;
-	char	*env_var_value;
+    char	*env_var;
+    char	*env_var_value;
+	char *tmp;
 
-	env_var = get_env_from_str(&token[*indexes[0]]);
-	if (env_var_exists(env_var, shell))
-	{
-		env_var_value = ft_getenv(shell->env_head, env_var);
-		while (*env_var_value)
-		{
-			buffer[(*indexes)[1]++] = *env_var_value;
-			env_var_value++;
-		}
-	}
-	if (env_var)
-		(*indexes)[0] += ft_strlen(env_var) + 1;
-	else if (token[(*indexes)[0]] == '$')
-		(*indexes[0])++;
-	free(env_var);
+    env_var = get_env_from_str(&token[*indexes[0]]);
+    if (env_var_exists(env_var, shell))
+    {
+        env_var_value = ft_getenv(shell->env_head, env_var);
+        tmp = env_var_value;
+        while (*env_var_value)
+        {
+            buffer[(*indexes)[1]++] = *env_var_value;
+            env_var_value++;
+        }
+        free(tmp);
+    }
+    if (env_var)
+        (*indexes)[0] += ft_strlen(env_var) + 1;
+    else if (token[(*indexes)[0]] == '$')
+        (*indexes[0])++;
+    free(env_var);
 }
 
 /* function that returns buffer that is the new value for token */
