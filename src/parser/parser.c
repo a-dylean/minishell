@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/09 12:11:10 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 19:42:21 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	**get_cmd_array_from_tokens(t_token *tokens)
 	char	**cmd_array;
 	int		i;
 
-	i = 0;
+	i = -1;
 	cmd_array = malloc((count_not_null_tokens(tokens) + 1) * sizeof(char *));
 	if (cmd_array == NULL)
 		return (NULL);
@@ -43,21 +43,19 @@ char	**get_cmd_array_from_tokens(t_token *tokens)
 	{
 		if (tokens->value != NULL && tokens->value[0] != '\0')
 		{
-			cmd_array[i] = ft_strdup(tokens->value);
+			cmd_array[++i] = ft_strdup(tokens->value);
 			if (cmd_array[i] == NULL)
 				return (free_array(cmd_array), NULL);
-			i++;
 		}
 		else if (tokens->value != NULL)
 		{
-			cmd_array[i] = ft_strdup("");
+			cmd_array[++i] = ft_strdup("");
 			if (cmd_array[i] == NULL)
 				return (free_array(cmd_array), NULL);
-			i++;
 		}
 		tokens = tokens->next;
 	}
-	cmd_array[i] = NULL;
+	cmd_array[++i] = NULL;
 	return (cmd_array);
 }
 
