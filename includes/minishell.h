@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 16:56:14 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 15:45:38 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,7 @@ int						count_chars(char *str, char c);
 int						char_is_separator(char c);
 void					write_error(char *cmd, char *error);
 char	*ft_getenv(t_env *env_list, char *key);
+char	*remove_char(char *str, char c);
 
 /* signals */
 void					catch_sigint(int signum);

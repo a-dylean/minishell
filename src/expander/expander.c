@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 13:43:58 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 17:34:06 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,9 @@ void	set_quotes_status(t_token *tokens)
 	{
 		in_single_quotes = 0;
 		in_double_quotes = 0;
-		if (temp->value && temp->value[0] == S_QUOTE && !in_double_quotes)
+		if (temp->value[0] == S_QUOTE && !in_double_quotes)
 			in_single_quotes = !in_single_quotes;
-		else if (temp->value && temp->value[0] == D_QUOTE && !in_single_quotes)
-			in_double_quotes = !in_double_quotes;
-		else if (temp->type == DELIMITER && ft_strchr(temp->value, S_QUOTE)
-			&& !in_double_quotes) // done to handle cases like cat << ho"la"
-			in_single_quotes = !in_single_quotes;
-		else if (temp->type == DELIMITER && ft_strchr(temp->value, D_QUOTE)
-			&& !in_single_quotes)
+		else if (temp->value[0] == D_QUOTE && !in_single_quotes)
 			in_double_quotes = !in_double_quotes;
 		if (in_single_quotes)
 			temp->quotes_status = SQUOTED;
@@ -63,14 +57,13 @@ void	set_quotes_status(t_token *tokens)
 
 int	valid_expansion(char c, char next_c, int quotes_status)
 {
-	return (c == '$' && next_c != '\0' && !char_is_separator(next_c)
-		&& (quotes_status == NONE || quotes_status == DQUOTED));
+	if (c == '$' && (ft_isalpha(next_c) || next_c == '?' || next_c == '_')
+		&& (quotes_status == NONE || quotes_status == DQUOTED))
+		return (1);
+	// else if (c == '$')
+	// 	return (-1);
+	return (0);
 }
-
-// char *handle_delimiters(char *word)
-// {
-
-// }
 
 void	perform_expansion(t_token *tokens, t_shell *shell)
 {
@@ -97,8 +90,7 @@ void	perform_expansion(t_token *tokens, t_shell *shell)
 					break ;
 			}
 		}
-		// if (temp)
-			temp = temp->next;
+		temp = temp->next;
 	}
 }
 
@@ -106,7 +98,6 @@ int	expander(t_token *tokens, t_shell *shell)
 {
 	set_quotes_status(tokens);
 	perform_expansion(tokens, shell);
-	// handle_delimiters(tokens);
 	remove_quotes(tokens);
 	return (0);
 }

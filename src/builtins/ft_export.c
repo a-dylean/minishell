@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:03 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 18:56:22 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 17:15:43 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 int is_valid_identifier(char *str) 
 {
     int i;
+	if (!str)
+		return (0);
 	if (!ft_isalpha(str[0]) && str[0] != '_')
         return 0;
     i = 1;
@@ -60,7 +62,7 @@ int	valid_for_export(char *str)
     if (!split[1])
 		return (free_array(split), 0);
     if (!is_valid_env_value(split[1]))
-		return (1);
+		return (free_array(split), 1);
     return (free_array(split), 0);
 }
 

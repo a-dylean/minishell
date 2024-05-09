@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:16 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 18:41:49 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 15:17:08 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	var_exists(t_env *env_head, char *var_name)
 	t_env	*env;
 
 	env = env_head;
+	if (!var_name)
+		return (0);
 	while (env)
 	{
 		if (ft_strcmp(env->var_name, var_name) == 0)
