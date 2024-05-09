@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:22:53 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/09 18:52:26 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 19:51:24 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_env(t_shell *shell)
 {
-	t_env *env;
+	t_env	*env;
 
 	env = shell->env_head;
 	while (env)

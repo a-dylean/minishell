@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 17:31:02 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/09 18:53:19 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 19:52:14 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	**init_array(int size)
 
 void	free_array(char **arr)
 {
-	int i;
+	int	i;
 
 	if (arr)
 	{
