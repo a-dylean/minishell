@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   buffer_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:09:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 14:02:03 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/09 18:28:13 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,12 @@ void	expand_to_exit_status(char *token, char *buffer, int *j, t_shell *shell)
 {
 	char	*exit_status;
 	char *tmp;
-
-	exit_status = ft_itoa(shell->exit_status);
+	exit_status = ft_itoa(0);
+	if (shell->exit_status)
+	{
+		free(exit_status);
+		exit_status = ft_itoa(shell->exit_status);
+	}
 	tmp = exit_status;
 	while (*exit_status)
 	{
@@ -56,6 +60,28 @@ void	expand_to_exit_status(char *token, char *buffer, int *j, t_shell *shell)
 	free(tmp);
 	token++;
 }
+
+// void	expand_to_exit_status(char *token, char *buffer, int *index,
+// 		t_shell *shell)
+// {
+// 	char	*exit_status;
+// 	int		len;
+
+// 	exit_status = ft_itoa(0);
+// 	if (shell->exit_status)
+// 	{
+// 		free(exit_status);
+// 		exit_status = ft_itoa(shell->exit_status);
+// 	}
+// 	len = ft_strlen(exit_status);
+// 	printf("exit_status: %s\n", exit_status);
+// 	ft_strlcpy(&buffer[*index], exit_status, len + 1);
+// 	*index += len;
+// 	free(exit_status);
+// 	// while (*token == '$' && *(token + 1) == '?')
+// 	// 	token += 2;
+// 	token++;
+// }
 
 char	*ft_getenv(t_env *env_list, char *key)
 {
@@ -75,29 +101,30 @@ char	*ft_getenv(t_env *env_list, char *key)
 and if it doesn't it doesn't copy anything ($$ is not handeled the bash
 way (returning PID) because it's not in the subject) */
 
-void	handle_expansion(char *token, int (*indexes)[2], char *buffer, t_shell *shell)
+void	handle_expansion(char *token, int (*indexes)[2], char *buffer,
+		t_shell *shell)
 {
-    char	*env_var;
-    char	*env_var_value;
-	char *tmp;
+	char	*env_var;
+	char	*env_var_value;
+	char	*tmp;
 
-    env_var = get_env_from_str(&token[*indexes[0]]);
-    if (var_exists(shell->env_head, env_var))
-    {
-        env_var_value = ft_getenv(shell->env_head, env_var);
-        tmp = env_var_value;
-        while (*env_var_value)
-        {
-            buffer[(*indexes)[1]++] = *env_var_value;
-            env_var_value++;
-        }
-        free(tmp);
-    }
-    if (env_var)
-        (*indexes)[0] += ft_strlen(env_var) + 1;
-    else if (token[(*indexes)[0]] == '$')
-        (*indexes[0])++;
-    free(env_var);
+	env_var = get_env_from_str(&token[*indexes[0]]);
+	if (var_exists(shell->env_head, env_var))
+	{
+		env_var_value = ft_getenv(shell->env_head, env_var);
+		tmp = env_var_value;
+		while (*env_var_value)
+		{
+			buffer[(*indexes)[1]++] = *env_var_value;
+			env_var_value++;
+		}
+		free(tmp);
+	}
+	if (env_var)
+		(*indexes)[0] += ft_strlen(env_var) + 1;
+	else if (token[(*indexes)[0]] == '$')
+		(*indexes[0])++;
+	free(env_var);
 }
 
 /* function that returns buffer that is the new value for token */
@@ -116,7 +143,8 @@ char	*get_buffer_value(char *token, char *buffer, t_shell *shell)
 		{
 			if (token[indexes[0] + 1] == '?')
 			{
-				expand_to_exit_status(&token[indexes[0]], buffer, &indexes[1], shell);
+				expand_to_exit_status(&token[indexes[0]], buffer, &indexes[1],
+					shell);
 				if (token[indexes[0] + 2] == '\0')
 					break ;
 				indexes[0] += 2;

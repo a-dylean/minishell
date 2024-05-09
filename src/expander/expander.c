@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/09 17:34:06 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 18:00:03 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char	*get_value_after_expansion(char *token, t_shell *shell)
 	if (!buffer)
 		return (NULL);
 	buffer = get_buffer_value(token, buffer, shell);
+	if (!buffer)
+		return (NULL);
 	new_token = get_value_from_buffer(buffer);
 	if (!new_token)
 		return (free(buffer), NULL);
