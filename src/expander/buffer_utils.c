@@ -6,13 +6,11 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:09:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/09 18:28:13 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 18:46:46 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-/* init buffer */
 
 char	*init_buffer(char *token, t_shell *shell)
 {
@@ -44,7 +42,8 @@ char	*get_value_from_buffer(char buffer[])
 void	expand_to_exit_status(char *token, char *buffer, int *j, t_shell *shell)
 {
 	char	*exit_status;
-	char *tmp;
+	char	*tmp;
+
 	exit_status = ft_itoa(0);
 	if (shell->exit_status)
 	{
@@ -59,42 +58,6 @@ void	expand_to_exit_status(char *token, char *buffer, int *j, t_shell *shell)
 	}
 	free(tmp);
 	token++;
-}
-
-// void	expand_to_exit_status(char *token, char *buffer, int *index,
-// 		t_shell *shell)
-// {
-// 	char	*exit_status;
-// 	int		len;
-
-// 	exit_status = ft_itoa(0);
-// 	if (shell->exit_status)
-// 	{
-// 		free(exit_status);
-// 		exit_status = ft_itoa(shell->exit_status);
-// 	}
-// 	len = ft_strlen(exit_status);
-// 	printf("exit_status: %s\n", exit_status);
-// 	ft_strlcpy(&buffer[*index], exit_status, len + 1);
-// 	*index += len;
-// 	free(exit_status);
-// 	// while (*token == '$' && *(token + 1) == '?')
-// 	// 	token += 2;
-// 	token++;
-// }
-
-char	*ft_getenv(t_env *env_list, char *key)
-{
-	t_env	*tmp;
-
-	tmp = env_list;
-	while (tmp)
-	{
-		if (ft_strcmp(tmp->var_name, key) == 0)
-			return (ft_strdup(tmp->value));
-		tmp = tmp->next;
-	}
-	return (NULL);
 }
 
 /* function that copies the env value to the buffer if it exists

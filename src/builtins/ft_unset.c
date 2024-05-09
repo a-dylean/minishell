@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:16 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/09 15:17:08 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 18:51:25 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	delete_env_var(t_env *env_head, char *var_name)
 
 int	ft_unset(char **cmd, t_shell *shell)
 {
-	int i;
+	int	i;
 
 	if (!cmd[1])
 		return (EXIT_SUCCESS);

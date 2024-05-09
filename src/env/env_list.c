@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_utils.c                                        :+:      :+:    :+:   */
+/*   env_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 15:38:36 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 16:07:25 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 18:47:33 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,25 +89,4 @@ t_env	*init_env(char **env)
 		i++;
 	}
 	return (head);
-}
-
-void	free_env_node(t_env *env)
-{
-	free(env->var_name);
-	free(env->value);
-	free(env);
-}
-
-void	free_env(t_env *env)
-{
-	t_env	*current;
-	t_env	*next;
-
-	current = env;
-	while (current)
-	{
-		next = current->next;
-		free_env_node(current);
-		current = next;
-	}
 }

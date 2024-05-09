@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/09 15:45:38 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 19:06:39 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ typedef enum s_quotes
 /* structures */
 typedef struct s_token
 {
-	int id; // check if we still use it
 	int					type;
 	char				*value;
 	int					quotes_status;
@@ -103,22 +102,12 @@ typedef struct s_shell
 	char				*cur_dir;
 	char				*user_name;
 	t_env				*env_head;
-	// char			**cmd_paths;
-	// char			*prev_prompt;
-	// int				exec_on_pipe;
-	// struct termios	mirror_termios;
-	// char			*trimmed_prompt;
-	// char			*terminal_prompt;
-	// int				cmd_has_been_executed;
 }						t_shell;
 
 /* lexer */
 int						valid_quotes(char *str);
 int						lexer(t_shell *shell);
 int						get_type(char *str);
-int						get_type(char *str);
-int						len_word(char *str, int i);
-int						len_between_quotes(char *str, int i, char c);
 int						count_spaces(char *str, int i);
 int						len_between_tokens(char *str, int i, char c);
 int						check_redir_type(char *str, int i, int count, char ch);
@@ -131,19 +120,18 @@ int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
 void					handle_redirections(t_token *tokens,
 							t_command *command);
-void					delete_next_type(t_token **tokens, int type);
-t_token					*remove_pipes(t_token *tokens, int id);
 
 /* expander */
 int						expander(t_token *tokens, t_shell *shell);
 char					*get_value_after_expansion(char *token, t_shell *shell);
 char					*get_value_from_buffer(char buffer[]);
-int	calculate_expansion_size(char *token, int *i, t_shell *shell);
+int						calculate_expansion_size(char *token, int *i,
+							t_shell *shell);
 char					*init_buffer(char *token, t_shell *shell);
 char					*get_buffer_value(char *token, char *buffer,
 							t_shell *shell);
-void					handle_expansion(char *token, int (*index)[2], char *buffer,
-							t_shell *shell);
+void					handle_expansion(char *token, int (*index)[2],
+							char *buffer, t_shell *shell);
 int						calculate_buffer_size(char *token, t_shell *shell);
 char					*get_env_from_str(char *str);
 void					expand_to_exit_status(char *token, char *buffer, int *j,
@@ -156,7 +144,7 @@ void					set_quotes_status(t_token *tokens);
 t_env					*init_env(char **env);
 t_env					*init_env_node(char *str);
 void					add_back_env_var(t_env *head, t_env *new);
-char	*get_env_value(char *str, char *var_name);
+char					*get_env_value(char *str, char *var_name);
 
 /* executer */
 int						init_shell(t_shell *shell, char **env);
@@ -184,8 +172,8 @@ int						ft_export(char **cmd, t_shell *shell);
 int						ft_unset(char **cmd, t_shell *shell);
 
 /* builins utils*/
-int is_valid_identifier(char *str);
-int	var_exists(t_env *env_head, char *var_name);
+int						is_valid_identifier(char *str);
+int						var_exists(t_env *env_head, char *var_name);
 
 /* linked lists*/
 t_command				*init_command(void);
@@ -216,8 +204,8 @@ int						str_is_empty_or_space_only(char *str);
 int						count_chars(char *str, char c);
 int						char_is_separator(char c);
 void					write_error(char *cmd, char *error);
-char	*ft_getenv(t_env *env_list, char *key);
-char	*remove_char(char *str, char c);
+char					*ft_getenv(t_env *env_list, char *key);
+char					*remove_char(char *str, char c);
 
 /* signals */
 void					catch_sigint(int signum);

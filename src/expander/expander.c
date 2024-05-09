@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/09 18:00:03 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 18:35:45 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,8 @@ void	set_quotes_status(t_token *tokens)
 
 int	valid_expansion(char c, char next_c, int quotes_status)
 {
-	if (c == '$' && (ft_isalpha(next_c) || next_c == '?' || next_c == '_')
-		&& (quotes_status == NONE || quotes_status == DQUOTED))
-		return (1);
-	// else if (c == '$')
-	// 	return (-1);
-	return (0);
+	return (c == '$' && (ft_isalpha(next_c) || next_c == '?' || next_c == '_')
+		&& (quotes_status == NONE || quotes_status == DQUOTED));
 }
 
 void	perform_expansion(t_token *tokens, t_shell *shell)

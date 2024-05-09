@@ -6,13 +6,13 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:22:53 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 13:27:56 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/09 18:52:26 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int ft_env(t_shell *shell)
+int	ft_env(t_shell *shell)
 {
 	t_env *env;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_lists.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 16:38:47 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/09 19:05:46 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,11 @@
 
 t_token	*create_token(char *value, int type, int quotes_status)
 {
-	t_token	*token;
-	static int id = 0;
+	t_token		*token;
 
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	token->id = id++;
 	token->value = ft_strdup(value);
 	if (!token->value)
 	{
@@ -36,7 +34,7 @@ t_token	*create_token(char *value, int type, int quotes_status)
 
 void	add_token_back(t_token **tokens, t_token *new_node)
 {
-	t_token *current;
+	t_token	*current;
 
 	if (!new_node)
 		return ;
@@ -112,7 +110,7 @@ void	del_first(t_token **tokens)
 		(*tokens)->prev = NULL;
 }
 
-int stack_len(t_token *tokens)
+int	stack_len(t_token *tokens)
 {
 	int		len;
 	t_token	*temp;
@@ -129,8 +127,8 @@ int stack_len(t_token *tokens)
 
 int	len_command(t_command *command)
 {
-	int			len;
-	t_command	*temp;
+	int len;
+	t_command *temp;
 
 	len = 0;
 	temp = command;
