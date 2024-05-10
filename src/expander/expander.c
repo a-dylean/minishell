@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/10 14:57:57 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/10 15:12:50 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,41 +63,40 @@ int	valid_expansion(char c, char next_c, int quotes_status)
 		&& (quotes_status == NONE || quotes_status == DQUOTED));
 }
 
-void	perform_expansion(t_token *tokens, t_shell *shell)
+void	perform_expansion(t_token *temp, t_shell *shell)
 {
-	t_token	*temp;
-	int		i;
 	char	*new_value;
+	int		i;
 
-	temp = tokens;
-	while (temp)
+	i = 0;
+	while (temp->value[i] && temp->value[i + 1])
 	{
-		if ((temp->type == WORD || temp->type == FILENAME) && temp->value)
+		if (valid_expansion(temp->value[i], temp->value[i + 1],
+				temp->quotes_status))
 		{
-			i = 0;
-			while (temp->value[i] && temp->value[i + 1])
-			{
-				if (valid_expansion(temp->value[i], temp->value[i + 1],
-						temp->quotes_status))
-				{
-					new_value = get_value_after_expansion(temp->value, shell);
-					free(temp->value);
-					temp->value = new_value;
-					if (!temp->value)
-						break ;
-					i = -1;
-				}
-				i++;
-			}
+			new_value = get_value_after_expansion(temp->value, shell);
+			free(temp->value);
+			temp->value = new_value;
+			if (!temp->value)
+				return ;
+			i = -1;
 		}
-		temp = temp->next;
+		i++;
 	}
 }
 
 int	expander(t_token *tokens, t_shell *shell)
 {
+	t_token	*temp;
+
+	temp = tokens;
 	set_quotes_status(tokens);
-	perform_expansion(tokens, shell);
+	while (temp)
+	{
+		if ((temp->type == WORD || temp->type == FILENAME) && temp->value)
+			perform_expansion(temp, shell);
+		temp = temp->next;
+	}
 	remove_quotes(tokens);
 	return (0);
 }
