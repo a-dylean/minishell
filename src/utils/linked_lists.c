@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/09 19:05:46 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/10 13:24:39 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,55 +87,4 @@ void	free_commands(t_command **commands)
 		current = temp;
 	}
 	*commands = NULL;
-}
-
-t_token	*clear_one(t_token **tokens)
-{
-	if ((*tokens) && (*tokens)->value)
-	{
-		free((*tokens)->value);
-		(*tokens)->value = NULL;
-	}
-	return (NULL);
-}
-
-void	del_first(t_token **tokens)
-{
-	t_token	*node;
-
-	node = *tokens;
-	*tokens = node->next;
-	clear_one(&node);
-	if (*tokens)
-		(*tokens)->prev = NULL;
-}
-
-int	stack_len(t_token *tokens)
-{
-	int		len;
-	t_token	*temp;
-
-	len = 0;
-	temp = tokens;
-	while (temp)
-	{
-		len++;
-		temp = temp->next;
-	}
-	return (len);
-}
-
-int	len_command(t_command *command)
-{
-	int len;
-	t_command *temp;
-
-	len = 0;
-	temp = command;
-	while (temp)
-	{
-		len++;
-		temp = temp->next;
-	}
-	return (len);
 }

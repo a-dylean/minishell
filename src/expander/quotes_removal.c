@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 18:34:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/09 16:04:09 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/10 13:28:12 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int	nested_quotes(char *str)
 	double_quote = 0;
 	while (*str != '\0')
 	{
-		if (*str == '\'')
+		if (*str == S_QUOTE)
 			single_quote++;
-		else if (*str == '"')
+		else if (*str == D_QUOTE)
 			double_quote++;
 		if ((single_quote % 2 != 0) && (double_quote % 2 != 0))
 			return (1);
@@ -75,7 +75,7 @@ void	remove_unquoted_chars(t_token **token)
 	{
 		if ((*token)->value[0] == '$' && (*token)->value[i + 1]
 			&& ((*token)->value[i + 1] == D_QUOTE || (*token)->value[i
-				+ 1] == S_QUOTE))
+					+ 1] == S_QUOTE))
 			(*token)->value = remove_char((*token)->value, '$');
 		i++;
 	}

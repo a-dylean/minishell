@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/09 19:06:39 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/10 13:27:38 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,10 @@ typedef struct s_token
 typedef struct s_command
 {
 	char				**cmd_name;
-	char *delimiter; // store the delimiter ?
 	bool				is_builtin;
 	t_token				*redirections;
 	struct s_command	*next;
 	struct s_command	*prev;
-	// add delimiter and append data if needed
-	// add last or first command data if needed by pipex
 }						t_command;
 
 typedef struct s_env
@@ -183,10 +180,6 @@ void					add_command_back(t_command **commands,
 t_token					*create_token(char *value, int type, int quotes_status);
 void					add_token_back(t_token **tokens, t_token *new_node);
 void					free_tokens(t_token **tokens);
-void					del_first(t_token **tokens);
-t_token					*clear_one(t_token **tokens);
-int						stack_len(t_token *tokens);
-int						len_command(t_command *command);
 
 /* errors */
 int						syntax_error_in_token(char *token);
