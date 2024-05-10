@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/09 18:35:45 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/10 14:57:57 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ void	perform_expansion(t_token *tokens, t_shell *shell)
 	temp = tokens;
 	while (temp)
 	{
-		if (temp->type == WORD || temp->type == FILENAME)
+		if ((temp->type == WORD || temp->type == FILENAME) && temp->value)
 		{
-			i = -1;
-			while (temp->value && temp->value[++i])
+			i = 0;
+			while (temp->value[i] && temp->value[i + 1])
 			{
 				if (valid_expansion(temp->value[i], temp->value[i + 1],
 						temp->quotes_status))
@@ -83,9 +83,11 @@ void	perform_expansion(t_token *tokens, t_shell *shell)
 					new_value = get_value_after_expansion(temp->value, shell);
 					free(temp->value);
 					temp->value = new_value;
+					if (!temp->value)
+						break ;
+					i = -1;
 				}
-				if (!temp || !temp->value)
-					break ;
+				i++;
 			}
 		}
 		temp = temp->next;
