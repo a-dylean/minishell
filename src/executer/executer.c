@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 18:01:46 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/10 17:39:59 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,22 +67,27 @@ void	pipe_and_fork(t_command *current, t_shell *shell)
 		exit(EXIT_FAILURE);
 	}
 }
+int cmd_is_builtin(char *cmd)
+{
+	if (ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "pwd") == 0
+		|| ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "export") == 0
+		|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0
+		|| ft_strcmp(cmd, "exit") == 0)
+		return (1);
+	return (0);
+}
 
 void	execute_command(t_command *current, t_shell *shell)
 {
 	signal(SIGQUIT, SIG_DFL);
-	// if (!current->cmd_name[0])
-	// {
-	// 	shell->exit_status = 0;
-	// 	free_and_exit_shell(shell, shell->exit_status);
-	// }
+	// null check
 	if (!current->cmd_name || !current->cmd_name[0] || current->cmd_name[0][0] == '\0')
 	{	
 		write_error(NULL, "command not found");
 		shell->exit_status = 127;
 		free_and_exit_shell(shell, shell->exit_status);
 	}
-	if (current->is_builtin == true)
+	if (cmd_is_builtin(current->cmd_name[0]))
 		exec_builtin(current, shell);
 	else
 	{
@@ -127,7 +132,14 @@ int	executer(t_shell *shell)
         return -1;
 	current = shell->commands;
 	prev_fd = 0;
-	if (!current->next && current->is_builtin == true && !current->redirections)
+	//null check and protection from empty str
+	if (!current->cmd_name || !current->cmd_name[0] || current->cmd_name[0][0] == '\0')
+	{	
+		write_error(NULL, "command not found");
+		shell->exit_status = 127;
+		free_and_exit_shell(shell, shell->exit_status);
+	}
+	if (!current->next && cmd_is_builtin(current->cmd_name[0]) && !current->redirections)
 		exec_single_builtin(current, shell);
 	else
 	{

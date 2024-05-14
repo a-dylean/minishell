@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/10 13:27:38 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/10 17:26:52 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ typedef struct s_token
 typedef struct s_command
 {
 	char				**cmd_name;
-	bool				is_builtin;
 	t_token				*redirections;
 	struct s_command	*next;
 	struct s_command	*prev;
