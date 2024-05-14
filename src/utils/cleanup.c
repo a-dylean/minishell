@@ -4,8 +4,9 @@ void	free_and_exit_shell(t_shell *shell, int exit_code)
 {
 	if (shell)
 	{
-		// close_fds also here
 		free_shell(shell);
+		if (shell->env && shell->env_head)
+			free_env((shell->env_head));
 	}
 	exit(exit_code);
 }
@@ -38,7 +39,5 @@ void	free_shell(t_shell *shell)
 			free_tokens(&(shell->tokens));
 		if (shell->commands)
 			free_commands(&(shell->commands));
-		// if (shell->env)
-		//     free_env((shell->env_head));
 	}
 }

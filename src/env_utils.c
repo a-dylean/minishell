@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 15:38:36 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/22 16:58:59 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:36:38 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,11 @@ void free_env(t_env *env)
     {
         tmp = env;
         env = env->next;
-        free(tmp->value);
-        free(tmp);
+		if (tmp->var_name)
+			free(tmp->var_name);
+		if (tmp->value)
+        	free(tmp->value);
+		if (tmp)
+        	free(tmp);
     }
 }

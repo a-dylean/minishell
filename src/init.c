@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:28:00 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 14:30:28 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:06:53 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int init_shell(t_shell *shell, char **env)
 	else
 	{
 		shell->envless = 0;
-		//shell->env_head = init_env(env);
+		shell->env_head = init_env(env);
 		shell->user_name = getenv("USER");
  		shell->env = env;
 	}

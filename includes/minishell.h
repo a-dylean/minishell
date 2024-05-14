@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 14:30:12 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:38:56 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ typedef struct s_shell
 	char				*prev_dir;
 	char				*cur_dir;
 	char				*user_name;
-	// t_env				*env_head;
+	t_env				*env_head;
 }						t_shell;
 
 /* lexer */
@@ -130,14 +130,14 @@ t_token					*remove_pipes(t_token *tokens, int id);
 int						expander(t_token *tokens, t_shell *shell);
 char					*get_value_after_expansion(char *token, t_shell *shell);
 char					*get_value_from_buffer(char buffer[]);
-int						calculate_buffer_size(char *token);
-int						calculate_expansion_size(char *token, int *i);
-char					*init_buffer(char *token);
+int						calculate_buffer_size(char *token, t_shell *shell);
+int						calculate_expansion_size(char *token, int *i, t_shell *shell);
+char					*init_buffer(char *token, t_shell *shell);
 char					*get_buffer_value(char *token, char *buffer,
 							t_shell *shell);
-void					handle_expansion(char *token, int *i, char *buffer,
-							int *j);
-int						calculate_buffer_size(char *token);
+int						var_exists(t_env *env_head, char *var_name);
+void					handle_expansion(char *token, int (*indexes)[2], char *buffer,
+							t_shell *shell);
 char					*get_env_from_str(char *str);
 int						env_var_exists(char *env_var);
 void					expand_to_exit_status(char *token, char *buffer, int *j,
@@ -148,6 +148,7 @@ void					set_quotes_status(t_token *tokens);
 
 /* env */
 t_env					*init_env(char **env);
+char					*ft_getenv(t_env *env_list, char *key);
 
 /* executer */
 int						init_shell(t_shell *shell, char **env);
@@ -192,7 +193,7 @@ int 					syntax_error_eof(void);
 /* utils */
 void					free_and_exit_shell(t_shell *shell, int exit_code);
 void					free_shell(t_shell *shell);
-void free_env(t_env *env);
+void 					free_env(t_env *env);
 void					free_commands(t_command **commands);
 char					**init_array(int size);
 void					free_array(char **arr);

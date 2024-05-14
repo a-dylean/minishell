@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 12:15:46 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:39:22 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ int	minishell_loop(t_shell *shell)
 		signal(SIGQUIT, SIG_IGN);
 		shell->input = readline(PROMPT);
 		if (lexer(shell) == EXIT_SUCCESS && parser(shell) == EXIT_SUCCESS)
-			// print_commands(shell->commands);
-			//g_exit_code = 0;
 			g_exit_code = executer(shell);
 		else
 			g_exit_code = 1;

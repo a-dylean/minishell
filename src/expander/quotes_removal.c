@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 18:34:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 12:21:59 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 13:07:54 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,57 @@ char	*remove_char(char *str, char c)
 	return (str);
 }
 
-void remove_unquoted_chars(t_token **token)
+int	nested_quotes(char *str)
 {
+	int	single_quote;
+	int	double_quote;
+
+	single_quote = 0;
+	double_quote = 0;
+	while (*str != '\0')
+	{
+		if (*str == S_QUOTE)
+			single_quote++;
+		else if (*str == D_QUOTE)
+			double_quote++;
+		if ((single_quote % 2 != 0) && (double_quote % 2 != 0))
+			return (1);
+		str++;
+	}
+	return (0);
+}
+
+void	handle_nested_quotes(t_token **token)
+{
+	if (ft_strchr((*token)->value, S_QUOTE) > ft_strchr((*token)->value,
+			D_QUOTE))
+		(*token)->value = remove_char((*token)->value, D_QUOTE);
+	else
+		(*token)->value = remove_char((*token)->value, S_QUOTE);
+}
+
+void	remove_unquoted_chars(t_token **token)
+{
+	int	i;
+
+	i = 0;
 	if ((*token)->value == NULL)
 		return ;
-	if ((*token)->quotes_status == NONE)
+	while ((*token)->value[i])
 	{
-		(*token)->value = remove_char((*token)->value, D_QUOTE);
-		(*token)->value = remove_char((*token)->value, S_QUOTE);
+		if ((*token)->value[0] == '$' && (*token)->value[i + 1]
+			&& ((*token)->value[i + 1] == D_QUOTE || (*token)->value[i
+					+ 1] == S_QUOTE))
+			(*token)->value = remove_char((*token)->value, '$');
+		i++;
 	}
-	else if ((*token)->quotes_status == DQUOTED)
+	if (nested_quotes((*token)->value))
 	{
-		(*token)->value = remove_char((*token)->value, D_QUOTE);
+		handle_nested_quotes(token);
+		return ;
 	}
-	else if ((*token)->quotes_status == SQUOTED)
-	{
-		(*token)->value = remove_char((*token)->value, S_QUOTE);
-	}
+	(*token)->value = remove_char((*token)->value, D_QUOTE);
+	(*token)->value = remove_char((*token)->value, S_QUOTE);
 }
 
 void	remove_quotes(t_token *tokens)
@@ -65,3 +99,4 @@ void	remove_quotes(t_token *tokens)
 		temp = temp->next;
 	}
 }
+
