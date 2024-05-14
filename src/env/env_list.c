@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_utils.c                                        :+:      :+:    :+:   */
+/*   env_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 15:38:36 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 13:36:38 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 14:52:52 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ t_env	*init_env_node(char *str)
 	t_env	*env_node;
 
 	env_node = malloc(sizeof(t_env));
-	if (env_node == NULL)
-		exit(EXIT_FAILURE);
+	if (!env_node)
+		return (NULL);
 	split = ft_split(str, '=');
 	env_node->var_name = ft_strdup(split[0]);
 	env_node->value = get_env_value(str, split[0]);
@@ -89,21 +89,4 @@ t_env	*init_env(char **env)
 		i++;
 	}
 	return (head);
-}
-
-void free_env(t_env *env)
-{
-    t_env *tmp;
-
-    while (env)
-    {
-        tmp = env;
-        env = env->next;
-		if (tmp->var_name)
-			free(tmp->var_name);
-		if (tmp->value)
-        	free(tmp->value);
-		if (tmp)
-        	free(tmp);
-    }
 }

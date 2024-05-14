@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander_env.c                                     :+:      :+:    :+:   */
+/*   env_str.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:21:59 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/19 14:23:15 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/14 14:53:52 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,4 @@ char	*get_env_from_str(char *str)
 	if (env_var)
 		return (env_var);
 	return (NULL);
-}
-
-/* function that checks if env var exists in env list */
-
-int	env_var_exists(char *env_var)
-{
-	char	*env_var_value;
-
-	if (env_var == NULL)
-		return (0);
-	env_var_value = getenv(env_var);
-	if (env_var_value)
-		return (1);
-	return (0);
 }

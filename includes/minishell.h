@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 13:38:56 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 15:27:14 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ char					*get_buffer_value(char *token, char *buffer,
 int						var_exists(t_env *env_head, char *var_name);
 void					handle_expansion(char *token, int (*indexes)[2], char *buffer,
 							t_shell *shell);
-char					*get_env_from_str(char *str);
 int						env_var_exists(char *env_var);
 void					expand_to_exit_status(char *token, char *buffer, int *j,
 							t_shell *shell);
@@ -148,7 +147,12 @@ void					set_quotes_status(t_token *tokens);
 
 /* env */
 t_env					*init_env(char **env);
+t_env					*init_env_node(char *str);
+void					add_back_env_var(t_env *head, t_env *new);
 char					*ft_getenv(t_env *env_list, char *key);
+char					*get_env_value(char *str, char *var_name);
+char					*get_env_from_str(char *str);
+
 
 /* executer */
 int						init_shell(t_shell *shell, char **env);
@@ -171,6 +175,10 @@ int						ft_echo(t_command *commands);
 int						ft_pwd(t_command *commands);
 int						ft_cd(t_command *commands, t_shell *shell);
 void					ft_exit(t_command *commands, t_shell *shell);
+int						ft_env(t_shell *shell);
+int						ft_export(char **cmd, t_shell *shell);
+int						ft_unset(char **cmd, t_shell *shell);
+int						is_valid_identifier(char *str);
 
 /* linked lists*/
 t_command				*init_command(void);

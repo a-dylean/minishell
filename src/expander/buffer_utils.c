@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:09:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 13:11:52 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 15:28:46 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,34 +120,4 @@ char	*get_buffer_value(char *token, char *buffer, t_shell *shell)
 	}
 	buffer[indexes[1]] = '\0';
 	return (buffer);
-}
-
-int	var_exists(t_env *env_head, char *var_name)
-{
-	t_env	*env;
-
-	env = env_head;
-	if (!var_name)
-		return (0);
-	while (env)
-	{
-		if (ft_strcmp(env->var_name, var_name) == 0)
-			return (1);
-		env = env->next;
-	}
-	return (0);
-}
-
-char	*ft_getenv(t_env *env_list, char *key)
-{
-	t_env	*tmp;
-
-	tmp = env_list;
-	while (tmp)
-	{
-		if (ft_strcmp(tmp->var_name, key) == 0)
-			return (ft_strdup(tmp->value));
-		tmp = tmp->next;
-	}
-	return (NULL);
 }
