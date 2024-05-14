@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 15:33:55 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 11:53:06 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,15 @@ void	create_filename(t_shell *shell)
 	char	*temp_file;
 	int		fd;
 	static int i = 0;
+	char	*temp_num;
 
-	temp_file = ft_strjoin("/tmp/minishell_heredoc_", ft_itoa(getpid()) + i);
+	temp_num = ft_itoa(getpid() + 1);
+	temp_file = ft_strjoin("/tmp/minishell_heredoc_", temp_num);
+	free(temp_num);
 	if (!temp_file)
 	{
 		perror("ft_strjoin");
+		free(temp_file);
 		return ;
 	}
 	fd = open(temp_file, O_RDWR | O_CREAT | O_TRUNC, 0666);

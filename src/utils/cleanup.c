@@ -19,6 +19,11 @@ void	free_shell(t_shell *shell)
 			free(shell->input);
 			shell->input = NULL;
 		}
+		if (shell->heredoc)
+		{
+			free(shell->heredoc);
+			shell->heredoc = NULL;
+		}
 		if (shell->prev_dir)
 		{
 			free(shell->prev_dir);
