@@ -1,39 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   array.c                                            :+:      :+:    :+:   */
+/*   env_global.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/16 17:31:02 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/09 19:52:14 by atonkopi         ###   ########.fr       */
+/*   Created: 2024/05/09 18:45:38 by atonkopi          #+#    #+#             */
+/*   Updated: 2024/05/09 18:51:04 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	**init_array(int size)
+void	free_env_node(t_env *env)
 {
-	char	**array;
-
-	array = malloc((size + 1) * sizeof(char *));
-	if (!array)
-		exit(EXIT_FAILURE);
-	return (array);
+	free(env->var_name);
+	free(env->value);
+	free(env);
 }
 
-void	free_array(char **arr)
+void	free_env(t_env *env)
 {
-	int	i;
+	t_env	*current;
+	t_env	*next;
 
-	if (arr)
+	current = env;
+	while (current)
 	{
-		i = 0;
-		while (arr[i])
-		{
-			free(arr[i]);
-			i++;
-		}
-		free(arr);
+		next = current->next;
+		free_env_node(current);
+		current = next;
 	}
+}
+
+char	*ft_getenv(t_env *env_list, char *key)
+{
+	t_env	*tmp;
+
+	tmp = env_list;
+	while (tmp)
+	{
+		if (ft_strcmp(tmp->var_name, key) == 0)
+			return (ft_strdup(tmp->value));
+		tmp = tmp->next;
+	}
+	return (NULL);
 }

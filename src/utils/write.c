@@ -12,6 +12,10 @@
 
 #include "../includes/minishell.h"
 
+// add input that causes the error, bash does this:
+// bash: export: `45': not a valid identifier
+// vs our inpet:
+// minishell: export: not a valid identifier
 void	write_error(char *cmd, char *error)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);

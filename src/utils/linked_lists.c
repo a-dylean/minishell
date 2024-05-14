@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_lists.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 12:04:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/06 14:46:42 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/10 13:24:39 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,11 @@
 
 t_token	*create_token(char *value, int type, int quotes_status)
 {
-	t_token	*token;
-	static int id = 0;
+	t_token		*token;
 
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	token->id = id++;
 	token->value = ft_strdup(value);
 	if (!token->value)
 	{
@@ -36,7 +34,7 @@ t_token	*create_token(char *value, int type, int quotes_status)
 
 void	add_token_back(t_token **tokens, t_token *new_node)
 {
-	t_token *current;
+	t_token	*current;
 
 	if (!new_node)
 		return ;
@@ -82,61 +80,11 @@ void	free_commands(t_command **commands)
 	while (current)
 	{
 		temp = current->next;
-		free_array(current->cmd_name);
+		if (current->cmd_name)
+			free_array(current->cmd_name);
 		free_tokens(&(current->redirections));
 		free(current);
 		current = temp;
 	}
 	*commands = NULL;
-}
-
-t_token	*clear_one(t_token **tokens)
-{
-	if ((*tokens) && (*tokens)->value)
-	{
-		free((*tokens)->value);
-		(*tokens)->value = NULL;
-	}
-	return (NULL);
-}
-
-void	del_first(t_token **tokens)
-{
-	t_token	*node;
-
-	node = *tokens;
-	*tokens = node->next;
-	clear_one(&node);
-	if (*tokens)
-		(*tokens)->prev = NULL;
-}
-
-int stack_len(t_token *tokens)
-{
-	int		len;
-	t_token	*temp;
-
-	len = 0;
-	temp = tokens;
-	while (temp)
-	{
-		len++;
-		temp = temp->next;
-	}
-	return (len);
-}
-
-int	len_command(t_command *command)
-{
-	int			len;
-	t_command	*temp;
-
-	len = 0;
-	temp = command;
-	while (temp)
-	{
-		len++;
-		temp = temp->next;
-	}
-	return (len);
 }

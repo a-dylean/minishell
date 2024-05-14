@@ -17,7 +17,7 @@ SOURCES	=	ft_atoi.c ft_atoi_long.c ft_bzero.c ft_isalnum.c ft_isalpha.c ft_tolow
 			ft_strtrim.c ft_substr.c ft_split.c ft_itoa.c ft_striteri.c \
 			ft_strncpy.c get_next_line.c ft_split_charset.c ft_isspace.c\
 			ft_capitalize.c \
-			ft_atol.c ft_strcmp.c \
+			ft_atol.c ft_strcmp.c ft_strndup.c \
 
 OBJECTS	=	$(SOURCES:.c=.o)
 

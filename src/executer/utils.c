@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 12:25:08 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 16:38:15 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ char	*check_if_directory(char *cmd, t_shell *shell)
 {
 	struct stat path_stat;
 
-	if (stat(cmd, &path_stat) == -1)
-	{
-		perror(cmd);
-		shell->exit_status = 1;
-		free_and_exit_shell(shell, shell->exit_status);
-	}
+	// if (stat(cmd, &path_stat) == -1)
+	// {
+	// 	perror(cmd);
+	// 	shell->exit_status = 1;
+	// 	free_and_exit_shell(shell, shell->exit_status);
+	// }
+	stat(cmd, &path_stat);
 	if (S_ISDIR(path_stat.st_mode))
 	{
 		write_error(cmd, "Is a directory");
@@ -73,18 +74,23 @@ char	*search_executable_cmd(char **path_dirs, char *cmd)
 
 char	*get_cmd_path(char *cmd, t_shell *shell)
 {
-	char	**path_dirs;
-	char	*path_var;
+    char	**path_dirs;
+    char	*path_var;
 
-	if (ft_strchr(cmd, '/') != NULL)
-		return (check_if_directory(cmd, shell));
-	path_var = getenv("PATH");
-	if (!path_var)
-		return (NULL);
-	path_dirs = ft_split(path_var, ':');
-	if (!path_dirs)
-		return (NULL);
-	return (search_executable_cmd(path_dirs, cmd));
+    //added protection
+	if (!cmd || !shell)
+        return NULL;
+    if (ft_strchr(cmd, '/') != NULL)
+        return (check_if_directory(cmd, shell));
+    path_var = ft_getenv(shell->env_head, "PATH");
+    if (!path_var)
+        return (NULL);
+    path_dirs = ft_split(path_var, ':');
+    if (!path_dirs)
+	//added free here
+         return (free(path_var), NULL);
+    free(path_var);
+    return (search_executable_cmd(path_dirs, cmd));
 }
 
 void	wait_commands(t_shell *shell)

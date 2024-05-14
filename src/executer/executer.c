@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 13:13:57 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/07 18:01:46 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ void	exec_builtin(t_command *commands, t_shell *shell)
 		shell->exit_status = ft_pwd(commands);
 	else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
 		shell->exit_status = ft_echo(commands);
-	// else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
-	// 	shell->exit_status = ft_export();
-	// else if (ft_strcmp(commands->cmd_name[0], "unset") == 0)
-	// 	shell->exit_status = ft_unset();
-	// else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
-	// 	shell->exit_status = ft_env();
+	else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
+		shell->exit_status = ft_export(commands->cmd_name, shell);
+	else if (ft_strcmp(commands->cmd_name[0], "unset") == 0)
+		shell->exit_status = ft_unset(commands->cmd_name, shell);
+	else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
+		shell->exit_status = ft_env(shell);
 	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)
 		ft_exit(commands, shell);
 	free_and_exit_shell(shell, shell->exit_status);
@@ -38,12 +38,12 @@ void	exec_single_builtin(t_command *commands, t_shell *shell)
 		shell->exit_status = ft_pwd(commands);
 	else if (ft_strcmp(commands->cmd_name[0], "echo") == 0)
 		shell->exit_status = ft_echo(commands);
-	// else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
-	// 	shell->exit_status = ft_export();
-	// else if (ft_strcmp(commands->cmd_name[0], "unset") == 0)
-	// 	shell->exit_status = ft_unset();
-	// else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
-	// 	shell->exit_status = ft_env();
+	else if (ft_strcmp(commands->cmd_name[0], "export") == 0)
+		shell->exit_status = ft_export(commands->cmd_name, shell);
+	else if (ft_strcmp(commands->cmd_name[0], "unset") == 0)
+		shell->exit_status = ft_unset(commands->cmd_name, shell);
+	else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
+		shell->exit_status = ft_env(shell);
 	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)
 		ft_exit(commands, shell);
 }
@@ -71,9 +71,15 @@ void	pipe_and_fork(t_command *current, t_shell *shell)
 void	execute_command(t_command *current, t_shell *shell)
 {
 	signal(SIGQUIT, SIG_DFL);
-	if (!current->cmd_name[0])
-	{
-		shell->exit_status = 0;
+	// if (!current->cmd_name[0])
+	// {
+	// 	shell->exit_status = 0;
+	// 	free_and_exit_shell(shell, shell->exit_status);
+	// }
+	if (!current->cmd_name || !current->cmd_name[0] || current->cmd_name[0][0] == '\0')
+	{	
+		write_error(NULL, "command not found");
+		shell->exit_status = 127;
 		free_and_exit_shell(shell, shell->exit_status);
 	}
 	if (current->is_builtin == true)
@@ -85,11 +91,14 @@ void	execute_command(t_command *current, t_shell *shell)
 		{
 			write_error(current->cmd_name[0], "command not found");
 			shell->exit_status = 127;
+			// added to fix leak
+			free(shell->cmd_path);
 			free_and_exit_shell(shell, shell->exit_status);
 		}
 		execve(shell->cmd_path, current->cmd_name, shell->env);
 		perror(shell->cmd_path);
-		free(shell->cmd_path);
+		// if (shell && shell->cmd_path) // had to add this after a google sheet test, can't remember which
+		// 	free(shell->cmd_path);
 	}
 }
 

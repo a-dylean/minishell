@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:44:36 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 11:57:12 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/09 19:00:15 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	cd_minus(t_shell *shell, int option)
 {
-	char *temp;
+	char	*temp;
 
 	temp = ft_strdup(shell->prev_dir);
 	if (shell->prev_dir == NULL)
@@ -54,7 +54,8 @@ int	check_for_arguments(t_command *commands, t_shell *shell)
 	{
 		if (commands->cmd_name[1][0] == '-' && !commands->cmd_name[1][1])
 			return (cd_minus(shell, 1));
-		else if (commands->cmd_name[1][0] == '-' && commands->cmd_name[1][1] == '-' && !commands->cmd_name[1][2])
+		else if (commands->cmd_name[1][0] == '-'
+			&& commands->cmd_name[1][1] == '-' && !commands->cmd_name[1][2])
 			return (cd_minus(shell, 0));
 		else if (chdir(commands->cmd_name[1]) == -1)
 		{
@@ -68,8 +69,7 @@ int	check_for_arguments(t_command *commands, t_shell *shell)
 
 void	update_working_directory(t_shell *shell)
 {
-	char	cwd[4096]; // = PATH_MAX on the system (getconf -a PATH_MAX)
-
+	char cwd[4096]; // = PATH_MAX on the system (getconf -a PATH_MAX)
 	if (shell->prev_dir)
 		free(shell->prev_dir);
 	shell->prev_dir = ft_strdup(shell->cur_dir);
@@ -82,10 +82,11 @@ void	update_working_directory(t_shell *shell)
 
 void	init_directories(t_shell *shell)
 {
-	char	cwd[4096]; // = PATH_MAX on the system (getconf -a PATH_MAX)
+	char cwd[4096]; // = PATH_MAX on the system (getconf -a PATH_MAX)
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		perror("pwd");
+	return ;
 	shell->cur_dir = ft_strdup(cwd);
 }
 
@@ -100,7 +101,7 @@ int	ft_cd(t_command *commands, t_shell *shell)
 	}
 	if (!commands->cmd_name[1])
 	{
-		if (chdir(getenv("HOME")) == -1)
+		if (chdir(ft_getenv(shell->env_head, "HOME")) == -1)
 		{
 			ft_putstr_fd("minishell: cd :", STDERR_FILENO);
 			perror("");
@@ -111,4 +112,3 @@ int	ft_cd(t_command *commands, t_shell *shell)
 	}
 	return (check_for_arguments(commands, shell));
 }
-

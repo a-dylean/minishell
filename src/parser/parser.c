@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/06 14:45:26 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/09 19:42:21 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,29 +29,34 @@ int	count_not_null_tokens(t_token *tokens)
 	}
 	return (count);
 }
+
 char	**get_cmd_array_from_tokens(t_token *tokens)
 {
-	char	**array;
+	char	**cmd_array;
 	int		i;
 
-	i = 0;
-	array = malloc(sizeof(char *) * (count_not_null_tokens(tokens) + 1));
-	if (!array)
+	i = -1;
+	cmd_array = malloc((count_not_null_tokens(tokens) + 1) * sizeof(char *));
+	if (cmd_array == NULL)
 		return (NULL);
 	while (tokens && tokens->type != PIPE)
 	{
-		if (tokens->type == WORD)
+		if (tokens->value != NULL && tokens->value[0] != '\0')
 		{
-			if (tokens->value != NULL)
-			{
-				array[i] = ft_strdup(tokens->value);
-				i++;
-			}
+			cmd_array[++i] = ft_strdup(tokens->value);
+			if (cmd_array[i] == NULL)
+				return (free_array(cmd_array), NULL);
+		}
+		else if (tokens->value != NULL)
+		{
+			cmd_array[++i] = ft_strdup("");
+			if (cmd_array[i] == NULL)
+				return (free_array(cmd_array), NULL);
 		}
 		tokens = tokens->next;
 	}
-	array[i] = NULL;
-	return (array);
+	cmd_array[++i] = NULL;
+	return (cmd_array);
 }
 
 bool	is_builtin(char *cmd)
