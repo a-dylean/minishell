@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 16:38:15 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 16:52:51 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ char	*check_if_directory(char *cmd, t_shell *shell)
 {
 	struct stat path_stat;
 
-	// if (stat(cmd, &path_stat) == -1)
-	// {
-	// 	perror(cmd);
-	// 	shell->exit_status = 1;
-	// 	free_and_exit_shell(shell, shell->exit_status);
-	// }
+	if (stat(cmd, &path_stat) == -1) // added this to avoid leaks for */*
+	{
+		perror(cmd);
+		shell->exit_status = 1;
+		free_and_exit_shell(shell, shell->exit_status);
+	}
 	stat(cmd, &path_stat);
 	if (S_ISDIR(path_stat.st_mode))
 	{

@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/07 12:15:17 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 16:37:01 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ int	lexer(t_shell *shell)
 	if (!shell->tokens)
 		return (EXIT_FAILURE);
 	assign_type_redirections(shell->tokens);
-	if (!check_syntax(shell->tokens))
+	if (!check_syntax(shell->tokens, shell))
 		return (EXIT_SUCCESS);
 	return (EXIT_FAILURE);
 }

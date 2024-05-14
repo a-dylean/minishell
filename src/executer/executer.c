@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/14 15:26:48 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 16:49:22 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ void	execute_command(t_command *current, t_shell *shell)
 		}
 		execve(shell->cmd_path, current->cmd_name, shell->env);
 		perror(shell->cmd_path);
-		// if (shell && shell->cmd_path) // had to add this after a google sheet test, can't remember which
-		// 	free(shell->cmd_path);
+		if (shell && shell->cmd_path) // had to add this for this google sheet test ~
+			free(shell->cmd_path);
 	}
 }
 

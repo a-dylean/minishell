@@ -7,7 +7,7 @@ CFLAGS = -Wall -Wextra -Werror
 INCLUDES = -I includes -I libft
 
 SRC = 	src/main.c src/terminal.c src/init.c src/test.c \
-		src/builtins/builtins.c src/builtins/ft_cd.c src/builtins/ft_echo.c src/builtins/ft_exit.c src/builtins/ft_env.c\
+		src/builtins/ft_pwd.c src/builtins/ft_cd.c src/builtins/ft_echo.c src/builtins/ft_exit.c src/builtins/ft_env.c\
 		src/builtins/ft_export.c src/builtins/ft_unset.c\
 		src/env/env_global.c src/env/env_str.c src/env/env_list.c\
         src/utils/array.c src/utils/linked_lists.c src/utils/string.c src/utils/cleanup.c src/utils/write.c\

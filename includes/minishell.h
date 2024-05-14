@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 15:27:14 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 16:38:26 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int						check_redir_type(char *str, int i, int count, char ch);
 void					assign_type_redirections(t_token *tokens);
 
 /* parser */
-int						check_syntax(t_token *tokens);
+int						check_syntax(t_token *tokens, t_shell *shell);
 int						parser(t_shell *shell);
 int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
@@ -194,7 +194,7 @@ int						stack_len(t_token *tokens);
 int						len_command(t_command *command);
 
 /* errors */
-int						syntax_error_in_token(char *token);
+int						syntax_error_in_token(char *token, t_shell *shell);
 int						undefined_behavior_error(char *str);
 int 					syntax_error_eof(void);
 

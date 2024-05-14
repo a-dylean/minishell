@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 15:32:14 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 16:55:04 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	**get_cmd_array_from_tokens(t_token *tokens)
 			if (tokens->value != NULL)
 			{
 				array[i] = ft_strdup(tokens->value);
-				if (array[i] == NULL)
+				if (array[i] == NULL && tokens->next != NULL && tokens->next->type == WORD)
 					array[i] = ft_strdup(" ");
 				i++;
 			}

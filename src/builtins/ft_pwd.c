@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:10:39 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 17:05:15 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/14 16:09:41 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,3 @@ int	ft_pwd(t_command *commands)
 	write(STDOUT_FILENO, "\n", 1);
 	return (0);
 }
-
-// int	ft_export()
-// {
-
-// }
-
-// int	ft_unset()
-// {
-
-// }
-
-// int	ft_env()
-// {
-
-// }
