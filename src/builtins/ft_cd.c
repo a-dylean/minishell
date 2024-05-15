@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:44:36 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 17:01:12 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 11:49:43 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	ft_cd(t_command *commands, t_shell *shell)
 	}
 	if (!commands->cmd_name[1])
 	{
-		if (chdir(getenv("HOME")) == -1)
+		if (chdir(ft_getenv(shell->env_head, "HOME")) == -1)
 		{
 			ft_putstr_fd("minishell: cd :", STDERR_FILENO);
 			perror("");

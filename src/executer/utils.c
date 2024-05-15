@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/14 16:52:51 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 11:51:20 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,13 @@ char	*get_cmd_path(char *cmd, t_shell *shell)
 
 	if (ft_strchr(cmd, '/') != NULL)
 		return (check_if_directory(cmd, shell));
-	path_var = getenv("PATH");
+	path_var = ft_getenv(shell->env_head, "PATH");
 	if (!path_var)
 		return (NULL);
 	path_dirs = ft_split(path_var, ':');
 	if (!path_dirs)
-		return (NULL);
+		return (free(path_var), NULL);
+	free(path_var);
 	return (search_executable_cmd(path_dirs, cmd));
 }
 
