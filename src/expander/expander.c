@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 13:07:38 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 17:37:13 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	set_quotes_status(t_token *tokens)
 			temp->quotes_status = DQUOTED;
 		else
 			temp->quotes_status = NONE;
+		printf("quotes status set: %d\n", temp->quotes_status);
 		temp = temp->next;
 	}
 }
