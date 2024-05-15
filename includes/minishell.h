@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 16:38:26 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:01:02 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,11 +164,18 @@ void					has_no_filename(t_command *current, t_shell *shell,
 							int prev_fd);
 void					open_and_redirect_fd(t_command *current,
 							t_shell *shell);
+void					get_fd_out(t_token *redirections, t_shell *shell);
+void					get_fd_in(t_token *redirections, t_shell *shell);
 char					*get_cmd_path(char *cmd, t_shell *shell);
 void					wait_commands(t_shell *shell);
 
 /* heredoc */
 void					handle_heredoc(t_token *redirections, t_shell *shell);
+void					unlink_heredoc(t_shell *shell);
+void					free_line(char *line, t_token *tmp);
+void					write_line_to_heredoc(int fd, t_token *tmp,
+							t_shell *shell, t_token *redirections);
+int						check_if_other_heredoc(t_token *current);
 
 /* builtins */
 int						ft_echo(t_command *commands);
