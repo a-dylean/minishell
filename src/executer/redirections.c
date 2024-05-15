@@ -6,23 +6,11 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 14:59:27 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/15 14:01:23 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 15:41:55 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	get_heredoc_as_fd_in(t_shell *shell)
-{
-	if (shell->infile_fd != -2)
-		close(shell->infile_fd);
-	shell->infile_fd = open(shell->heredoc, O_RDONLY);
-	if (unlink(shell->heredoc) == -1)
-	{
-		perror("unlink");
-		exit(EXIT_FAILURE);
-	}
-}
 
 void	get_file_as_fd_in(t_token *redirections, t_shell *shell)
 {
@@ -56,7 +44,11 @@ void	get_fd_in(t_token *redirections, t_shell *shell)
 
 	current = redirections;
 	if (shell->heredoc)
-		get_heredoc_as_fd_in(shell);
+	{
+		if (shell->infile_fd != -2)
+			close(shell->infile_fd);
+		shell->infile_fd = open(shell->heredoc, O_RDONLY);
+	}
 	else
 		get_file_as_fd_in(redirections, shell);
 }
@@ -95,18 +87,23 @@ void	get_fd_out(t_token *redirections, t_shell *shell)
 	}
 }
 
-void	open_and_redirect_fd(t_command *current, t_shell *shell)
+void	get_fds(t_token *redirections, t_shell *shell)
 {
-	if (current->redirections->type == GREAT || current->redirections->type == GREATGREAT) 
+	if (redirections->type == GREAT || redirections->type == GREATGREAT) 
 	{
-		get_fd_out(current->redirections, shell);
-		get_fd_in(current->redirections, shell);
+		get_fd_out(redirections, shell);
+		get_fd_in(redirections, shell);
 	}
 	else
 	{
-		get_fd_in(current->redirections, shell);
-		get_fd_out(current->redirections, shell);
+		get_fd_in(redirections, shell);
+		get_fd_out(redirections, shell);
 	}
+}
+
+void	open_and_redirect_fd(t_command *current, t_shell *shell)
+{
+	get_fds(current->redirections, shell);
 	if (shell->infile_fd != -2)
 	{
 		if (dup2(shell->infile_fd, STDIN_FILENO) == -1)
@@ -126,6 +123,14 @@ void	open_and_redirect_fd(t_command *current, t_shell *shell)
 			free_and_exit_shell(shell, shell->exit_status);
 		}
 		close(shell->outfile_fd);
+	}
+	if (shell->heredoc && !current->next)
+	{
+		if (unlink(shell->heredoc) == -1)
+		{
+			perror("unlink");
+			exit(EXIT_FAILURE);
+		}
 	}
 }
 /*if the command has no specified infile or outfile, it is redirected*/
