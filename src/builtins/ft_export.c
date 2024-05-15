@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:03 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/15 16:02:31 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/15 17:14:14 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	valid_for_export(char *str)
 {
 	char	**split;
 
+	if (ft_strlen(str) == 0)
+		return (err_msg_with_arg("export", str, "not a valid identifier"), -1);
 	if (!ft_strchr(str, '=') || str[0] == '=')
 	{
 		if (!is_valid_identifier(str))
