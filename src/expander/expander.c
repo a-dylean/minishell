@@ -12,8 +12,6 @@
 
 #include "../includes/minishell.h"
 
-/* function that returns the value of the buffer */
-
 char	*get_value_after_expansion(char *token, t_shell *shell)
 {
 	char	*new_token;
@@ -32,30 +30,16 @@ char	*get_value_after_expansion(char *token, t_shell *shell)
 	return (new_token);
 }
 
-void	set_quotes_status(t_token *tokens)
+void update_quotes_status(t_token **token, char c)
 {
-	t_token	*temp;
-	int		in_single_quotes;
-	int		in_double_quotes;
-
-	temp = tokens;
-	while (temp)
-	{
-		in_single_quotes = 0;
-		in_double_quotes = 0;
-		if (temp->value[0] == S_QUOTE && !in_double_quotes)
-			in_single_quotes = !in_single_quotes;
-		else if (temp->value[0] == D_QUOTE && !in_single_quotes)
-			in_double_quotes = !in_double_quotes;
-		if (in_single_quotes)
-			temp->quotes_status = SQUOTED;
-		else if (in_double_quotes)
-			temp->quotes_status = DQUOTED;
-		else
-			temp->quotes_status = NONE;
-		printf("quotes status set: %d\n", temp->quotes_status);
-		temp = temp->next;
-	}
+	if (c == S_QUOTE && (*token)->quotes_status == NONE)
+		(*token)->quotes_status = SQUOTED;
+	else if (c == D_QUOTE && (*token)->quotes_status == NONE)
+		(*token)->quotes_status = DQUOTED;
+	else if (c == S_QUOTE && (*token)->quotes_status == SQUOTED && (*token)->value[(int)ft_strlen((*token)->value) - 1] != c)
+		(*token)->quotes_status = NONE;
+	else if (c == D_QUOTE && (*token)->quotes_status == DQUOTED && (*token)->value[(int)ft_strlen((*token)->value) - 1] != c)
+		(*token)->quotes_status = NONE;
 }
 
 int	valid_expansion(char c, char next_c, int quotes_status)
@@ -63,7 +47,6 @@ int	valid_expansion(char c, char next_c, int quotes_status)
 	return (c == '$' && (ft_isalpha(next_c) || next_c == '?' || next_c == '_')
 		&& (quotes_status == NONE || quotes_status == DQUOTED));
 }
-
 void	perform_expansion(t_token *temp, t_shell *shell)
 {
 	char	*new_value;
@@ -89,13 +72,21 @@ void	perform_expansion(t_token *temp, t_shell *shell)
 int	expander(t_token *tokens, t_shell *shell)
 {
 	t_token	*temp;
+	int i;
 
-	temp = tokens;
-	set_quotes_status(tokens);
+	// tokens or shell->tokens ?
+	temp = shell->tokens;
 	while (temp)
 	{
+		i = 0;
+		while (temp->value[i])
+		{
+			update_quotes_status(&temp, temp->value[i]);
+			i++;
+		}
 		if ((temp->type == WORD || temp->type == FILENAME) && temp->value)
 			perform_expansion(temp, shell);
+		
 		temp = temp->next;
 	}
 	remove_quotes(tokens);
