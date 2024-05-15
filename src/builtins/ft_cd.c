@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:44:36 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/15 11:49:43 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 17:46:17 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,45 @@
 
 int	cd_minus(t_shell *shell, int option)
 {
-	char *temp;
+	char *curr_dir;
+	char *old_dir;
 
-	temp = ft_strdup(shell->prev_dir);
-	if (shell->prev_dir == NULL)
+	curr_dir = ft_getenv(shell->env_head, "OLDPWD");
+	old_dir = ft_getenv(shell->env_head, "PWD");
+	if (!curr_dir)
 	{
-		ft_putstr_fd(shell->cur_dir, STDERR_FILENO);
-		ft_putstr_fd("\n", STDOUT_FILENO);
-		free(temp);
-		return (0);
+		write_error("cd", "OLDPWD not set");
+		if (old_dir)
+			free(old_dir);
+		return (1);
 	}
-	if (chdir(shell->prev_dir) == -1)
+	else if (!old_dir)
+	{
+		write_error("cd", "PWD not set");
+		if (curr_dir)
+			free(curr_dir);
+		return (1);
+	}
+	if (curr_dir && chdir(curr_dir) == -1)
 	{
 		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
 		perror(shell->prev_dir);
-		free(temp);
+		free(curr_dir);
+		if (old_dir)
+			free(old_dir);
 		return (1);
 	}
-	else
+	if (option == 1)
 	{
-		if (shell->prev_dir)
-			free(shell->prev_dir);
-		shell->prev_dir = ft_strdup(shell->cur_dir);
-		if (shell->cur_dir)
-			free(shell->cur_dir);
-		shell->cur_dir = ft_strdup(temp);
-		if (option == 1)
-		{
-			ft_putstr_fd(shell->cur_dir, STDOUT_FILENO);
-			ft_putstr_fd("\n", STDOUT_FILENO);
-		}
+		ft_putstr_fd(curr_dir, STDOUT_FILENO);
+		ft_putstr_fd("\n", STDOUT_FILENO);
 	}
+	ft_setenv(shell->env_head, "PWD", curr_dir);
+	ft_setenv(shell->env_head, "OLDPWD", old_dir);
+	if (curr_dir)
+		free(curr_dir);
+	if (old_dir)
+		free(old_dir);
 	return (0);
 }
 
@@ -66,34 +74,10 @@ int	check_for_arguments(t_command *commands, t_shell *shell)
 	return (0);
 }
 
-void	update_working_directory(t_shell *shell)
-{
-	char	cwd[4096]; // = PATH_MAX on the system (getconf -a PATH_MAX)
-
-	if (shell->prev_dir)
-		free(shell->prev_dir);
-	shell->prev_dir = ft_strdup(shell->cur_dir);
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		perror("pwd");
-	if (shell->cur_dir)
-		free(shell->cur_dir);
-	shell->cur_dir = ft_strdup(cwd);
-}
-
-void	init_directories(t_shell *shell)
-{
-	char	cwd[4096]; // = PATH_MAX on the system (getconf -a PATH_MAX)
-
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		perror("pwd");
-	return ;
-	shell->cur_dir = ft_strdup(cwd);
-}
-
 int	ft_cd(t_command *commands, t_shell *shell)
 {
-	if (shell->cur_dir == NULL)
-		init_directories(shell);
+	char	*value;
+
 	if (commands->cmd_name[0] && commands->cmd_name[1] && commands->cmd_name[2])
 	{
 		write_error("cd", "too many arguments");
@@ -101,13 +85,18 @@ int	ft_cd(t_command *commands, t_shell *shell)
 	}
 	if (!commands->cmd_name[1])
 	{
-		if (chdir(ft_getenv(shell->env_head, "HOME")) == -1)
+		value = ft_getenv(shell->env_head, "HOME");
+		if (!value)
+		{
+			write_error("cd", "HOME not set");
+			return (1);
+		}
+		if (chdir(value) == -1)
 		{
 			ft_putstr_fd("minishell: cd :", STDERR_FILENO);
 			perror("");
 			return (1);
 		}
-		update_working_directory(shell);
 		return (0);
 	}
 	return (check_for_arguments(commands, shell));

@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:04:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/15 16:23:41 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:47:59 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static char	*search_executable_cmd(char **path_dirs, char *cmd)
 	{
 		temp = ft_strjoin(path_dirs[i], "/");
 		cmd_path = ft_strjoin(temp, cmd);
-		if (access(cmd_path, X_OK) == 0)
+		if (cmd_path && access(cmd_path, X_OK) == 0)
 		{
 			free(temp);
 			free_array(path_dirs);

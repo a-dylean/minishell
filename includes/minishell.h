@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/15 16:25:20 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 17:43:55 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,7 @@ void					add_back_env_var(t_env *head, t_env *new);
 char					*ft_getenv(t_env *env_list, char *key);
 char					*get_env_value(char *str, char *var_name);
 char					*get_env_from_str(char *str);
+void 					ft_setenv(t_env *env_head, char *name, char *value);
 
 
 /* executer */
