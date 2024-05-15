@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/14 16:52:51 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 13:30:50 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ char	*search_executable_cmd(char **path_dirs, char *cmd)
 	int		i;
 
 	i = 0;
+	if (cmd[0] == '\0')
+		return (NULL);
 	while (path_dirs[i])
 	{
 		temp = ft_strjoin(path_dirs[i], "/");
