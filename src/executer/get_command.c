@@ -6,17 +6,25 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:04:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/15 16:18:59 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:23:41 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+static void	handle_error(char *cmd, char *error,
+				int exit_status, t_shell *shell)
+{
+	write_error(cmd, error);
+	shell->exit_status = exit_status;
+	free_and_exit_shell(shell, shell->exit_status);
+}
+
 static char	*check_if_directory(char *cmd, t_shell *shell)
 {
 	struct stat	path_stat;
 
-	if (stat(cmd, &path_stat) == -1) // added this to avoid leaks for */*
+	if (stat(cmd, &path_stat) == -1)
 	{
 		perror(cmd);
 		shell->exit_status = 127;
@@ -24,21 +32,13 @@ static char	*check_if_directory(char *cmd, t_shell *shell)
 	}
 	stat(cmd, &path_stat);
 	if (S_ISDIR(path_stat.st_mode))
-	{
-		write_error(cmd, "Is a directory");
-		shell->exit_status = 126;
-		free_and_exit_shell(shell, shell->exit_status);
-	}
+		handle_error(cmd, "Is a directory", 126, shell);
 	else if (access(cmd, X_OK) == 0)
 		return (cmd);
 	if (!S_ISDIR(path_stat.st_mode))
 	{
 		if (access(cmd, F_OK) == -1)
-		{
-			write_error(cmd, "No such file or directory");
-			shell->exit_status = 127;
-			free_and_exit_shell(shell, shell->exit_status);
-		}
+			handle_error(cmd, "No such file or directory", 127, shell);
 		else
 			shell->exit_status = 126;
 		return (cmd);

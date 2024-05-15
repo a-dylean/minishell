@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/15 16:01:02 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:25:20 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,7 @@ void					get_fd_out(t_token *redirections, t_shell *shell);
 void					get_fd_in(t_token *redirections, t_shell *shell);
 char					*get_cmd_path(char *cmd, t_shell *shell);
 void					wait_commands(t_shell *shell);
+void					pipe_and_fork(t_command *current, t_shell *shell);
 
 /* heredoc */
 void					handle_heredoc(t_token *redirections, t_shell *shell);
