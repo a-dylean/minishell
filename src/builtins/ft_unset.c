@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:16 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 15:25:52 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:05:29 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ int	ft_unset(char **cmd, t_shell *shell)
 	i = 1;
 	while (cmd[i])
 	{
-		if (!is_valid_identifier(cmd[i]))
-			return (write_error("unset", "not a valid identifier"), 1);
+		// if (!is_valid_identifier(cmd[i]))
+		// 	return (write_error("unset", "not a valid identifier"), 1);
 		if (var_exists(shell->env_head, shell->commands->cmd_name[i]))
 			delete_env_var(shell->env_head, shell->commands->cmd_name[i]);
 		i++;

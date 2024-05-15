@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:03:41 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 16:38:26 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 15:46:37 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,15 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <unistd.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
+# include <unistd.h>
 
 # define S_QUOTE '\''
 # define D_QUOTE '\"'
 # define PROMPT "\001\e[0m\e[35m\002minishell$> \001\e[0m\002"
 
-extern int		g_exit_code;
+extern int				g_exit_code;
 
 /* enums */
 typedef enum s_type
@@ -122,7 +122,8 @@ int						check_syntax(t_token *tokens, t_shell *shell);
 int						parser(t_shell *shell);
 int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
-void					handle_redirections(t_token *tokens, t_command *command);
+void					handle_redirections(t_token *tokens,
+							t_command *command);
 void					delete_next_type(t_token **tokens, int type);
 t_token					*remove_pipes(t_token *tokens, int id);
 
@@ -131,13 +132,14 @@ int						expander(t_token *tokens, t_shell *shell);
 char					*get_value_after_expansion(char *token, t_shell *shell);
 char					*get_value_from_buffer(char buffer[]);
 int						calculate_buffer_size(char *token, t_shell *shell);
-int						calculate_expansion_size(char *token, int *i, t_shell *shell);
+int						calculate_expansion_size(char *token, int *i,
+							t_shell *shell);
 char					*init_buffer(char *token, t_shell *shell);
 char					*get_buffer_value(char *token, char *buffer,
 							t_shell *shell);
 int						var_exists(t_env *env_head, char *var_name);
-void					handle_expansion(char *token, int (*indexes)[2], char *buffer,
-							t_shell *shell);
+void					handle_expansion(char *token, int (*indexes)[2],
+							char *buffer, t_shell *shell);
 int						env_var_exists(char *env_var);
 void					expand_to_exit_status(char *token, char *buffer, int *j,
 							t_shell *shell);
@@ -152,7 +154,6 @@ void					add_back_env_var(t_env *head, t_env *new);
 char					*ft_getenv(t_env *env_list, char *key);
 char					*get_env_value(char *str, char *var_name);
 char					*get_env_from_str(char *str);
-
 
 /* executer */
 int						init_shell(t_shell *shell, char **env);
@@ -196,12 +197,13 @@ int						len_command(t_command *command);
 /* errors */
 int						syntax_error_in_token(char *token, t_shell *shell);
 int						undefined_behavior_error(char *str);
-int 					syntax_error_eof(void);
+int						syntax_error_eof(void);
+void					err_msg_with_arg(char *cmd, char *arg, char *error);
 
 /* utils */
 void					free_and_exit_shell(t_shell *shell, int exit_code);
 void					free_shell(t_shell *shell);
-void 					free_env(t_env *env);
+void					free_env(t_env *env);
 void					free_commands(t_command **commands);
 char					**init_array(int size);
 void					free_array(char **arr);

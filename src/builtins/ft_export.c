@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:03 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 14:49:07 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:02:31 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,17 @@ int	valid_for_export(char *str)
 {
 	char	**split;
 
-	if (!ft_strchr(str, '='))
+	if (!ft_strchr(str, '=') || str[0] == '=')
 	{
 		if (!is_valid_identifier(str))
-			return (write_error("export", "not a valid identifier"), 1);
+			return (err_msg_with_arg("export", str, "not a valid identifier"),
+				1);
 		return (-1);
 	}
 	split = ft_split(str, '=');
 	if (ft_strcmp(str, "=") == 0 || !is_valid_identifier(split[0]))
 	{
-		write_error("export", "not a valid identifier");
+		err_msg_with_arg("export", str, "not a valid identifier");
 		return (1);
 	}
 	if (!split[1])
