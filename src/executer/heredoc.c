@@ -6,11 +6,20 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/15 11:29:06 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 15:45:19 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	unlink_heredoc(t_shell *shell)
+{
+	if (unlink(shell->heredoc) == -1)
+	{
+		perror("unlink");
+		exit(EXIT_FAILURE);
+	}
+}
 
 void	create_filename(t_shell *shell)
 {
