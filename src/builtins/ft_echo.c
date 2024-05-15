@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 11:23:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/14 13:45:00 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 14:18:15 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	write_commands(t_command *commands, bool n_flag, int *i)
 	{
 		write(STDOUT_FILENO, commands->cmd_name[*i],
 			ft_strlen(commands->cmd_name[*i]));
-		if (commands->cmd_name[*i + 1] && ft_strcmp(commands->cmd_name[*i], " "))
+		if (commands->cmd_name[*i + 1] && commands->cmd_name[*i + 1][0] != '\0')
 			write(STDOUT_FILENO, " ", 1);
 		(*i)++;
 	}

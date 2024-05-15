@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 14:59:27 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/07 12:48:06 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 14:01:23 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,32 @@ void	get_heredoc_as_fd_in(t_shell *shell)
 	}
 }
 
+void	get_file_as_fd_in(t_token *redirections, t_shell *shell)
+{
+	t_token	*current;
+
+	current = redirections;
+	while (current)
+	{
+		if (current->next && (current->next->type == FILENAME))
+		{
+			if (current->type == LESS)
+			{
+				if (shell->infile_fd != -2)
+					close(shell->infile_fd);
+				shell->infile_fd = open(current->next->value, O_RDONLY);
+			}
+		}
+		if (shell->infile_fd == -1)
+		{
+			perror(current->next->value);
+			shell->exit_status = 1;
+			free_and_exit_shell(shell, shell->exit_status);
+		}
+		current = current->next;
+	}
+}
+
 void	get_fd_in(t_token *redirections, t_shell *shell)
 {
 	t_token	*current;
@@ -32,27 +58,7 @@ void	get_fd_in(t_token *redirections, t_shell *shell)
 	if (shell->heredoc)
 		get_heredoc_as_fd_in(shell);
 	else
-	{
-		while (current)
-		{
-			if (current->next && (current->next->type == FILENAME))
-			{
-				if (current->type == LESS)
-				{
-					if (shell->infile_fd != -2)
-						close(shell->infile_fd);
-					shell->infile_fd = open(current->next->value, O_RDONLY);
-				}
-			}
-			if (shell->infile_fd == -1)
-			{
-				perror(current->next->value);
-				shell->exit_status = 1;
-				free_and_exit_shell(shell, shell->exit_status);
-			}
-			current = current->next;
-		}
-	}
+		get_file_as_fd_in(redirections, shell);
 }
 
 void	open_outfile(char *filename, t_shell *shell, int flags)

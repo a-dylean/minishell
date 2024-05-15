@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:09:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 15:28:46 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 14:20:43 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ char	*get_value_from_buffer(char buffer[])
 {
 	char	*new_token;
 
+	if (buffer[0] == '\0')
+		return (NULL);
 	new_token = ft_strdup(buffer);
 	if (!new_token)
 		return (NULL);
