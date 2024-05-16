@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/16 14:33:08 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/16 15:52:19 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ int	minishell_loop(t_shell *shell)
 		signal(SIGINT, catch_sigint);
 		signal(SIGQUIT, SIG_IGN);
 		shell->input = readline(PROMPT);
+		if (!shell->input)
+            free_and_exit_shell(shell, 1);
 		if (lexer(shell) == EXIT_SUCCESS && parser(shell) == EXIT_SUCCESS)
 			g_exit_code = executer(shell);
 		else
