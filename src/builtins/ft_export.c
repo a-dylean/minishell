@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:03 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/16 13:59:58 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/16 19:29:37 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,11 @@ int	valid_for_export(char *str)
 	split = ft_split(str, '=');
 	if (ft_strcmp(str, "=") == 0 || !is_valid_identifier(split[0]))
 	{
-		err_msg_with_arg("export", str, "not a valid identifier");
-		return (1);
+		if (split[0][0] == '-')
+			return (err_msg_with_arg("export", split[0], "invalid option"),
+				free_array(split), 2);
+		return (err_msg_with_arg("export", str, "not a valid identifier"),
+			free_array(split), 1);
 	}
 	if (!split[1])
 		return (free_array(split), 0);
@@ -113,6 +116,8 @@ int	ft_export(char **cmd, t_shell *shell)
 			handle_export(cmd[i], shell);
 		else if (exit_code == 1)
 			return (1);
+		else if (exit_code == 2)
+			return (2);
 		i++;
 	}
 	return (0);
