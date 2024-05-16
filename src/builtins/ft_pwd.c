@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:10:39 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/14 16:09:41 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 18:01:36 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 int	ft_pwd(t_command *commands)
 {
-	char	cwd[4096]; // = PATH_MAX on the system (getconf -a PATH_MAX)
+	char	cwd[4096];
 
-	if (commands->cmd_name[1] && commands->cmd_name[1][0] && commands->cmd_name[1][0] == '-')
+	if (commands->cmd_name[1] && commands->cmd_name[1][0]
+			&& commands->cmd_name[1][0] == '-')
 	{
 		write_error(commands->cmd_name[1], "invalid option");
 		return (2);
