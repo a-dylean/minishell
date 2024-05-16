@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:22:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/16 14:05:28 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/16 15:33:35 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ t_command	*init_command(void)
 		exit(EXIT_FAILURE);
 	new_command->cmd_name = NULL;
 	new_command->is_builtin = false;
-	new_command->delimiter = NULL;
 	return (new_command);
 }
 
