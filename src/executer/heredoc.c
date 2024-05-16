@@ -6,19 +6,29 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/15 11:29:06 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:00:26 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+void	unlink_heredoc(t_shell *shell)
+{
+	if (unlink(shell->heredoc) == -1)
+	{
+		perror("unlink");
+		exit(EXIT_FAILURE);
+	}
+}
+
 void	create_filename(t_shell *shell)
 {
-	char	*temp_file;
-	int		fd;
-	static int i = 0;
-	char	*temp_num;
+	char		*temp_file;
+	int			fd;
+	static int	i;
+	char		*temp_num;
 
+	i = 0;
 	temp_num = ft_itoa(getpid() + 1);
 	temp_file = ft_strjoin("/tmp/minishell_heredoc_", temp_num);
 	free(temp_num);
@@ -44,48 +54,28 @@ void	create_heredoc(t_token *redirections, t_shell *shell)
 {
 	int		fd;
 	char	*line;
-	t_token	tmp = {0};
+	t_token	tmp;
 
+	ft_memset(&tmp, 0, sizeof(t_token));
 	fd = open(shell->heredoc, O_RDWR | O_CREAT, 0666);
 	if (fd == -1)
 	{
 		perror("open");
 		return ;
 	}
-	while ((line = readline("> ")) != NULL)
+	line = readline("> ");
+	while (line != NULL)
 	{	
 		if (ft_strcmp(line, redirections->next->value) == 0)
 			break ;
 		tmp.value = line;
-		if (redirections->next->quotes_status == NONE)
-			perform_expansion(&tmp, shell);
-		if (tmp.value)
-			write(fd, tmp.value, ft_strlen(tmp.value));
-		write(fd, "\n", 1);
-		free(line);
-		if (tmp.value != line)
-		{
-			free(tmp.value);
-			tmp.value = NULL;
-		}
+		write_line_to_heredoc(fd, &tmp, shell, redirections);
+		free_line(line, &tmp);
+		line = readline("> ");
 	}
 	if (line)
 		free(line);
 	close(fd);
-}
-
-int	check_if_other_heredoc(t_token *current)
-{
-	t_token	*tmp;
-
-	tmp = current->next;
-	while (tmp)
-	{
-		if (tmp->type == LESSLESS)
-			return (1);
-		tmp = tmp->next;
-	}
-	return (0);
 }
 
 void	handle_heredoc(t_token *redirections, t_shell *shell)

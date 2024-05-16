@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:43:34 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/09 18:52:22 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/07 17:33:48 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	compute_exit_status(long stat, t_shell *shell)
 
 static int	get_exit_status(t_command *commands, char *arg, t_shell *shell)
 {
-	long	stat;
+	long stat;
 
 	stat = ft_atol(arg);
 	if (errno == ERANGE)

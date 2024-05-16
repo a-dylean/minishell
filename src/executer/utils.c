@@ -6,96 +6,64 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/16 13:23:22 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:02:46 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*check_if_directory(char *cmd, t_shell *shell)
+int	check_if_other_heredoc(t_token *current)
 {
-	struct stat path_stat;
+	t_token	*tmp;
 
-	if (stat(cmd, &path_stat) == -1) // added this to avoid leaks for */*
+	tmp = current->next;
+	while (tmp)
 	{
-		perror(cmd);
-		shell->exit_status = 1;
-		free_and_exit_shell(shell, shell->exit_status);
+		if (tmp->type == LESSLESS)
+			return (1);
+		tmp = tmp->next;
 	}
-	stat(cmd, &path_stat);
-	if (S_ISDIR(path_stat.st_mode))
-	{
-		write_error(cmd, "Is a directory");
-		shell->exit_status = 126;
-		free_and_exit_shell(shell, shell->exit_status);
-	}
-	else if (access(cmd, X_OK) == 0)
-		return (cmd);
-	if (!S_ISDIR(path_stat.st_mode))
-	{
-		if (access(cmd, F_OK) == -1)
-		{
-			write_error(cmd, "No such file or directory");
-			shell->exit_status = 127;
-			free_and_exit_shell(shell, shell->exit_status);
-		}
-		else
-			shell->exit_status = 126;
-		return (cmd);
-	}
-	else
-		return (NULL);
+	return (0);
 }
 
-char	*search_executable_cmd(char **path_dirs, char *cmd)
+void	write_line_to_heredoc(int fd, t_token *tmp,
+			t_shell *shell, t_token *redirections)
 {
-	char	*cmd_path;
-	char	*temp;
-	int		i;
-
-	i = 0;
-	if (cmd[0] == '\0')
-	{
-		free_array(path_dirs);
-		return (NULL);
-	}
-	while (path_dirs[i])
-	{
-		temp = ft_strjoin(path_dirs[i], "/");
-		cmd_path = ft_strjoin(temp, cmd);
-		if (access(cmd_path, X_OK) == 0)
-		{
-			free(temp);
-			free_array(path_dirs);
-			return (cmd_path);
-		}
-		free(cmd_path);
-		free(temp);
-		i++;
-	}
-	free_array(path_dirs);
-	return (NULL);
+	if (redirections->next->quotes_status == NONE)
+		perform_expansion(tmp, shell);
+	if (tmp->value)
+		write(fd, tmp->value, ft_strlen(tmp->value));
+	write(fd, "\n", 1);
 }
 
-char	*get_cmd_path(char *cmd, t_shell *shell)
+void	free_line(char *line, t_token *tmp)
 {
-    char	**path_dirs;
-    char	*path_var;
+	free(line);
+	if (tmp->value != line)
+	{
+		free(tmp->value);
+		tmp->value = NULL;
+	}
+}
 
-    //added protection
-	if (!cmd || !shell)
-        return NULL;
-    if (ft_strchr(cmd, '/') != NULL)
-        return (check_if_directory(cmd, shell));
-    path_var = ft_getenv(shell->env_head, "PATH");
-    if (!path_var)
-        return (NULL);
-    path_dirs = ft_split(path_var, ':');
-    if (!path_dirs)
-	//added free here
-         return (free(path_var), NULL);
-    free(path_var);
-    return (search_executable_cmd(path_dirs, cmd));
+void	pipe_and_fork(t_command *current, t_shell *shell)
+{
+	if (current->next)
+	{
+		if (pipe(shell->pipe_fd) == -1)
+		{
+			perror("pipe");
+			exit(EXIT_FAILURE);
+		}
+	}
+	if (current->redirections)
+		handle_heredoc(current->redirections, shell);
+	shell->last_pid = fork();
+	if (shell->last_pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
 }
 
 void	wait_commands(t_shell *shell)

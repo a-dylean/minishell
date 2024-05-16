@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:10:39 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/16 13:21:36 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:00:26 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 int	ft_pwd(t_command *commands)
 {
-	char	cwd[4096]; // = PATH_MAX on the system (getconf -a PATH_MAX)
+	char	cwd[4096];
 
-	if (commands->cmd_name[1] && commands->cmd_name[1][0] && commands->cmd_name[1][0] == '-')
+	if (commands->cmd_name[1] && commands->cmd_name[1][0]
+			&& commands->cmd_name[1][0] == '-')
 	{
 		write_error(commands->cmd_name[1], "invalid option");
 		return (2);

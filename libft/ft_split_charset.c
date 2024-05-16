@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_charset.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:28:11 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/09 19:03:17 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/04/09 11:05:00 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static char	**fill_arr(char const *s, char *charset, char **strs)
 
 char	**ft_split_charset(char const *s, char *charset)
 {
-	char	**strs;
+	char **strs;
 
 	if (!s)
 		return (NULL);
