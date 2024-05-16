@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/16 17:45:25 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/16 19:57:58 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,10 @@ int	executer(t_shell *shell)
 		return (-1);
 	current = shell->commands;
 	prev_fd = 0;
-	// if (!current->next && current->is_builtin == true && !current->redirections)
-	// 	exec_builtin(current, shell);
-	// else
-	// {
+	if (!current->next && current->is_builtin == true && !current->redirections)
+		exec_builtin(current, shell);
+	else
+	{
 		while (current)
 		{
 			pipe_and_fork(current, shell);
@@ -105,7 +105,7 @@ int	executer(t_shell *shell)
 				prev_fd = handle_parent(current, shell, prev_fd);
 			current = current->next;
 		}
-	// }
+	}
 	wait_commands(shell);
 	return (shell->exit_status);
 }
