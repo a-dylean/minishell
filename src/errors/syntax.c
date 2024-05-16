@@ -3,37 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:16:29 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/14 16:38:05 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:20:11 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// modify for readabilty, split into smaller functions
-int	invalid_type_syntax_error(t_token *token, t_shell *shell)
+int	invalid_type_syntax_error(t_token *token)
 {
 	if (token->value[0] == '>' && token->value[1] == '>'
 		&& ft_strlen(token->value) >= 4)
-		return (syntax_error_in_token(">>", shell));
+		return (syntax_error_in_token(">>"));
 	else if (token->value[0] == '<' && token->value[1] == '<'
 		&& ft_strlen(token->value) >= 4)
-		return (syntax_error_in_token("<<", shell));
+		return (syntax_error_in_token("<<"));
 	else if (token->value[0] == '>')
-		return (syntax_error_in_token(">", shell));
+		return (syntax_error_in_token(">"));
 	else if (token->value[0] == '<')
-		return (syntax_error_in_token("<", shell));
+		return (syntax_error_in_token("<"));
 	else if (token->value[0] == '|' && token->value[1] == '|'
 		&& ft_strlen(token->value) >= 2)
-		return (syntax_error_in_token("||", shell));
+		return (syntax_error_in_token("||"));
 	else if (token->value[0] == '|')
-		return (syntax_error_in_token("|", shell));
+		return (syntax_error_in_token("|"));
 	return (0);
 }
 
-int	check_syntax(t_token *tokens, t_shell *shell)
+int	check_syntax(t_token *tokens)
 {
 	t_token	*tmp;
 
@@ -41,16 +40,16 @@ int	check_syntax(t_token *tokens, t_shell *shell)
 	while (tmp)
 	{
 		if (tmp->type == -1)
-			return (invalid_type_syntax_error(tmp, shell));
+			return (invalid_type_syntax_error(tmp));
 		if (tmp->type == PIPE && (!tmp->prev || !tmp->next))
-			return (invalid_type_syntax_error(tmp, shell));
+			return (invalid_type_syntax_error(tmp));
 		if (tmp->type >= LESS && tmp->type <= LESSLESS)
 		{
 			if (!tmp->next)
-				return (syntax_error_in_token("newline", shell));
+				return (syntax_error_in_token("newline"));
 			else if (tmp->next->type != FILENAME
 				&& tmp->next->type != DELIMITER)
-				return (syntax_error_in_token(tmp->next->value, shell));
+				return (syntax_error_in_token(tmp->next->value));
 		}
 		tmp = tmp->next;
 	}

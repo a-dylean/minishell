@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/16 13:59:03 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:21:36 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ int						check_redir_type(char *str, int i, int count, char ch);
 void					assign_type_redirections(t_token *tokens);
 
 /* parser */
-int						check_syntax(t_token *tokens, t_shell *shell);
 int						parser(t_shell *shell);
 int						count_tokens_before_pipe(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
@@ -205,7 +204,6 @@ int						stack_len(t_token *tokens);
 int						len_command(t_command *command);
 
 /* errors */
-int						syntax_error_in_token(char *token, t_shell *shell);
 int						undefined_behavior_error(char *str);
 int						syntax_error_eof(void);
 void					err_msg_with_arg(char *cmd, char *arg, char *error);
@@ -230,4 +228,108 @@ void					print_commands(t_command *commands);
 void					test_list(t_token *tokens);
 void					print_commands_reverse(t_command *commands);
 
+int						valid_quotes(char *str);
+int						lexer(t_shell *shell);
+int						get_type(char *str);
+int						len_between_tokens(char *str, int i, char c);
+int						check_redir_type(char *str, int i, int count, char ch);
+void					assign_type_redirections(t_token *tokens);
+
+/* parser */
+int						check_syntax(t_token *tokens);
+int						parser(t_shell *shell);
+int						count_tokens_before_pipe(t_token *tokens);
+int						no_pipe_in_list(t_token *tokens);
+void					handle_redirections(t_token *tokens,
+							t_command *command);
+
+/* expander */
+int						expander(t_token *tokens, t_shell *shell);
+char					*get_value_after_expansion(char *token, t_shell *shell);
+char					*get_value_from_buffer(char buffer[]);
+int						calculate_expansion_size(char *token, int *i,
+							t_shell *shell);
+char					*init_buffer(char *token, t_shell *shell);
+char					*get_buffer_value(char *token, char *buffer,
+							t_shell *shell);
+void					handle_expansion(char *token, int (*index)[2],
+							char *buffer, t_shell *shell);
+int						calculate_buffer_size(char *token, t_shell *shell);
+char					*get_env_from_str(char *str);
+void					expand_to_exit_status(char *token, char *buffer, int *j,
+							t_shell *shell);
+void					remove_quotes(t_token *tokens);
+void					perform_expansion(t_token *tokens, t_shell *shell);
+void					set_quotes_status(t_token *tokens);
+
+/* env */
+t_env					*init_env(char **env);
+t_env					*init_env_node(char *str);
+void					add_back_env_var(t_env *head, t_env *new);
+char					*get_env_value(char *str, char *var_name);
+
+/* executer */
+int						init_shell(t_shell *shell, char **env);
+int						minishell_loop(t_shell *shell);
+int						non_interactive_behaviour(t_shell *shell,
+							char *command);
+int						executer(t_shell *shell);
+void					has_no_filename(t_command *current, t_shell *shell,
+							int prev_fd);
+void					open_and_redirect_fd(t_command *current,
+							t_shell *shell);
+char					*get_cmd_path(char *cmd, t_shell *shell);
+void					wait_commands(t_shell *shell);
+
+/* heredoc */
+void					handle_heredoc(t_token *redirections, t_shell *shell);
+
+/* builtins */
+int						ft_echo(t_command *commands);
+int						ft_pwd(t_command *commands);
+int						ft_cd(t_command *commands, t_shell *shell);
+void					ft_exit(t_command *commands, t_shell *shell);
+int						ft_env(t_shell *shell);
+int						ft_export(char **cmd, t_shell *shell);
+int						ft_unset(char **cmd, t_shell *shell);
+
+/* builins utils*/
+int						is_valid_identifier(char *str);
+int						var_exists(t_env *env_head, char *var_name);
+
+/* linked lists*/
+t_command				*init_command(void);
+t_command				*get_last_command(t_command *head);
+void					add_command_back(t_command **commands,
+							t_command *new_node);
+t_token					*create_token(char *value, int type, int quotes_status);
+void					add_token_back(t_token **tokens, t_token *new_node);
+void					free_tokens(t_token **tokens);
+
+/* errors */
+int						syntax_error_in_token(char *token);
+int						undefined_behavior_error(char *str);
+int						syntax_error_eof(void);
+
+/* utils */
+void					free_and_exit_shell(t_shell *shell, int exit_code);
+void					free_shell(t_shell *shell);
+void					free_env(t_env *env);
+void					free_commands(t_command **commands);
+char					**init_array(int size);
+void					free_array(char **arr);
+int						str_is_empty_or_space_only(char *str);
+int						count_chars(char *str, char c);
+int						char_is_separator(char c);
+void					write_error(char *cmd, char *error);
+char					*ft_getenv(t_env *env_list, char *key);
+char					*remove_char(char *str, char c);
+
+/* signals */
+void					catch_sigint(int signum);
+
+/* tests */
+void					print_commands(t_command *commands);
+void					test_list(t_token *tokens);
+void					print_commands_reverse(t_command *commands);
 #endif

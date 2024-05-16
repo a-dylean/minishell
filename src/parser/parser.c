@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/16 13:56:56 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:48:13 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,15 @@ int	count_not_null_tokens(t_token *tokens)
 	}
 	return (count);
 }
+
 char	**get_cmd_array_from_tokens(t_token *tokens)
 {
 	char	**cmd_array;
 	int		i;
 
-	i = 0;
-	cmd_array = malloc(sizeof(char *) * (count_not_null_tokens(tokens) + 1));
-	if (!cmd_array)
+	i = -1;
+	cmd_array = malloc((count_not_null_tokens(tokens) + 1) * sizeof(char *));
+	if (cmd_array == NULL)
 		return (NULL);
 	while (tokens && tokens->type != PIPE)
 	{
@@ -54,7 +55,7 @@ char	**get_cmd_array_from_tokens(t_token *tokens)
 		}
 		tokens = tokens->next;
 	}
-	cmd_array[i] = NULL;
+	cmd_array[++i] = NULL;
 	return (cmd_array);
 }
 

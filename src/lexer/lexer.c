@@ -6,82 +6,24 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/16 14:07:03 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:33:29 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	len_between_quotes(char *str, int i, char quote)
-{
-	int	len;
-
-	len = 1;
-	while (str[i + len] != quote && str[i + len])	
-		len++;
-	len++;
-	return (len);
-}
-
-int	len_word(char *str, int i)
-{
-	int	len;
-
-	len = 1;
-	while (str[i + len] && !ft_isspace(str[i + len]))
-	{
-		if (!ft_strchr("|><", str[i + len]))
-			len++;
-		else
-			return (len);
-	}
-	return (len);
-}
-
-int	count_spaces(char *str, int i)
-{
-	int	len;
-
-	len = 0;
-	while (str[i + len] && str[i] && ft_isspace(str[i + len]))
-		len++;
-	return (len);
-}
-
 void	assign_type_redirections(t_token *tokens)
 {
 	while (tokens)
 	{
-		if ((tokens->type >= LESS && tokens->type <= GREATGREAT) && (tokens->next
-				&& tokens->next->type == WORD))
+		if ((tokens->type >= LESS && tokens->type <= GREATGREAT)
+			&& (tokens->next && tokens->next->type == WORD))
 			tokens->next->type = FILENAME;
 		else if (tokens->type == LESSLESS && (tokens->next
 				&& tokens->next->type == WORD))
 			tokens->next->type = DELIMITER;
 		tokens = tokens->next;
 	}
-}
-
-char	*ft_strndup(char *s, int n)
-{
-	char	*res;
-	int		len;
-	int		i;
-
-	len = ft_strlen(s);
-	if (len == 0)
-		return (NULL);
-	res = (char *)malloc(sizeof(char) * (n + 1));
-	if (!res)
-		return (NULL);
-	i = 0;
-	while (s[i] != '\0' && i < n)
-	{
-		res[i] = s[i];
-		i++;
-	}
-	res[i] = '\0';
-	return (res);
 }
 
 int	get_token_size(char *str)
@@ -106,7 +48,8 @@ int	get_token_size(char *str)
 	}
 	return (i);
 }
-char *get_token(char *str)
+
+char	*get_token(char *str)
 {
 	char	*token_value;
 	int		len;
@@ -120,7 +63,7 @@ char *get_token(char *str)
 	return (token_value);
 }
 
-t_token *tokenize(char *str, t_shell *shell)
+t_token	*tokenize(char *str, t_shell *shell)
 {
 	int		i;
 	char	*substr;
@@ -166,7 +109,7 @@ int	lexer(t_shell *shell)
 	if (!shell->tokens)
 		return (EXIT_FAILURE);
 	assign_type_redirections(shell->tokens);
-	if (!check_syntax(shell->tokens, shell))
+	if (!check_syntax(shell->tokens))
 		return (EXIT_SUCCESS);
 	return (EXIT_FAILURE);
 }
