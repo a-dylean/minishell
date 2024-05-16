@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   buffer_size.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:25:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 13:06:28 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/16 12:12:04 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-/* function that calculates the size of the expansion
-that will be added to the buffer */
 
 /* function that calculates the size of the expansion
 that will be added to the buffer */
@@ -25,12 +22,16 @@ int	calculate_expansion_size(char *token, int *i, t_shell *shell)
 	char	*env_var;
 
 	buffer_size = 0;
+	if (token[*i + 1] == '?')
+	{
+		env_var_value = ft_itoa(shell->exit_status);
+		buffer_size += ft_strlen(env_var_value);
+		*i += 2;
+		return (free(env_var_value), buffer_size);
+	}
 	env_var = get_env_from_str(&token[*i]);
 	if (!env_var)
-	{
-		*i += 1;
-		return (1);
-	}
+		return (*i += 1, 1);
 	else if (var_exists(shell->env_head, env_var))
 	{
 		env_var_value = ft_getenv(shell->env_head, env_var);
@@ -38,12 +39,8 @@ int	calculate_expansion_size(char *token, int *i, t_shell *shell)
 			buffer_size += ft_strlen(env_var_value);
 		free(env_var_value);
 	}
-	// if (env_var)
-		*i += ft_strlen(env_var) + 1;
-	// else
-	// 	*i += 1;
-	free(env_var);
-	return (buffer_size);
+	*i += ft_strlen(env_var) + 1;
+	return (free(env_var), buffer_size);
 }
 
 /* function that calculates the size of the buffer needed for the new token */
