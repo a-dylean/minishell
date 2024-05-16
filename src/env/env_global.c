@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_global.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 18:45:38 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 14:58:46 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:22:25 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,9 @@
 
 void	free_env_node(t_env *env)
 {
-	if (env->var_name)
-		free(env->var_name);
-	if (env->value)
-		free(env->value);
-	if (env)
-		free(env);
+	free(env->var_name);
+	free(env->value);
+	free(env);
 }
 
 void	free_env(t_env *env)

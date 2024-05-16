@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/09 18:52:49 by atonkopi          #+#    #+#             */
+/*   Updated: 2024/05/16 13:26:04 by atonkopi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	free_and_exit_shell(t_shell *shell, int exit_code)
@@ -5,7 +17,7 @@ void	free_and_exit_shell(t_shell *shell, int exit_code)
 	if (shell)
 	{
 		free_shell(shell);
-		if (shell->env && shell->env_head)
+		if (shell->env_head)
 			free_env((shell->env_head));
 	}
 	exit(exit_code);

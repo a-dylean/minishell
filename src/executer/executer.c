@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/15 14:23:26 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:23:00 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,15 @@ void	pipe_and_fork(t_command *current, t_shell *shell)
 void	execute_command(t_command *current, t_shell *shell)
 {
 	signal(SIGQUIT, SIG_DFL);
-	if (!current->cmd_name[0])
-	{
-		shell->exit_status = 0;
+	// if (!current->cmd_name[0])
+	// {
+	// 	shell->exit_status = 0;
+	// 	free_and_exit_shell(shell, shell->exit_status);
+	// }
+	if (!current->cmd_name || !current->cmd_name[0] || current->cmd_name[0][0] == '\0')
+	{	
+		write_error(NULL, "command not found");
+		shell->exit_status = 127;
 		free_and_exit_shell(shell, shell->exit_status);
 	}
 	if (current->is_builtin == true)
@@ -85,6 +91,8 @@ void	execute_command(t_command *current, t_shell *shell)
 		{
 			write_error(current->cmd_name[0], "command not found");
 			shell->exit_status = 127;
+			// added to fix leak
+			free(shell->cmd_path);
 			free_and_exit_shell(shell, shell->exit_status);
 		}
 		execve(shell->cmd_path, current->cmd_name, shell->env);

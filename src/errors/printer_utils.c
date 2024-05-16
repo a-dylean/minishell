@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printer_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:32:04 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/14 16:35:39 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:22:51 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ int	syntax_error_in_token(char *token, t_shell *shell)
 	return (1);
 }
 
-int syntax_error_eof(void)
+int	syntax_error_eof(void)
 {
-	ft_putstr_fd("minishell: syntax error: unexpected end of file\n", STDERR_FILENO);
+	ft_putstr_fd("minishell: syntax error: unexpected end of file\n",
+		STDERR_FILENO);
 	return (1);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:28:00 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/14 13:06:53 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/16 13:20:41 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ int init_shell(t_shell *shell, char **env)
 		shell->user_name = getenv("USER");
  		shell->env = env;
 	}
-	// shell->tokens = *init_tokens();
-	// shell->commands = *init_commands();
 	shell->tokens = NULL;
 	shell->commands = NULL;
 	shell->last_pid = -2;
