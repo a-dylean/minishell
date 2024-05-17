@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/16 15:39:31 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:00:09 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,11 @@ void					set_quotes_status(t_token *tokens);
 
 /* env */
 t_env					*init_env(char **env);
+char					**init_env_array(t_env *env_head);
+t_env					*init_default_env(void);
 t_env					*init_env_node(char *str);
-void					add_back_env_var(t_env *head, t_env *new);
+t_env					*init_default_env_node(char *var_name, char *value);
+void					add_back_env_var(t_env **head, t_env *new);
 char					*ft_getenv(t_env *env_list, char *key);
 char					*get_env_value(char *str, char *var_name);
 char					*get_env_from_str(char *str);

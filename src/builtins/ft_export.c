@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:03 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/16 13:59:58 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/17 15:16:19 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	handle_export(char *str, t_shell *shell)
 	split = ft_split(str, '=');
 	tmp = shell->env_head;
 	if (!var_exists(shell->env_head, split[0]))
-		add_back_env_var(shell->env_head, init_env_node(str));
+		add_back_env_var(&shell->env_head, init_env_node(str));
 	else
 	{
 		while (tmp)
