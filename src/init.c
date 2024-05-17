@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:28:00 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/17 16:05:31 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int init_shell(t_shell *shell, char **env)
 {
-	shell->env_head = init_env(env);
+	shell->env_list = init_env(env);
 	shell->tokens = NULL;
 	shell->commands = NULL;
 	shell->last_pid = -2;

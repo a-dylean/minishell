@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/17 16:00:09 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ typedef struct s_shell
 	char				*prev_dir;
 	char				*cur_dir;
 	char				*user_name;
-	t_env				*env_head;
+	t_env				*env_list;
 }						t_shell;
 
 /* lexer */

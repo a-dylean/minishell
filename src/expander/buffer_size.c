@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 13:25:51 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/16 14:03:10 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	calculate_expansion_size(char *token, int *i, t_shell *shell)
 	env_var = get_env_from_str(&token[*i]);
 	if (!env_var)
 		return (*i += 1, 1);
-	else if (var_exists(shell->env_head, env_var))
+	else if (var_exists(shell->env_list, env_var))
 	{
-		env_var_value = ft_getenv(shell->env_head, env_var);
+		env_var_value = ft_getenv(shell->env_list, env_var);
 		if (env_var_value)
 			buffer_size += ft_strlen(env_var_value);
 		free(env_var_value);

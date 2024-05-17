@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:44:36 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/16 13:59:31 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int	cd_minus(t_shell *shell, int option)
 	char	*curr_dir;
 	char	*old_dir;
 
-	curr_dir = ft_getenv(shell->env_head, "OLDPWD");
-	old_dir = ft_getenv(shell->env_head, "PWD");
+	curr_dir = ft_getenv(shell->env_list, "OLDPWD");
+	old_dir = ft_getenv(shell->env_list, "PWD");
 	if (!curr_dir)
 	{
 		write_error("cd", "OLDPWD not set");
@@ -52,8 +52,8 @@ int	cd_minus(t_shell *shell, int option)
 		ft_putstr_fd(curr_dir, STDOUT_FILENO);
 		ft_putstr_fd("\n", STDOUT_FILENO);
 	}
-	ft_setenv(shell->env_head, "PWD", curr_dir);
-	ft_setenv(shell->env_head, "OLDPWD", old_dir);
+	ft_setenv(shell->env_list, "PWD", curr_dir);
+	ft_setenv(shell->env_list, "OLDPWD", old_dir);
 	return (free_and_return(curr_dir, old_dir, 0));
 }
 
@@ -87,7 +87,7 @@ int	ft_cd(t_command *commands, t_shell *shell)
 	}
 	if (!commands->cmd_name[1])
 	{
-		value = ft_getenv(shell->env_head, "HOME");
+		value = ft_getenv(shell->env_list, "HOME");
 		if (!value)
 		{
 			write_error("cd", "HOME not set");
