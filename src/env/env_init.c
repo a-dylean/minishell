@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 15:42:53 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/17 15:59:33 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/17 18:00:36 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ t_env	*init_default_env(void)
 	t_env	*res;
 
 	res = NULL;
-	printf("init_default_env\n");
 	new = init_default_env_node("PWD", getcwd(NULL, 0));
 	if (!new)
 		return (free_env(res), NULL);
