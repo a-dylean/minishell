@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:16 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/16 14:00:39 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ int	ft_unset(char **cmd, t_shell *shell)
 	{
 		// if (!is_valid_identifier(cmd[i]))
 		// 	return (write_error("unset", "not a valid identifier"), 1);
-		if (var_exists(shell->env_head, shell->commands->cmd_name[i]))
-			delete_env_var(shell->env_head, shell->commands->cmd_name[i]);
+		if (var_exists(shell->env_list, shell->commands->cmd_name[i]))
+			delete_env_var(shell->env_list, shell->commands->cmd_name[i]);
 		i++;
 	}
 	return (EXIT_SUCCESS);

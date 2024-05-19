@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 14:09:01 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/17 13:44:36 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,9 @@ void	handle_expansion(char *token, int (*indexes)[2], char *buffer,
 	
 	// printf("token: %s\n", token);
 	env_var = get_env_from_str(&token[*indexes[0]]);
-	// printf("env_var: %s\n", env_var);
-	if (var_exists(shell->env_head, env_var))
+	if (var_exists(shell->env_list, env_var))
 	{
-		env_var_value = ft_getenv(shell->env_head, env_var);
+		env_var_value = ft_getenv(shell->env_list, env_var);
 		tmp = env_var_value;
 		while (*env_var_value)
 		{

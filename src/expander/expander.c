@@ -40,7 +40,7 @@ char	*get_value_after_expansion(char *str, t_shell *shell, int *i)
 	name = get_env_from_str(str + *i);
 	if (!name)
 		return (free(str), NULL);
-	value = get_var_value(shell->env_head, name + 1);
+	value = get_var_value(shell->env_list, name + 1);
 	if (!value)
 		return (free(name), free(str), NULL);
 	replaced = str_replace(str, name, value, *i);

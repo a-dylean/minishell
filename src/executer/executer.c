@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/16 19:57:58 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ void	execute_command(t_command *current, t_shell *shell)
 			shell->exit_status = 127;
 			free_and_exit_shell(shell, shell->exit_status);
 		}
-		execve(shell->cmd_path, current->cmd_name, shell->env);
+		char **env = init_env_array(shell->env_list);
+		execve(shell->cmd_path, current->cmd_name, env);
+		// execve(shell->cmd_path, current->cmd_name, shell->env);
 		perror(shell->cmd_path);
 		if (shell && shell->cmd_path)
 			free(shell->cmd_path);

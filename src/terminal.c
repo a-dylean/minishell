@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/16 15:52:19 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/17 14:28:05 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,6 @@ void	catch_sigint(int signum)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-}
-
-int	non_interactive_behaviour(t_shell *shell, char *command)
-{
-	(void)shell;
-	(void)command;
-	printf("Non interactive behaviour\n");
-	return (EXIT_SUCCESS);
 }
 
 int	minishell_loop(t_shell *shell)

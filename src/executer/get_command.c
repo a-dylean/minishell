@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:04:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/15 16:47:59 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	*get_cmd_path(char *cmd, t_shell *shell)
 
 	if (ft_strchr(cmd, '/') != NULL)
 		return (check_if_directory(cmd, shell));
-	path_var = ft_getenv(shell->env_head, "PATH");
+	path_var = ft_getenv(shell->env_list, "PATH");
 	if (!path_var)
 		return (NULL);
 	path_dirs = ft_split(path_var, ':');
