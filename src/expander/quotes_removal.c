@@ -64,7 +64,7 @@ void	handle_nested_quotes(t_token **token)
 		(*token)->value = remove_char((*token)->value, S_QUOTE);
 }
 
-void	remove_unquoted_chars(t_token **token)
+void	remove_dollar_sign(t_token **token)
 {
 	int	i;
 
@@ -79,23 +79,48 @@ void	remove_unquoted_chars(t_token **token)
 			(*token)->value = remove_char((*token)->value, '$');
 		i++;
 	}
-	if (nested_quotes((*token)->value))
+}
+
+char	*remove_unquoted_chars(char *str)
+{
+	char	*new_str;
+	char	quote;
+	int		j;
+	int		i;
+
+	i = 0;
+	j = 0;
+	quote = 0;
+	new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
+	if (!new_str)
+		return (NULL);
+	while (str[i])
 	{
-		handle_nested_quotes(token);
-		return ;
+		if (get_quote(&quote, str[i]) && str[i] != quote)
+			new_str[j++] = str[i];
+		i++;
 	}
-	(*token)->value = remove_char((*token)->value, D_QUOTE);
-	(*token)->value = remove_char((*token)->value, S_QUOTE);
+	return (new_str);
 }
 
 void	remove_quotes(t_token *tokens)
 {
 	t_token	*temp;
+	char *unquoted_value;
 
 	temp = tokens;
 	while (temp)
 	{
-		remove_unquoted_chars(&temp);
+		if (temp->value)
+		{
+			remove_dollar_sign(&temp);
+			unquoted_value = remove_unquoted_chars(temp->value);
+			if (unquoted_value)
+			{
+				free(temp->value);
+				temp->value = unquoted_value;
+			}
+		}
 		temp = temp->next;
 	}
 }
