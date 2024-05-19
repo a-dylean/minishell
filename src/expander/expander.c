@@ -12,20 +12,21 @@
 
 #include "../includes/minishell.h"
 
-char	*get_var_value(t_env *head, char *name, char *d_quoted)
+char	*get_var_value(t_env *env_list, char *name, char *d_quoted)
 {
-	while (head)
+	t_env	*temp;
+
+	temp = env_list;
+	while (temp)
 	{
-		if (ft_strcmp(head->var_name, name) == 0)
-			return (head->value);
-		head = head->next;
+		if (ft_strcmp(temp->var_name, name) == 0)
+			return (temp->value);
+		temp = temp->next;
 	}
 	if (d_quoted)
 		return ("");
 	return (NULL);
 }
-
-/* function that returns the value of the buffer */
 
 char	*get_value_after_expansion(char *str, t_shell *shell, int *i)
 {
