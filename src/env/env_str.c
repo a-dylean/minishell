@@ -12,28 +12,6 @@
 
 #include "../includes/minishell.h"
 
-/* function that extracts value of env from string */
-
-char	*get_env_from_str(char *str)
-{
-	int		i;
-	char	*env_var;
-	
-	i = 1;
-	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-		i++;
-	env_var = ft_calloc(i + 1, sizeof(char));
-	if (!env_var)
-		return (free(str), NULL);
-	env_var[0] = '$';
-	i = 1;
-	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-	{
-		env_var[i] = str[i];
-		i++;
-	}
-	return (env_var);
-}
 /*used in ft_cd, changes the value of OLDPWD and PWD*/
 void	ft_setenv(t_env *env_head, char *name, char *value)
 {

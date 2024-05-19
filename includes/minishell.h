@@ -118,23 +118,12 @@ void					handle_redirections(t_token *tokens,
 
 /* expander */
 int						expander(t_token *tokens, t_shell *shell);
-char	*get_value_after_expansion(char *str, t_shell *shell, int *i);
-char					*get_value_from_buffer(char buffer[]);
-int						calculate_buffer_size(char *token, t_shell *shell);
-int						calculate_expansion_size(char *token, int *i,
-							t_shell *shell);
-char					*init_buffer(char *token, t_shell *shell);
-char					*get_buffer_value(char *token, char *buffer,
-							t_shell *shell);
+char					*get_value_after_expansion(char *str, t_shell *shell, int *i);
+char	*get_new_str_value(char *str, char *old_value, char *new_value, int prev_index);
 int						var_exists(t_env *env_head, char *var_name);
-void					handle_expansion(char *token, int (*indexes)[2],
-							char *buffer, t_shell *shell);
-void					expand_to_exit_status(char *token, char *buffer, int *j,
-							t_shell *shell);
 void					remove_quotes(t_token *tokens);
 void					perform_expansion(t_token *tokens, t_shell *shell);
 int					get_quote(char *str, char c);
-char *expand(char *str, t_shell *shell);
 
 /* env */
 t_env					*init_env(char **env);
@@ -210,7 +199,7 @@ int						count_chars(char *str, char c);
 int						char_is_separator(char c);
 void					write_error(char *cmd, char *error);
 char					*remove_char(char *str, char c);
-char	*str_replace(char *str, char *old, char *new, int old_index);
+char	*get_new_str_value(char *str, char *old, char *new, int old_index);
 
 /* signals */
 void					catch_sigint(int signum);

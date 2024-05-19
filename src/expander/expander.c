@@ -12,45 +12,16 @@
 
 #include "../includes/minishell.h"
 
-char	*get_var_value(t_env *env_list, char *name, char *d_quoted)
+int	valid_expansion(char *str, int i, char *quote)
 {
-	t_env	*temp;
-
-	temp = env_list;
-	while (temp)
+	if (*quote == S_QUOTE)
+		return (0);
+	if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'))
 	{
-		if (ft_strcmp(temp->var_name, name) == 0)
-			return (temp->value);
-		temp = temp->next;
+		*quote = 0;
+		return (1);
 	}
-	if (d_quoted)
-		return ("");
-	return (NULL);
-}
-
-char	*get_value_after_expansion(char *str, t_shell *shell, int *i)
-{
-	char	*name;
-	char	*value;
-	char	*replaced;
-	char	*d_quoted;
-
-	d_quoted = ft_strchr(str, D_QUOTE);
-	if (str[*i] == '$' && str[*i + 1] == '?')
-	{
-		value = ft_itoa(shell->exit_status);
-		replaced = str_replace(str, "$?", value, *i);
-		return (free(value), free(str), replaced);
-	}
-	name = get_env_from_str(str + *i);
-	if (!name)
-		return (free(str), NULL);
-	value = get_var_value(shell->env_list, name + 1, d_quoted);
-	if (!value)
-		return (free(name), free(str), NULL);
-	replaced = str_replace(str, name, value, *i);
-	*i = 0;
-	return (free(name), free(str), replaced);
+	return (0);
 }
 
 int	get_quote(char *quote, char c)
@@ -64,18 +35,6 @@ int	get_quote(char *quote, char c)
 			return (*quote);
 		}
 	return (-1);
-}
-
-int	valid_expansion(char *str, int i, char *quote)
-{
-	if (*quote == S_QUOTE)
-		return (0);
-	if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'))
-	{
-		*quote = 0;
-		return (1);
-	}
-	return (0);
 }
 
 void	perform_expansion(t_token *temp, t_shell *shell)
