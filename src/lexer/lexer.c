@@ -63,28 +63,6 @@ char	*get_token(char *str)
 	return (token_value);
 }
 
-int	get_token_quotes(char *str)
-{
-	int	i;
-	int	status;
-
-	i = 0;
-	status = NONE;
-	while (str[i])
-	{
-		if (str[i] == '\'' && status == NONE)
-			status = SQUOTED;
-		else if (str[i] == '\"' && status == NONE)
-			status = DQUOTED;
-		else if (str[i] == '\'' && status == SQUOTED)
-			status = NONE;
-		else if (str[i] == '\"' && status == DQUOTED)
-			status = NONE;
-		i++;
-	}
-	return (status);
-}
-
 t_token	*tokenize(char *str, t_shell *shell)
 {
 	int		i;
@@ -101,8 +79,7 @@ t_token	*tokenize(char *str, t_shell *shell)
 			substr = get_token(str);
 			if (!substr)
 				return (free_tokens(&shell->tokens), NULL);
-			new_token = create_token(substr, get_type(substr),
-					get_token_quotes(substr));
+			new_token = create_token(substr, get_type(substr));
 			if (!new_token)
 				return (free(substr), free_tokens(&shell->tokens), NULL);
 			add_token_back(&shell->tokens, new_token);
