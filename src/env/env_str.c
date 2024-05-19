@@ -39,10 +39,10 @@ char	*get_env_from_str(char *str)
 void	ft_setenv(t_env *env_head, char *name, char *value)
 {
 	t_env	*current;
-	t_env	*prev;
+	// t_env	*prev;
 
 	current = env_head;
-	prev = NULL;
+	// prev = NULL;
 	while (current != NULL)
 	{
 		if (ft_strcmp(current->var_name, name) == 0)
@@ -51,7 +51,7 @@ void	ft_setenv(t_env *env_head, char *name, char *value)
 			current->value = ft_strdup(value);
 			return ;
 		}
-		prev = current;
+		// prev = current;
 		current = current->next;
 	}
 	return ;

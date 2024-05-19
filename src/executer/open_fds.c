@@ -40,9 +40,9 @@ static void	get_file_as_fd_in(t_token *redirections, t_shell *shell)
 
 void	get_fd_in(t_token *redirections, t_shell *shell)
 {
-	t_token	*current;
+	// t_token	*current;
 
-	current = redirections;
+	// current = redirections;
 	if (shell->heredoc)
 	{
 		if (shell->infile_fd != -2)
