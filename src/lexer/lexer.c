@@ -116,7 +116,6 @@ t_token	*tokenize(char *str, t_shell *shell)
 
 int	lexer(t_shell *shell)
 {
-	char *expanded_input;
 	if (!shell->input)
 		exit(EXIT_FAILURE);
 	else if (ft_strcmp(shell->input, "\0") == 0)
@@ -129,11 +128,7 @@ int	lexer(t_shell *shell)
 	else if (str_is_empty_or_space_only(shell->input))
 		return (EXIT_SUCCESS);
 	add_history(shell->input);
-	expanded_input = expand(shell->input, shell);
-	if (!expanded_input)
-		return (EXIT_FAILURE);
-	shell->tokens = tokenize(expanded_input, shell);
-	// shell->tokens = tokenize(shell->input, shell);
+	shell->tokens = tokenize(shell->input, shell);
 	if (!shell->tokens)
 		return (EXIT_FAILURE);
 	assign_type_redirections(shell->tokens);

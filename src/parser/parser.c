@@ -83,7 +83,7 @@ t_command	*get_command(t_token *tokens, t_shell *shell)
 
 	if (!tokens)
 		return (NULL);
-	// expander(tokens, shell);
+	expander(tokens, shell);
 	command = malloc(sizeof(t_command));
 	if (!command)
 		return (NULL);

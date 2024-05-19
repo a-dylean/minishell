@@ -56,7 +56,7 @@ char	*str_replace(char *str, char *old, char *new, int old_index)
 	int		size;
 
 	size = ft_strlen(str) + ft_strlen(new) - ft_strlen(old);
-	new_str = ft_calloc(size + 1, sizeof(char));
+	new_str = malloc(size + 1);
 	if (!new_str)
 		return (NULL);
 	i = 0;
