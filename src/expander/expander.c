@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-char	*get_var_value(t_env *head, char *name)
+char	*get_var_value(t_env *head, char *name, char *d_quoted)
 {
 	while (head)
 	{
@@ -20,7 +20,9 @@ char	*get_var_value(t_env *head, char *name)
 			return (head->value);
 		head = head->next;
 	}
-	return ("");
+	if (d_quoted)
+		return ("");
+	return (NULL);
 }
 
 /* function that returns the value of the buffer */
@@ -30,24 +32,24 @@ char	*get_value_after_expansion(char *str, t_shell *shell, int *i)
 	char	*name;
 	char	*value;
 	char	*replaced;
+	char	*d_quoted;
+
+	d_quoted = ft_strchr(str, D_QUOTE);
 	if (str[*i] == '$' && str[*i + 1] == '?')
 	{
 		value = ft_itoa(shell->exit_status);
 		replaced = str_replace(str, "$?", value, *i);
-		free(value);
-		return (replaced);
+		return (free(value), free(str), replaced);
 	}
 	name = get_env_from_str(str + *i);
 	if (!name)
 		return (free(str), NULL);
-	value = get_var_value(shell->env_list, name + 1);
+	value = get_var_value(shell->env_list, name + 1, d_quoted);
 	if (!value)
 		return (free(name), free(str), NULL);
 	replaced = str_replace(str, name, value, *i);
 	*i = 0;
-	free(name);
-	free(str);
-	return (replaced);
+	return (free(name), free(str), replaced);
 }
 
 int	get_quote(char *quote, char c)

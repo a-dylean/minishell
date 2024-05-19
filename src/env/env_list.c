@@ -32,6 +32,7 @@ char	*value_mem_alloc(char *str, size_t var_name_len)
 	{
 		value = malloc(full_str_len - var_name_len);
 		if (!value)
+		//exit properly
 			exit(EXIT_FAILURE);
 	}
 	return (value);

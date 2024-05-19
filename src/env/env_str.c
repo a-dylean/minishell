@@ -22,7 +22,7 @@ char	*get_env_from_str(char *str)
 	i = 1;
 	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;
-	env_var = malloc(i + 1);
+	env_var = ft_calloc(i + 1, sizeof(char));
 	if (!env_var)
 		return (free(str), NULL);
 	env_var[0] = '$';
