@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/20 14:00:45 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/20 16:26:53 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 int	valid_expansion(char *str, int i, char *quote)
 {
 	if (*quote == S_QUOTE)
+		return (0);
+	if (str[0] == '<' && str[1] == '<')
 		return (0);
 	if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i
 			+ 1] == '?'))
