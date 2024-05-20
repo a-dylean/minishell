@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:16:29 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/16 14:20:11 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/20 18:52:01 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,14 @@ int	check_syntax(t_token *tokens)
 	while (tmp)
 	{
 		if (tmp->type == -1)
-			return (invalid_type_syntax_error(tmp));
-		if (tmp->type == PIPE && (!tmp->prev || !tmp->next))
-			return (invalid_type_syntax_error(tmp));
+			return (syntax_error_in_token(tmp->value));
+		if (tmp->type == PIPE && (!tmp->prev || !tmp->next
+				|| tmp->next->type == PIPE))
+		{
+			if (tmp->next && tmp->next->type == PIPE)
+				return (syntax_error_in_token("||"));
+			return (syntax_error_in_token("|"));
+		}
 		if (tmp->type >= LESS && tmp->type <= LESSLESS)
 		{
 			if (!tmp->next)

@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:16 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/20 18:08:24 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ int	ft_unset(char **cmd, t_shell *shell)
 	i = 1;
 	while (cmd[i])
 	{
-		// if (!is_valid_identifier(cmd[i]))
-		// 	return (write_error("unset", "not a valid identifier"), 1);
+		if (cmd[1][0] == '-')
+			return (err_msg_with_arg("export", cmd[1], "invalid option"), 2);
 		if (var_exists(shell->env_list, shell->commands->cmd_name[i]))
 			delete_env_var(shell->env_list, shell->commands->cmd_name[i]);
 		i++;

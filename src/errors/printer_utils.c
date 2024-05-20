@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:32:04 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/20 16:36:43 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/20 18:34:54 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	syntax_error_in_token(char *token)
 		STDERR_FILENO);
 	ft_putstr_fd(token, 2);
 	ft_putstr_fd("'\n", 2);
-	return (1);
+	return (2);
 }
 
 int	syntax_error_eof(void)

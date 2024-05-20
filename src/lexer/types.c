@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:35:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/02 15:22:46 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/20 18:54:43 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ int	check_redir_type(char *str, int i, int count, char ch)
 		return (result_double);
 	else if (count - i == 1)
 		return (result_single);
-	else
-		return (-1);
+	return (-1);
 }
 
 int	get_type(char *str)
