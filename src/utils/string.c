@@ -26,24 +26,3 @@ int	str_is_empty_or_space_only(char *str)
 	return (1);
 }
 
-int	count_chars(char *str, char c)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (str[i])
-	{
-		if (str[i] == c)
-			count++;
-		i++;
-	}
-	return (count);
-}
-
-int	char_is_separator(char c)
-{
-	return (c == '$' || c == ' ' || c == '=' || c == '\0' || c == D_QUOTE
-		|| c == S_QUOTE);
-}

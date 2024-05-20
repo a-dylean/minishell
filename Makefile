@@ -13,10 +13,10 @@ SRC = 	src/main.c src/terminal.c src/init.c src/test.c \
         src/errors/printer_utils.c src/errors/syntax.c \
         src/executer/executer.c src/executer/redirections.c src/executer/utils.c src/executer/heredoc.c src/executer/open_fds.c\
         src/executer/get_command.c \
-		src/expander/buffer_size.c src/expander/expander.c src/expander/buffer_utils.c src/expander/quotes_removal.c \
+		src/expander/expander.c src/expander/expander_utils.c src/expander/quotes_removal.c \
         src/lexer/lexer.c src/lexer/types.c \
         src/parser/cmds_ops.c src/parser/parser.c src/parser/redirections_ops.c src/parser/tokens_ops.c \
-		src/env/env_list.c src/env/env_str.c src/env/env_global.c \
+		src/env/env_list.c src/env/env_str.c src/env/env_global.c src/env/env_init.c \
 
 OBJ_DIR = obj
 OBJ := $(patsubst src/%.c,$(OBJ_DIR)/%.o,$(SRC))

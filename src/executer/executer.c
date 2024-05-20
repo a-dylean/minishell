@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/16 17:45:25 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ void	execute_command(t_command *current, t_shell *shell)
 			shell->exit_status = 127;
 			free_and_exit_shell(shell, shell->exit_status);
 		}
-		execve(shell->cmd_path, current->cmd_name, shell->env);
+		char **env = init_env_array(shell->env_list);
+		execve(shell->cmd_path, current->cmd_name, env);
+		// execve(shell->cmd_path, current->cmd_name, shell->env);
 		perror(shell->cmd_path);
 		if (shell && shell->cmd_path)
 			free(shell->cmd_path);
@@ -92,10 +94,10 @@ int	executer(t_shell *shell)
 		return (-1);
 	current = shell->commands;
 	prev_fd = 0;
-	// if (!current->next && current->is_builtin == true && !current->redirections)
-	// 	exec_builtin(current, shell);
-	// else
-	// {
+	if (!current->next && current->is_builtin == true && !current->redirections)
+		exec_builtin(current, shell);
+	else
+	{
 		while (current)
 		{
 			pipe_and_fork(current, shell);
@@ -105,7 +107,7 @@ int	executer(t_shell *shell)
 				prev_fd = handle_parent(current, shell, prev_fd);
 			current = current->next;
 		}
-	// }
+	}
 	wait_commands(shell);
 	return (shell->exit_status);
 }

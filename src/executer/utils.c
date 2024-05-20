@@ -29,8 +29,10 @@ int	check_if_other_heredoc(t_token *current)
 void	write_line_to_heredoc(int fd, t_token *tmp,
 			t_shell *shell, t_token *redirections)
 {
-	if (redirections->next->quotes_status == NONE)
-		perform_expansion(tmp, shell);
+	(void)shell;
+	(void)redirections;
+	// if (redirections->next->quotes_status == NONE)
+	// 	perform_expansion(tmp, shell);
 	if (tmp->value)
 		write(fd, tmp->value, ft_strlen(tmp->value));
 	write(fd, "\n", 1);

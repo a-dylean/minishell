@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/16 14:48:13 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/20 13:58:39 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,12 @@ bool	is_builtin(char *cmd)
 	return (false);
 }
 
-t_command	*get_command(t_token *tokens, t_shell *shell)
+t_command	*get_command(t_token *tokens)
 {
 	t_command	*command;
 
 	if (!tokens)
 		return (NULL);
-	expander(tokens, shell);
 	command = malloc(sizeof(t_command));
 	if (!command)
 		return (NULL);
@@ -118,7 +117,7 @@ int	parser(t_shell *shell)
 	{
 		if (temp->type != PIPE)
 		{
-			new_command = get_command(temp, shell);
+			new_command = get_command(temp);
 			if (!new_command)
 				return (free_commands(&shell->commands), -1);
 			add_command_back(&shell->commands, new_command);

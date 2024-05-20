@@ -29,9 +29,9 @@ void	handle_redirections(t_token *tokens, t_command *command)
 		{
 			next = temp->next->next;
 			add_token_back(&redirections, create_token(temp->value,
-					temp->type, temp->quotes_status));
+					temp->type));
 			add_token_back(&redirections, create_token(temp->next->value,
-					temp->next->type, temp->next->quotes_status));
+					temp->next->type));
 			temp = next;
 		}
 		else

@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/16 15:39:31 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/20 14:04:14 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,11 @@ typedef enum s_type
 	DELIMITER,
 }						t_type;
 
-typedef enum s_quotes
-{
-	NONE,
-	DQUOTED,
-	SQUOTED,
-}						t_quotes;
-
 /* structures */
 typedef struct s_token
 {
 	int					type;
 	char				*value;
-	int					quotes_status;
 	struct s_token		*next;
 	struct s_token		*prev;
 }						t_token;
@@ -98,7 +90,7 @@ typedef struct s_shell
 	char				*prev_dir;
 	char				*cur_dir;
 	char				*user_name;
-	t_env				*env_head;
+	t_env				*env_list;
 }						t_shell;
 
 /* lexer */
@@ -117,28 +109,22 @@ void					handle_redirections(t_token *tokens,
 							t_command *command);
 
 /* expander */
-int						expander(t_token *tokens, t_shell *shell);
-char					*get_value_after_expansion(char *token, t_shell *shell);
-char					*get_value_from_buffer(char buffer[]);
-int						calculate_buffer_size(char *token, t_shell *shell);
-int						calculate_expansion_size(char *token, int *i,
-							t_shell *shell);
-char					*init_buffer(char *token, t_shell *shell);
-char					*get_buffer_value(char *token, char *buffer,
-							t_shell *shell);
+char					*expander(char *str, t_shell *shell);
+char					*get_value_after_expansion(char *str, t_shell *shell,
+							int *i);
+char					*get_new_str_value(char *str, char *old_value,
+							char *new_value, int prev_index);
 int						var_exists(t_env *env_head, char *var_name);
-void					handle_expansion(char *token, int (*indexes)[2],
-							char *buffer, t_shell *shell);
-void					expand_to_exit_status(char *token, char *buffer, int *j,
-							t_shell *shell);
 void					remove_quotes(t_token *tokens);
-void					perform_expansion(t_token *tokens, t_shell *shell);
-void					set_quotes_status(t_token *tokens);
+int						get_quote(char *str, char c);
 
 /* env */
 t_env					*init_env(char **env);
+char					**init_env_array(t_env *env_head);
+t_env					*init_default_env(void);
 t_env					*init_env_node(char *str);
-void					add_back_env_var(t_env *head, t_env *new);
+t_env					*init_default_env_node(char *var_name, char *value);
+void					add_back_env_var(t_env **head, t_env *new_node);
 char					*ft_getenv(t_env *env_list, char *key);
 char					*get_env_value(char *str, char *var_name);
 char					*get_env_from_str(char *str);
@@ -183,7 +169,7 @@ t_command				*init_command(void);
 t_command				*get_last_command(t_command *head);
 void					add_command_back(t_command **commands,
 							t_command *new_node);
-t_token					*create_token(char *value, int type, int quotes_status);
+t_token					*create_token(char *value, int type);
 void					add_token_back(t_token **tokens, t_token *new_node);
 void					free_tokens(t_token **tokens);
 
@@ -202,8 +188,6 @@ void					free_commands(t_command **commands);
 char					**init_array(int size);
 void					free_array(char **arr);
 int						str_is_empty_or_space_only(char *str);
-int						count_chars(char *str, char c);
-int						char_is_separator(char c);
 void					write_error(char *cmd, char *error);
 char					*remove_char(char *str, char c);
 

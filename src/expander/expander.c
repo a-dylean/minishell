@@ -6,99 +6,58 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/16 14:32:27 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/20 16:26:53 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../includes/minishell.h"
 
-/* function that returns the value of the buffer */
-
-char	*get_value_after_expansion(char *token, t_shell *shell)
+int	valid_expansion(char *str, int i, char *quote)
 {
-	char	*new_token;
-	char	*buffer;
-
-	buffer = init_buffer(token, shell);
-	if (!buffer)
-		return (NULL);
-	buffer = get_buffer_value(token, buffer, shell);
-	if (!buffer)
-		return (NULL);
-	new_token = get_value_from_buffer(buffer);
-	if (!new_token)
-		return (free(buffer), NULL);
-	free(buffer);
-	return (new_token);
-}
-
-void	set_quotes_status(t_token *tokens)
-{
-	t_token	*temp;
-	int		in_single_quotes;
-	int		in_double_quotes;
-
-	temp = tokens;
-	while (temp)
+	if (*quote == S_QUOTE)
+		return (0);
+	if (str[0] == '<' && str[1] == '<')
+		return (0);
+	if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i
+			+ 1] == '?'))
 	{
-		in_single_quotes = 0;
-		in_double_quotes = 0;
-		if (temp->value[0] == S_QUOTE && !in_double_quotes)
-			in_single_quotes = !in_single_quotes;
-		else if (temp->value[0] == D_QUOTE && !in_single_quotes)
-			in_double_quotes = !in_double_quotes;
-		if (in_single_quotes)
-			temp->quotes_status = SQUOTED;
-		else if (in_double_quotes)
-			temp->quotes_status = DQUOTED;
-		else
-			temp->quotes_status = NONE;
-		// printf("quotes status set: %d\n", temp->quotes_status);
-		temp = temp->next;
+		*quote = 0;
+		return (1);
 	}
+	return (0);
 }
 
-int	valid_expansion(char c, char next_c, int quotes_status)
+int	get_quote(char *quote, char c)
 {
-	return (c == '$' && (ft_isalpha(next_c) || next_c == '?' || next_c == '_')
-		&& (quotes_status == NONE || quotes_status == DQUOTED));
+	if (c == S_QUOTE || c == D_QUOTE)
+	{
+		if (*quote == 0)
+			*quote = c;
+		else if (*quote == c)
+			*quote = 0;
+		return (*quote);
+	}
+	return (-1);
 }
 
-void	perform_expansion(t_token *temp, t_shell *shell)
+char	*expander(char *str, t_shell *shell)
 {
-	char	*new_value;
 	int		i;
+	char	quote;
 
 	i = 0;
-	while (temp->value[i] && temp->value[i + 1])
+	quote = 0;
+	while (str[i])
 	{
-		if (valid_expansion(temp->value[i], temp->value[i + 1],
-				temp->quotes_status))
+		get_quote(&quote, str[i]);
+		if (valid_expansion(str, i, &quote))
 		{
-			new_value = get_value_after_expansion(temp->value, shell);
-			free(temp->value);
-			temp->value = new_value;
-			if (!temp->value)
-				return ;
-			i = -1;
+			str = get_value_after_expansion(str, shell, &i);
+			if (!str || !str[0])
+				break ;
 		}
-		i++;
+		else
+			i++;
 	}
-}
-
-int	expander(t_token *tokens, t_shell *shell)
-{
-	t_token	*temp;
-
-	temp = tokens;
-	set_quotes_status(tokens);
-	while (temp)
-	{
-		if ((temp->type == WORD || temp->type == FILENAME) && temp->value)
-			perform_expansion(temp, shell);
-		temp = temp->next;
-	}
-	remove_quotes(tokens);
-	return (0);
+	return (str);
 }
