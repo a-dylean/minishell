@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/20 14:04:14 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,13 +109,14 @@ void					handle_redirections(t_token *tokens,
 							t_command *command);
 
 /* expander */
-int						expander(t_token *tokens, t_shell *shell);
-char					*get_value_after_expansion(char *str, t_shell *shell, int *i);
-char	*get_new_str_value(char *str, char *old_value, char *new_value, int prev_index);
+char					*expander(char *str, t_shell *shell);
+char					*get_value_after_expansion(char *str, t_shell *shell,
+							int *i);
+char					*get_new_str_value(char *str, char *old_value,
+							char *new_value, int prev_index);
 int						var_exists(t_env *env_head, char *var_name);
 void					remove_quotes(t_token *tokens);
-void					perform_expansion(t_token *tokens, t_shell *shell);
-int					get_quote(char *str, char c);
+int						get_quote(char *str, char c);
 
 /* env */
 t_env					*init_env(char **env);
@@ -123,7 +124,7 @@ char					**init_env_array(t_env *env_head);
 t_env					*init_default_env(void);
 t_env					*init_env_node(char *str);
 t_env					*init_default_env_node(char *var_name, char *value);
-void					add_back_env_var(t_env **head, t_env *new);
+void					add_back_env_var(t_env **head, t_env *new_node);
 char					*ft_getenv(t_env *env_list, char *key);
 char					*get_env_value(char *str, char *var_name);
 char					*get_env_from_str(char *str);
@@ -187,11 +188,8 @@ void					free_commands(t_command **commands);
 char					**init_array(int size);
 void					free_array(char **arr);
 int						str_is_empty_or_space_only(char *str);
-int						count_chars(char *str, char c);
-int						char_is_separator(char c);
 void					write_error(char *cmd, char *error);
 char					*remove_char(char *str, char c);
-char	*get_new_str_value(char *str, char *old, char *new, int old_index);
 
 /* signals */
 void					catch_sigint(int signum);

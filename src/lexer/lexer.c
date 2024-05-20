@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/17 11:30:15 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/20 14:01:29 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ t_token	*tokenize(char *str, t_shell *shell)
 
 int	lexer(t_shell *shell)
 {
+	char *expanded_input;
 	if (!shell->input)
 		exit(EXIT_FAILURE);
 	else if (ft_strcmp(shell->input, "\0") == 0)
@@ -105,10 +106,15 @@ int	lexer(t_shell *shell)
 	else if (str_is_empty_or_space_only(shell->input))
 		return (EXIT_SUCCESS);
 	add_history(shell->input);
-	shell->tokens = tokenize(shell->input, shell);
+	expanded_input = expander(shell->input, shell);
+	if (!expanded_input)
+		return (EXIT_SUCCESS);
+	shell->tokens = tokenize(expanded_input, shell);
+	free(expanded_input);
 	if (!shell->tokens)
 		return (EXIT_FAILURE);
 	assign_type_redirections(shell->tokens);
+	remove_quotes(shell->tokens);
 	if (!check_syntax(shell->tokens))
 		return (EXIT_SUCCESS);
 	return (EXIT_FAILURE);

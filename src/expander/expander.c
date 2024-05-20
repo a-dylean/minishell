@@ -6,7 +6,7 @@
 /*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/17 13:56:12 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/20 14:00:45 by atonkopi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ int	valid_expansion(char *str, int i, char *quote)
 {
 	if (*quote == S_QUOTE)
 		return (0);
-	if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'))
+	if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i
+			+ 1] == '?'))
 	{
 		*quote = 0;
 		return (1);
@@ -27,48 +28,34 @@ int	valid_expansion(char *str, int i, char *quote)
 int	get_quote(char *quote, char c)
 {
 	if (c == S_QUOTE || c == D_QUOTE)
-		{
-			if (*quote == 0)
-				*quote = c;
-			else if (*quote == c)
-				*quote = 0;
-			return (*quote);
-		}
+	{
+		if (*quote == 0)
+			*quote = c;
+		else if (*quote == c)
+			*quote = 0;
+		return (*quote);
+	}
 	return (-1);
 }
 
-void	perform_expansion(t_token *temp, t_shell *shell)
+char	*expander(char *str, t_shell *shell)
 {
 	int		i;
-	char quote;
+	char	quote;
 
 	i = 0;
 	quote = 0;
-	while (temp->value[i])
+	while (str[i])
 	{
-		get_quote(&quote, temp->value[i]);
-		if (valid_expansion(temp->value, i, &quote))
+		get_quote(&quote, str[i]);
+		if (valid_expansion(str, i, &quote))
 		{
-			temp->value = get_value_after_expansion(temp->value, shell, &i);
-			if (!temp->value || !temp->value[0])
+			str = get_value_after_expansion(str, shell, &i);
+			if (!str || !str[0])
 				break ;
 		}
 		else
 			i++;
 	}
-}
-
-int	expander(t_token *tokens, t_shell *shell)
-{
-	t_token	*temp;
-
-	temp = tokens;
-	while (temp)
-	{
-		if ((temp->type == WORD || temp->type == FILENAME) && temp->value)
-			perform_expansion(temp, shell);
-		temp = temp->next;
-	}
-	remove_quotes(tokens);
-	return (0);
+	return (str);
 }
