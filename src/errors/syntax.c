@@ -12,25 +12,25 @@
 
 #include "../includes/minishell.h"
 
-int	invalid_type_syntax_error(t_token *token)
-{
-	if (token->value[0] == '>' && token->value[1] == '>'
-		&& ft_strlen(token->value) >= 4)
-		return (syntax_error_in_token(">>"));
-	else if (token->value[0] == '<' && token->value[1] == '<'
-		&& ft_strlen(token->value) >= 4)
-		return (syntax_error_in_token("<<"));
-	else if (token->value[0] == '>')
-		return (syntax_error_in_token(">"));
-	else if (token->value[0] == '<')
-		return (syntax_error_in_token("<"));
-	else if (token->value[0] == '|' && token->value[1] == '|'
-		&& ft_strlen(token->value) >= 2)
-		return (syntax_error_in_token("||"));
-	else if (token->value[0] == '|')
-		return (syntax_error_in_token("|"));
-	return (0);
-}
+// int	invalid_type_syntax_error(t_token *token)
+// {
+// 	if (token->value[0] == '>' && token->value[1] == '>'
+// 		&& ft_strlen(token->value) >= 4)
+// 		return (syntax_error_in_token(">>"));
+// 	else if (token->value[0] == '<' && token->value[1] == '<'
+// 		&& ft_strlen(token->value) >= 4)
+// 		return (syntax_error_in_token("<<"));
+// 	else if (token->value[0] == '>')
+// 		return (syntax_error_in_token(">"));
+// 	else if (token->value[0] == '<')
+// 		return (syntax_error_in_token("<"));
+// 	else if (token->value[0] == '|' && token->value[1] == '|'
+// 		&& ft_strlen(token->value) >= 2)
+// 		return (syntax_error_in_token("||"));
+// 	else if (token->value[0] == '|')
+// 		return (syntax_error_in_token("|"));
+// 	return (0);
+// }
 
 int	check_syntax(t_token *tokens)
 {
@@ -39,8 +39,8 @@ int	check_syntax(t_token *tokens)
 	tmp = tokens;
 	while (tmp)
 	{
-		if (tmp->type == -1)
-			return (syntax_error_in_token(tmp->value));
+		// if (tmp->type == -1)
+		// 	return (syntax_error_in_token(tmp->value));
 		if (tmp->type == PIPE && (!tmp->prev || !tmp->next
 				|| tmp->next->type == PIPE))
 		{

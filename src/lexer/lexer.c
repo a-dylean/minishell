@@ -34,6 +34,8 @@ int	get_token_size(char *str)
 	if (!str)
 		return (-1);
 	type = get_type(str);
+	if (type == -1)
+		return (syntax_error_in_char(str[0]), -1);
 	if (type == GREATGREAT || type == LESSLESS)
 		return (2);
 	if (type == PIPE || type == LESS || type == GREAT)

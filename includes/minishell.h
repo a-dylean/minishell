@@ -179,6 +179,7 @@ int						undefined_behavior_error(char *str);
 int						syntax_error_eof(void);
 void					err_msg_with_arg(char *cmd, char *arg, char *error);
 int						syntax_error_in_token(char *token);
+int	syntax_error_in_char(char c);
 
 /* utils */
 void					free_and_exit_shell(t_shell *shell, int exit_code);
