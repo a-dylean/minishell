@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/20 16:22:38 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/21 12:27:16 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,16 @@ void	assign_type_redirections(t_token *tokens)
 		tokens = tokens->next;
 	}
 }
+int	len_invalid_type(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] && !ft_isspace(str[i])
+		&& (str[i] == '|' || str[i] == '<' || str[i] == '>'))
+		i++;
+	return (i);
+}
 
 int	get_token_size(char *str)
 {
@@ -35,7 +45,7 @@ int	get_token_size(char *str)
 		return (-1);
 	type = get_type(str);
 	if (type == -1)
-		return (syntax_error_in_char(str[0]), -1);
+		return (len_invalid_type(str));
 	if (type == GREATGREAT || type == LESSLESS)
 		return (2);
 	if (type == PIPE || type == LESS || type == GREAT)
@@ -116,7 +126,7 @@ int	lexer(t_shell *shell)
 		return (EXIT_FAILURE);
 	assign_type_redirections(shell->tokens);
 	remove_quotes(shell->tokens);
-	if (!check_syntax(shell->tokens))
+	if (!check_syntax(shell->tokens, shell))
 		return (EXIT_SUCCESS);
 	return (EXIT_FAILURE);
 }

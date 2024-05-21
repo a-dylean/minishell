@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   printer_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:32:04 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/20 18:34:54 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/21 12:04:05 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	syntax_error_in_token(char *token)
+int	syntax_error_in_token(char *token, t_shell *shell)
 {
 	ft_putstr_fd("minishell: syntax error near unexpected token `",
 		STDERR_FILENO);
 	ft_putstr_fd(token, 2);
 	ft_putstr_fd("'\n", 2);
-	return (2);
+	shell->exit_status = 2;
+	return (1);
 }
 
 int	syntax_error_in_char(char c)

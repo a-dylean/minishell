@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/20 14:04:14 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/21 11:54:16 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,12 +174,12 @@ void					add_token_back(t_token **tokens, t_token *new_node);
 void					free_tokens(t_token **tokens);
 
 /* errors */
-int						check_syntax(t_token *tokens);
+int						check_syntax(t_token *tokens, t_shell *shell);
 int						undefined_behavior_error(char *str);
 int						syntax_error_eof(void);
 void					err_msg_with_arg(char *cmd, char *arg, char *error);
-int						syntax_error_in_token(char *token);
-int	syntax_error_in_char(char c);
+int						syntax_error_in_token(char *token, t_shell *shell);
+int						syntax_error_in_char(char c);
 
 /* utils */
 void					free_and_exit_shell(t_shell *shell, int exit_code);
