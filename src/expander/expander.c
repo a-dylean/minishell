@@ -56,17 +56,35 @@ int	get_quote(char *quote, char c)
 	return (-1);
 }
 
+int count_dollars(char *str)
+{
+	int i;
+	int count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+			count++;
+		i++;
+	}
+	return (count);
+}
+
 char	*expander(char *str, t_shell *shell)
 {
 	int i;
 	char quote;
+	int expansions_counter;
 
 	i = 0;
 	quote = 0;
+	expansions_counter = count_dollars(str);
 	while (str[i])
 	{
 		get_quote(&quote, str[i]);
-		if (valid_expansion(str, i, &quote))
+		if (valid_expansion(str, i, &quote) && expansions_counter-- > 0)
 		{
 			str = get_value_after_expansion(str, shell, &i);
 			if (!str || !str[0])
