@@ -27,19 +27,15 @@ int	invalid_type_syntax_error(t_token *token, t_shell *shell)
 		return (syntax_error_in_token(">", shell));
 	else if (token->value[0] == '<')
 		return (syntax_error_in_token("<", shell));
-	else if (token->value[0] == '|' && token->value[1] == '|' && ft_strlen(token->value) >= 3)
-		return (syntax_error_in_token("||", shell));
-	else if (token->value[0] == '|')
+	else if (token->value && token->next && token->next->value
+		&& token->next->next && token->next->next->value)
+	{
+		if (!ft_strcmp(token->value, "|") && !ft_strcmp(token->next->value, "|")
+				&& !ft_strcmp(token->next->next->value, "|"))
+			return (syntax_error_in_token("||", shell));
+	}
+	if (token->value[0] == '|')
 		return (syntax_error_in_token("|", shell));
-	// else if (token->value && token->next && token->next->value
-	// 	&& token->next->next && token->next->next->value)
-	// {
-	// 	if (!ft_strcmp(token->value, "|") && !ft_strcmp(token->next->value, "|")
-	// 			&& !ft_strcmp(token->next->next->value, "|"))
-	// 		return (syntax_error_in_token("||", shell));
-	// }
-	// if (token->value[0] == '|')
-	// 	return (syntax_error_in_token("|", shell));
 	return (0);
 }
 

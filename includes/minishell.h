@@ -170,7 +170,7 @@ t_command				*init_command(void);
 t_command				*get_last_command(t_command *head);
 void					add_command_back(t_command **commands,
 							t_command *new_node);
-t_token					*create_token(char *value, int type);
+t_token					*create_token(char *value, int type, int quotes_status);
 void					add_token_back(t_token **tokens, t_token *new_node);
 void					free_tokens(t_token **tokens);
 

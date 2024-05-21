@@ -29,12 +29,13 @@ int	check_if_other_heredoc(t_token *current)
 void	write_line_to_heredoc(int fd, t_token *tmp,
 			t_shell *shell, t_token *redirections)
 {
-	(void)shell;
-	(void)redirections;
-	// if (redirections->next->quotes_status == NONE)
-	// 	perform_expansion(tmp, shell);
+	if (redirections->next->quotes_status == 0)
+		tmp->value = expander(tmp->value, shell);
 	if (tmp->value)
+	{
+		printf("tmp->value: %s\n", tmp->value);
 		write(fd, tmp->value, ft_strlen(tmp->value));
+	}
 	write(fd, "\n", 1);
 }
 

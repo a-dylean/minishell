@@ -38,7 +38,7 @@ void print_commands(t_command *commands)
 			while (current_command->redirections)
 			{
 				if (current_command->redirections->value != NULL)
-					printf("\n\tRedir val: %s Redir type: %d ", current_command->redirections->value, current_command->redirections->type);
+					printf("\n\tRedir val: %s Redir type: %d Redir quotes status %d", current_command->redirections->value, current_command->redirections->type, current_command->redirections->quotes_status);
 				current_command->redirections = current_command->redirections->next;
 			}
 			printf("\n");
@@ -48,7 +48,7 @@ void print_commands(t_command *commands)
 			printf("Command val: NULL ");
 			while (current_command->redirections)
 			{
-				printf("\n\tRedir val: %s Redir type: %d", current_command->redirections->value, current_command->redirections->type);
+				printf("\n\tRedir val: %s Redir type: %d Redir quotes status %d", current_command->redirections->value, current_command->redirections->type, current_command->redirections->quotes_status);
 				current_command->redirections = current_command->redirections->next;
 			}
 			printf("\n");

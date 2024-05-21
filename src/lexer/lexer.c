@@ -92,7 +92,7 @@ t_token	*tokenize(char *str, t_shell *shell)
 			substr = get_token(str);
 			if (!substr)
 				return (free_tokens(&shell->tokens), NULL);
-			new_token = create_token(substr, get_type(substr));
+			new_token = create_token(substr, get_type(substr), 0);
 			if (!new_token)
 				return (free(substr), free_tokens(&shell->tokens), NULL);
 			add_token_back(&shell->tokens, new_token);
@@ -104,15 +104,25 @@ t_token	*tokenize(char *str, t_shell *shell)
 	return (shell->tokens);
 }
 
-void	set_delimiter_quote_status(t_token *tokens)
+void	set_delimiter_quote_status(t_token *token)
 {
+	int	i;
 	t_token	*tmp;
 
-	tmp = tokens;
+	tmp = token;
+	token->quotes_status = 0;
 	while (tmp)
 	{
-		if (tmp->type == D_QUOTE || tmp->type == S_QUOTE)
-			tokens->quotes_status = 1;
+		i = 0;
+		if (tmp->type == DELIMITER)
+		{
+			while (tmp->value[i])
+			{
+				if (tmp->value[i] == D_QUOTE || tmp->value[i] == S_QUOTE)
+					tmp->quotes_status = 1;
+				i++;
+			}
+		}
 		tmp = tmp->next;
 	}
 }
@@ -138,16 +148,15 @@ int	lexer(t_shell *shell)
 	if (!shell->tokens)
 		return (EXIT_FAILURE);
 	assign_type_redirections(shell->tokens);
-	// add function for delimiter quote status
 	set_delimiter_quote_status(shell->tokens);
-	t_token	*tmp = shell->tokens;
-	while (tmp)
-	{
-		printf("value: %s\n", tmp->value);
-		printf("type: %d\n", tmp->type);
-		printf("quotes_status: %d\n", tmp->quotes_status);
-		tmp = tmp->next;
-	}
+	// t_token	*tmp = shell->tokens;
+	// while (tmp)
+	// {
+	// 	printf("value: %s\n", tmp->value);
+	// 	printf("type: %d\n", tmp->type);
+	// 	printf("quotes_status: %d\n", tmp->quotes_status);
+	// 	tmp = tmp->next;
+	// }
 	remove_quotes(shell->tokens);
 	if (!check_syntax(shell->tokens, shell))
 		return (EXIT_SUCCESS);
