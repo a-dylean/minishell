@@ -125,6 +125,7 @@ int	lexer(t_shell *shell)
 	if (!shell->tokens)
 		return (EXIT_FAILURE);
 	assign_type_redirections(shell->tokens);
+	// add function for delimiter quote status
 	remove_quotes(shell->tokens);
 	if (!check_syntax(shell->tokens, shell))
 		return (EXIT_SUCCESS);
