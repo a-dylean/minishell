@@ -12,11 +12,27 @@
 
 #include "../includes/minishell.h"
 
+int	is_heredoc(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		while (ft_isspace(str[i]))
+			i++;
+		if (str[i] == '<' && str[i + 1] == '<')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	valid_expansion(char *str, int i, char *quote)
 {
 	if (*quote == S_QUOTE)
 		return (0);
-	if (str[0] == '<' && str[1] == '<')
+	if (str && is_heredoc(str))
 		return (0);
 	if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i
 			+ 1] == '?'))
@@ -42,8 +58,8 @@ int	get_quote(char *quote, char c)
 
 char	*expander(char *str, t_shell *shell)
 {
-	int		i;
-	char	quote;
+	int i;
+	char quote;
 
 	i = 0;
 	quote = 0;
