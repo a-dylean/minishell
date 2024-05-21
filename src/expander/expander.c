@@ -32,7 +32,7 @@ int	valid_expansion(char *str, int i, char *quote)
 {
 	if (*quote == S_QUOTE)
 		return (0);
-	if (is_heredoc(str))
+	if (str && is_heredoc(str))
 		return (0);
 	if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i
 			+ 1] == '?'))
