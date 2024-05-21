@@ -32,11 +32,10 @@ void	write_line_to_heredoc(int fd, t_token *tmp,
 	if (redirections->next->quotes_status == 0)
 		tmp->value = expander(tmp->value, shell);
 	if (tmp->value)
-	{
-		printf("tmp->value: %s\n", tmp->value);
 		write(fd, tmp->value, ft_strlen(tmp->value));
-	}
 	write(fd, "\n", 1);
+	if (tmp->value)
+		free(tmp->value);
 }
 
 void	free_line(char *line, t_token *tmp)

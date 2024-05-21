@@ -67,7 +67,6 @@ void	create_heredoc(t_token *redirections, t_shell *shell)
 			break ;
 		tmp.value = line;
 		write_line_to_heredoc(fd, &tmp, shell, redirections);
-		// free_line(line, &tmp);
 		line = readline("> ");
 	}
 	if (line)

@@ -149,14 +149,6 @@ int	lexer(t_shell *shell)
 		return (EXIT_FAILURE);
 	assign_type_redirections(shell->tokens);
 	set_delimiter_quote_status(shell->tokens);
-	// t_token	*tmp = shell->tokens;
-	// while (tmp)
-	// {
-	// 	printf("value: %s\n", tmp->value);
-	// 	printf("type: %d\n", tmp->type);
-	// 	printf("quotes_status: %d\n", tmp->quotes_status);
-	// 	tmp = tmp->next;
-	// }
 	remove_quotes(shell->tokens);
 	if (!check_syntax(shell->tokens, shell))
 		return (EXIT_SUCCESS);
