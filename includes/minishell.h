@@ -49,6 +49,7 @@ typedef struct s_token
 {
 	int					type;
 	char				*value;
+	int					quotes_status;
 	struct s_token		*next;
 	struct s_token		*prev;
 }						t_token;

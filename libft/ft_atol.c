@@ -12,36 +12,55 @@
 
 #include "libft.h"
 
+static const char	*skip_whitespaces(const char *str)
+{
+	while (*str == ' ' || (*str > 8 && *str < 14))
+		str++;
+	return (str);
+}
+
+static const char	*handle_sign(const char *str, int *sign)
+{
+	if (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+			*sign *= -1;
+		str++;
+	}
+	return (str);
+}
+
+static long	handle_overflow(long ret, long sign, char current)
+{
+	if (sign > 0 && ret > (LONG_MAX - (current - '0')) / 10)
+	{
+		errno = ERANGE;
+		return (LONG_MAX);
+	}
+	else if (sign < 0 && - ret < (LONG_MIN + (current - '0')) / 10)
+	{
+		errno = ERANGE;
+		return (LONG_MIN);
+	}
+	return ((ret * 10) + (current - '0'));
+}
+
 long	ft_atol(const char *str)
 {
 	long int	ret;
-	int	sign;
-	int	i;
+	int			sign;
+	int			i;
 
 	i = 0;
 	ret = 0;
 	sign = 1;
-	while (*str == ' ' || (*str > 8 && *str < 14))
-		str++;
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			sign *= -1;
-		str++;
-	}
+	str = skip_whitespaces(str);
+	str = handle_sign(str, &sign);
 	while (ft_isdigit(str[i]) == 1)
 	{
-		if (sign > 0 && ret > (LONG_MAX - (str[i] - '0')) / 10)
-		{
-			errno = ERANGE;
-			return LONG_MAX;
-		}
-		else if (sign < 0 && -ret < (LONG_MIN + (str[i] - '0')) / 10)
-		{
-			errno = ERANGE;
-			return LONG_MIN;
-		}
-		ret = (ret * 10) + (str[i] - '0');
+		ret = handle_overflow(ret, sign, str[i]);
+		if (ret == LONG_MAX || ret == LONG_MIN)
+			return (ret);
 		i++;
 	}
 	if (i == 0)

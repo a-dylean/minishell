@@ -31,18 +31,3 @@ int	ft_pwd(t_command *commands)
 	write(STDOUT_FILENO, "\n", 1);
 	return (0);
 }
-
-// int	ft_export()
-// {
-
-// }
-
-// int	ft_unset()
-// {
-
-// }
-
-// int	ft_env()
-// {
-
-// }
