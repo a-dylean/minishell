@@ -56,11 +56,10 @@ t_env	*init_env(char **env)
 	return (head);
 }
 
-char **init_env_array(t_env *env_head)
+int	list_len(t_env *env_head)
 {
 	int		i;
 	t_env	*current;
-	char	**res;
 
 	i = 0;
 	current = env_head;
@@ -69,11 +68,20 @@ char **init_env_array(t_env *env_head)
 		i++;
 		current = current->next;
 	}
-	res = malloc(sizeof(char *) * (i + 1));
-	if (!res)
-		return (NULL);
+	return (i);
+}
+
+char	**init_env_array(t_env *env_head)
+{
+	int		i;
+	t_env	*current;
+	char	**res;
+
 	i = 0;
 	current = env_head;
+	res = malloc(sizeof(char *) * (list_len(current) + 1));
+	if (!res)
+		return (NULL);
 	while (current)
 	{
 		res[i] = ft_strjoin(current->var_name, "=");
