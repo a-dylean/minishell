@@ -6,13 +6,13 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 11:23:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/15 14:18:15 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 14:27:06 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	process_commands(t_command *commands, bool *n_flag, int *i)
+static void	check_for_n_flag(t_command *commands, bool *n_flag, int *i)
 {
 	int	j;
 
@@ -29,6 +29,9 @@ static void	process_commands(t_command *commands, bool *n_flag, int *i)
 	}
 }
 
+/*gets the length of the command to write, then writes it.
+Separate multiple commands by one space
+If the n_flag is present, does not write \n*/
 static void	write_commands(t_command *commands, bool n_flag, int *i)
 {
 	while (commands->cmd_name[*i])
@@ -43,6 +46,8 @@ static void	write_commands(t_command *commands, bool n_flag, int *i)
 		write(STDOUT_FILENO, "\n", 1);
 }
 
+/*If there is not argument, prints \n and returns.
+Otherwise, checks for valid flags and writes the commands*/
 int	ft_echo(t_command *commands)
 {
 	bool	n_flag;
@@ -55,7 +60,7 @@ int	ft_echo(t_command *commands)
 		write(STDOUT_FILENO, "\n", 1);
 		return (0);
 	}
-	process_commands(commands, &n_flag, &i);
+	check_for_n_flag(commands, &n_flag, &i);
 	write_commands(commands, n_flag, &i);
 	return (0);
 }

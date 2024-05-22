@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 15:38:36 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/17 15:43:33 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 14:23:14 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ t_env	*init_env_node(char *str)
 	free_array(split);
 	return (env_node);
 }
+
 t_env	*init_default_env_node(char *var_name, char *value)
 {
 	t_env	*env_node;
@@ -78,6 +79,7 @@ t_env	*init_default_env_node(char *var_name, char *value)
 	env_node->next = NULL;
 	return (env_node);
 }
+
 void	add_back_env_var(t_env **head, t_env *new_node)
 {
 	t_env	*current;

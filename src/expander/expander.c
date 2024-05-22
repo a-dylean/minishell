@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/20 16:26:53 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 14:46:23 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@ int	is_heredoc(char *str)
 	i = 0;
 	while (str[i])
 	{
-		while (ft_isspace(str[i]))
+		while (str[i] && ft_isspace(str[i]))
 			i++;
 		if (str[i] == '<' && str[i + 1] == '<')
 			return (1);
-		i++;
+		if (str[i])
+			i++;
 	}
 	return (0);
 }

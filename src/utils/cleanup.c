@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 18:52:49 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/20 13:13:01 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 14:32:30 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,6 @@ void	free_shell(t_shell *shell)
 		{
 			free(shell->heredoc);
 			shell->heredoc = NULL;
-		}
-		if (shell->prev_dir)
-		{
-			free(shell->prev_dir);
-			shell->prev_dir = NULL;
-		}
-		if (shell->cur_dir)
-		{
-			free(shell->cur_dir);
-			shell->cur_dir = NULL;
 		}
 		if (shell->tokens)
 			free_tokens(&(shell->tokens));
