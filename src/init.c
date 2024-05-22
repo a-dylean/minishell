@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:28:00 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/22 14:59:27 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:41:16 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 int	init_shell(t_shell *shell, char **env)
 {
 	shell->env_list = init_env(env);
+	if (shell->env_list == NULL)
+		return (EXIT_FAILURE);
 	shell->tokens = NULL;
 	shell->commands = NULL;
 	shell->last_pid = -2;

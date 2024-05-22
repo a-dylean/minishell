@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 14:07:59 by atonkopi          #+#    #+#             */
-/*   Updated: 2023/11/29 15:33:24 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:43:16 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,6 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	strs = fill_arr(s, c, strs);
 	if (!strs)
-	{
-		free_array(strs);
 		return (NULL);
-	}
 	return (strs);
 }

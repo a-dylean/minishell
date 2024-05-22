@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 15:38:36 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/22 14:23:14 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:44:13 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,11 @@ t_env	*init_env_node(char *str)
 	if (!env_node)
 		return (NULL);
 	split = ft_split(str, '=');
+	if (!split)
+		return (NULL);
 	env_node->var_name = ft_strdup(split[0]);
+	if (!env_node->var_name)
+		return (NULL);
 	env_node->value = get_env_value(str, split[0]);
 	env_node->next = NULL;
 	free_array(split);
