@@ -11,7 +11,7 @@ SRC = 	src/main.c src/terminal.c src/init.c src/test.c \
 		src/builtins/ft_export.c src/builtins/ft_unset.c\
         src/utils/array.c src/utils/linked_lists.c src/utils/string.c src/utils/cleanup.c src/utils/write.c\
         src/errors/printer_utils.c src/errors/syntax.c \
-        src/executer/executer.c src/executer/redirections.c src/executer/utils.c src/executer/heredoc.c src/executer/open_fds.c\
+        src/executer/executer.c src/executer/redirections.c src/executer/exec_utils.c src/executer/heredoc.c src/executer/open_fds.c\
         src/executer/get_command.c src/executer/redirections_utils.c\
 		src/expander/expander.c src/expander/expander_utils.c src/expander/quotes_removal.c \
         src/lexer/lexer.c src/lexer/types.c \

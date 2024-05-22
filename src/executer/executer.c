@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 13:58:54 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 14:11:50 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ int	executer(t_shell *shell)
 		return (-1);
 	current = shell->commands;
 	prev_fd = 0;
-	if (!current->next && current->is_builtin == true && (!current->redirections || ft_strcmp(current->cmd_name[0], "exit") == 0))
+	if (!current->next && current->is_builtin == true && (!current->redirections
+			|| ft_strcmp(current->cmd_name[0], "exit") == 0))
 		exec_builtin(current, shell, false);
 	else
 	{
