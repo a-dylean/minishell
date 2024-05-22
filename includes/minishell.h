@@ -137,6 +137,7 @@ int						minishell_loop(t_shell *shell);
 int						non_interactive_behaviour(t_shell *shell,
 							char *command);
 int						executer(t_shell *shell);
+void					get_fds(t_token *redirections, t_shell *shell);
 void					has_no_filename(t_command *current, t_shell *shell,
 							int prev_fd);
 void					open_and_redirect_fd(t_command *current,

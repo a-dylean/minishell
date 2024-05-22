@@ -49,6 +49,12 @@ static int	get_exit_status(t_command *commands, char *arg, t_shell *shell)
 // we need to add functions handling the freeing of the commands structure
 void	ft_exit(t_command *commands, t_shell *shell)
 {
+	if (commands->redirections)
+		get_fds(commands->redirections, shell);
+	if (shell->infile_fd >= 0)
+		close(shell->infile_fd);
+	if (shell->outfile_fd >= 0)
+		close(shell->outfile_fd);
 	if (commands->cmd_name[1])
 	{
 		if (get_exit_status(commands, commands->cmd_name[1], shell) == 1)

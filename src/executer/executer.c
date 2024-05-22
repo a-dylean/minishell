@@ -94,7 +94,7 @@ int	executer(t_shell *shell)
 		return (-1);
 	current = shell->commands;
 	prev_fd = 0;
-	if (!current->next && current->is_builtin == true && !current->redirections)
+	if (!current->next && current->is_builtin == true && (!current->redirections || ft_strcmp(current->cmd_name[0], "exit") == 0))
 		exec_builtin(current, shell);
 	else
 	{
