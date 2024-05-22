@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/22 15:04:38 by jlabonde         ###   ########.fr       */
+/*   Created: 2024/05/22 15:21:38 by jlabonde          #+#    #+#             */
+/*   Updated: 2024/05/22 15:21:55 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void					set_delimiter_quote_status(t_token *token);
 /* parser */
 int						parser(t_shell *shell);
 int						count_tokens_before_pipe(t_token *tokens);
+int						count_not_null_tokens(t_token *tokens);
 int						no_pipe_in_list(t_token *tokens);
 void					handle_redirections(t_token *tokens,
 							t_command *command);
@@ -155,7 +156,8 @@ void					open_and_redirect_fd(t_command *current,
 void					get_fd_out(t_token *redirections, t_shell *shell);
 void					get_fd_in(t_token *redirections, t_shell *shell);
 void					close_fds(t_shell *shell);
-void					duplicate_fd(int fd, int new_fd, t_shell *shell, int exit_status);
+void					duplicate_fd(int fd, int new_fd, t_shell *shell,
+							int exit_status);
 
 /* heredoc */
 void					handle_heredoc(t_token *redirections, t_shell *shell);

@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:28:11 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/04/09 11:05:00 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:20:46 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static int	count_words(char const *s, char *charset)
 	i = 0;
 	while (s[i])
 	{
-		if (!ft_strchr(charset, s[i]) && (i == 0 || ft_strchr(charset, s[i
-					- 1])))
+		if (!ft_strchr(charset, s[i]) && (i == 0
+				|| ft_strchr(charset, s[i - 1])))
 			count++;
 		i++;
 	}
@@ -73,8 +73,8 @@ static char	**fill_arr(char const *s, char *charset, char **strs)
 	j = 0;
 	while (s[i])
 	{
-		if (!ft_strchr(charset, s[i]) && (i == 0 || ft_strchr(charset, s[i
-					- 1])))
+		if (!ft_strchr(charset, s[i]) && (i == 0
+				|| ft_strchr(charset, s[i - 1])))
 		{
 			word_to_add = get_word(&s[i], charset);
 			if (!word_to_add)
@@ -92,7 +92,7 @@ static char	**fill_arr(char const *s, char *charset, char **strs)
 
 char	**ft_split_charset(char const *s, char *charset)
 {
-	char **strs;
+	char	**strs;
 
 	if (!s)
 		return (NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   write.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:19:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/15 15:51:28 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:15:41 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	write_error(char *cmd, char *error)
 	ft_putstr_fd(error, STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
+
 void	err_msg_with_arg(char *cmd, char *arg, char *error)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);

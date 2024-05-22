@@ -3,32 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/20 13:58:39 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:16:16 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	count_not_null_tokens(t_token *tokens)
-{
-	int		count;
-	t_token	*temp;
-
-	count = 0;
-	temp = tokens;
-	if (temp->type == PIPE)
-		temp = temp->next;
-	while (temp && temp->type != PIPE)
-	{
-		if (temp->value)
-			count++;
-		temp = temp->next;
-	}
-	return (count);
-}
 
 char	**get_cmd_array_from_tokens(t_token *tokens)
 {
