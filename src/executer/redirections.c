@@ -6,27 +6,11 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 14:59:27 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/15 15:47:52 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 13:39:51 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	close_fds(t_shell *shell)
-{
-	if (shell->infile_fd >= 0)
-		close(shell->infile_fd);
-	if (shell->outfile_fd >= 0)
-		close(shell->outfile_fd);
-}
-
-void	close_pipe_fds(t_shell *shell)
-{
-	if (shell->pipe_fd[0] != -2)
-		close(shell->pipe_fd[0]);
-	if (shell->pipe_fd[1] != -2)
-		close(shell->pipe_fd[1]);
-}
 
 void	get_fds(t_token *redirections, t_shell *shell)
 {

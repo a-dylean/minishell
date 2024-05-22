@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:04:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 13:47:11 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	handle_error(char *cmd, char *error,
+void	handle_error(char *cmd, char *error,
 				int exit_status, t_shell *shell)
 {
 	write_error(cmd, error);

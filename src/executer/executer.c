@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 13:58:54 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,15 @@ void	exec_builtin(t_command *commands, t_shell *shell, bool pipe)
 		shell->exit_status = ft_env(shell);
 	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)
 		ft_exit(commands, shell, pipe);
+	if (pipe == true)
+		free_and_exit_shell(shell, shell->exit_status);
 }
 
 void	execute_command(t_command *current, t_shell *shell)
 {
+	char	**env;
+
+	env = NULL;
 	signal(SIGQUIT, SIG_DFL);
 	if (!current->cmd_name[0])
 	{
@@ -39,22 +44,15 @@ void	execute_command(t_command *current, t_shell *shell)
 		free_and_exit_shell(shell, shell->exit_status);
 	}
 	if (current->is_builtin == true)
-	{
 		exec_builtin(current, shell, true);
-		free_and_exit_shell(shell, shell->exit_status);
-	}
 	else
 	{
 		shell->cmd_path = get_cmd_path(current->cmd_name[0], shell);
 		if (!shell->cmd_path)
-		{
-			write_error(current->cmd_name[0], "command not found");
-			shell->exit_status = 127;
-			free_and_exit_shell(shell, shell->exit_status);
-		}
-		char **env = init_env_array(shell->env_list);
+			handle_error(current->cmd_name[0], "command not found", 127, shell);
+		env = init_env_array(shell->env_list);
 		execve(shell->cmd_path, current->cmd_name, env);
-		// execve(shell->cmd_path, current->cmd_name, shell->env);
+		free_array(env);
 		perror(shell->cmd_path);
 		if (shell && shell->cmd_path)
 			free(shell->cmd_path);

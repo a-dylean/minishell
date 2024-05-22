@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/21 11:54:16 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 13:47:29 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,9 @@ int						executer(t_shell *shell);
 char					*get_cmd_path(char *cmd, t_shell *shell);
 void					wait_commands(t_shell *shell);
 void					pipe_and_fork(t_command *current, t_shell *shell);
+void					close_pipe_fds(t_shell *shell);
+void					handle_error(char *cmd, char *error,
+							int exit_status, t_shell *shell);
 
 /* redirections */
 void					get_fds(t_token *redirections, t_shell *shell);
