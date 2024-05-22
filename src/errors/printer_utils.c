@@ -22,15 +22,6 @@ int	syntax_error_in_token(char *token, t_shell *shell)
 	return (1);
 }
 
-int	syntax_error_in_char(char c)
-{
-	ft_putstr_fd("minishell: syntax error near unexpected token `",
-		STDERR_FILENO);
-	ft_putchar_fd(c, 2);
-	ft_putstr_fd("'\n", 2);
-	return (2);
-}
-
 int	syntax_error_eof(void)
 {
 	ft_putstr_fd("minishell: syntax error: unexpected end of file\n",

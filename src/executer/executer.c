@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-void	exec_builtin(t_command *commands, t_shell *shell)
+void	exec_builtin(t_command *commands, t_shell *shell, bool pipe)
 {
 	if (ft_strcmp(commands->cmd_name[0], "cd") == 0)
 		shell->exit_status = ft_cd(commands, shell);
@@ -27,7 +27,7 @@ void	exec_builtin(t_command *commands, t_shell *shell)
 	else if (ft_strcmp(commands->cmd_name[0], "env") == 0)
 		shell->exit_status = ft_env(shell);
 	else if (ft_strcmp(commands->cmd_name[0], "exit") == 0)
-		ft_exit(commands, shell);
+		ft_exit(commands, shell, pipe);
 }
 
 void	execute_command(t_command *current, t_shell *shell)
@@ -40,7 +40,7 @@ void	execute_command(t_command *current, t_shell *shell)
 	}
 	if (current->is_builtin == true)
 	{
-		exec_builtin(current, shell);
+		exec_builtin(current, shell, true);
 		free_and_exit_shell(shell, shell->exit_status);
 	}
 	else
@@ -95,7 +95,7 @@ int	executer(t_shell *shell)
 	current = shell->commands;
 	prev_fd = 0;
 	if (!current->next && current->is_builtin == true && (!current->redirections || ft_strcmp(current->cmd_name[0], "exit") == 0))
-		exec_builtin(current, shell);
+		exec_builtin(current, shell, false);
 	else
 	{
 		while (current)

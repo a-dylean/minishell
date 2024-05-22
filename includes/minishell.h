@@ -137,6 +137,11 @@ int						minishell_loop(t_shell *shell);
 int						non_interactive_behaviour(t_shell *shell,
 							char *command);
 int						executer(t_shell *shell);
+char					*get_cmd_path(char *cmd, t_shell *shell);
+void					wait_commands(t_shell *shell);
+void					pipe_and_fork(t_command *current, t_shell *shell);
+
+/* redirections */
 void					get_fds(t_token *redirections, t_shell *shell);
 void					has_no_filename(t_command *current, t_shell *shell,
 							int prev_fd);
@@ -144,9 +149,6 @@ void					open_and_redirect_fd(t_command *current,
 							t_shell *shell);
 void					get_fd_out(t_token *redirections, t_shell *shell);
 void					get_fd_in(t_token *redirections, t_shell *shell);
-char					*get_cmd_path(char *cmd, t_shell *shell);
-void					wait_commands(t_shell *shell);
-void					pipe_and_fork(t_command *current, t_shell *shell);
 
 /* heredoc */
 void					handle_heredoc(t_token *redirections, t_shell *shell);
@@ -160,7 +162,7 @@ int						check_if_other_heredoc(t_token *current);
 int						ft_echo(t_command *commands);
 int						ft_pwd(t_command *commands);
 int						ft_cd(t_command *commands, t_shell *shell);
-void					ft_exit(t_command *commands, t_shell *shell);
+void					ft_exit(t_command *commands, t_shell *shell, bool pipe);
 int						ft_env(t_shell *shell);
 int						ft_export(char **cmd, t_shell *shell);
 int						ft_unset(char **cmd, t_shell *shell);
@@ -181,7 +183,6 @@ int						undefined_behavior_error(char *str);
 int						syntax_error_eof(void);
 void					err_msg_with_arg(char *cmd, char *arg, char *error);
 int						syntax_error_in_token(char *token, t_shell *shell);
-int						syntax_error_in_char(char c);
 
 /* utils */
 void					free_and_exit_shell(t_shell *shell, int exit_code);
