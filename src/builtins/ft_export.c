@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:03 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/22 16:14:16 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:26:28 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ int	valid_for_export(char *str)
 	char	**split;
 
 	if (ft_strlen(str) == 0)
-		return (write_error(str, "export", "not a valid identifier"), -1);
+		return (write_error(str, "not a valid identifier", "export"), -1);
 	if (!ft_strchr(str, '=') || str[0] == '=')
 	{
 		if (!is_valid_identifier(str))
-			return (write_error(str, "export", "not a valid identifier"),
+			return (write_error(str, "not a valid identifier", "export"),
 				1);
 		return (-1);
 	}
@@ -61,9 +61,9 @@ int	valid_for_export(char *str)
 	if (ft_strcmp(str, "=") == 0 || !is_valid_identifier(split[0]))
 	{
 		if (split[0][0] == '-')
-			return (write_error(split[0], "export", "invalid option"),
+			return (write_error(split[0], "invalid option", "export"),
 				free_array(split), 2);
-		return (write_error(str, "export", "not a valid identifier"),
+		return (write_error(str, "not a valid identifier", "export"),
 			free_array(split), 1);
 	}
 	if (!split[1])

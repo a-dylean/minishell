@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:16 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/20 18:08:24 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:26:57 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	ft_unset(char **cmd, t_shell *shell)
 	while (cmd[i])
 	{
 		if (cmd[1][0] == '-')
-			return (err_msg_with_arg("export", cmd[1], "invalid option"), 2);
+			return (write_error(cmd[1], "invalid option", "export"), 2);
 		if (var_exists(shell->env_list, shell->commands->cmd_name[i]))
 			delete_env_var(shell->env_list, shell->commands->cmd_name[i]);
 		i++;
