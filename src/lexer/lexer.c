@@ -6,35 +6,11 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/21 12:27:16 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:04:26 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	assign_type_redirections(t_token *tokens)
-{
-	while (tokens)
-	{
-		if ((tokens->type >= LESS && tokens->type <= GREATGREAT)
-			&& (tokens->next && tokens->next->type == WORD))
-			tokens->next->type = FILENAME;
-		else if (tokens->type == LESSLESS && (tokens->next
-				&& tokens->next->type == WORD))
-			tokens->next->type = DELIMITER;
-		tokens = tokens->next;
-	}
-}
-int	len_invalid_type(char *str)
-{
-	int i;
-
-	i = 0;
-	while (str[i] && !ft_isspace(str[i])
-		&& (str[i] == '|' || str[i] == '<' || str[i] == '>'))
-		i++;
-	return (i);
-}
 
 int	get_token_size(char *str)
 {
@@ -102,29 +78,6 @@ t_token	*tokenize(char *str, t_shell *shell)
 		}
 	}
 	return (shell->tokens);
-}
-
-void	set_delimiter_quote_status(t_token *token)
-{
-	int	i;
-	t_token	*tmp;
-
-	tmp = token;
-	token->quotes_status = 0;
-	while (tmp)
-	{
-		i = 0;
-		if (tmp->type == DELIMITER)
-		{
-			while (tmp->value[i])
-			{
-				if (tmp->value[i] == D_QUOTE || tmp->value[i] == S_QUOTE)
-					tmp->quotes_status = 1;
-				i++;
-			}
-		}
-		tmp = tmp->next;
-	}
 }
 
 int	lexer(t_shell *shell)

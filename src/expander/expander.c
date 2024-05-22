@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 14:18:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/22 14:46:23 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 14:58:22 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int	valid_expansion(char *str, int i, char *quote)
 		return (0);
 	if (str && is_heredoc(str))
 		return (0);
-	if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i
-			+ 1] == '?'))
+	if (str[i] == '$' && (ft_isalnum(str[i + 1]) || str[i + 1] == '_'
+			|| str[i + 1] == '?'))
 	{
 		*quote = 0;
 		return (1);
@@ -57,10 +57,10 @@ int	get_quote(char *quote, char c)
 	return (-1);
 }
 
-int count_dollars(char *str)
+int	count_dollars(char *str)
 {
-	int i;
-	int count;
+	int	i;
+	int	count;
 
 	i = 0;
 	count = 0;
@@ -75,9 +75,9 @@ int count_dollars(char *str)
 
 char	*expander(char *str, t_shell *shell)
 {
-	int i;
-	char quote;
-	int expansions_counter;
+	int		i;
+	char	quote;
+	int		expansions_counter;
 
 	i = 0;
 	quote = 0;

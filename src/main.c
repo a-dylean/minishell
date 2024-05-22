@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:05:44 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/17 14:26:31 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:00:26 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ int	invalid_arg(int argc)
 
 int	main(int argc, char **argv, char **env)
 {
+	t_shell	shell;
+
 	(void)argv;
-	t_shell shell;
 	if (invalid_arg(argc) || init_shell(&shell, env))
 		free_and_exit_shell(NULL, EXIT_FAILURE);
 	minishell_loop(&shell);

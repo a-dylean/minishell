@@ -3,28 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   types.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:35:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/20 18:54:43 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:03:46 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	len_between_tokens(char *str, int i, char c)
-{
-	int	j;
-
-	j = i;
-	if (str[i] == c)
-	{
-		while (str[j] == c)
-			j++;
-		return (j - i);
-	}
-	return (0);
-}
 
 int	check_redir_type(char *str, int i, int count, char ch)
 {
@@ -73,4 +59,18 @@ int	get_type(char *str)
 		i++;
 	}
 	return (-1);
+}
+
+void	assign_type_redirections(t_token *tokens)
+{
+	while (tokens)
+	{
+		if ((tokens->type >= LESS && tokens->type <= GREATGREAT)
+			&& (tokens->next && tokens->next->type == WORD))
+			tokens->next->type = FILENAME;
+		else if (tokens->type == LESSLESS && (tokens->next
+				&& tokens->next->type == WORD))
+			tokens->next->type = DELIMITER;
+		tokens = tokens->next;
+	}
 }

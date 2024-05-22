@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/22 13:47:29 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:04:38 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,10 @@ int						valid_quotes(char *str);
 int						lexer(t_shell *shell);
 int						get_type(char *str);
 int						len_between_tokens(char *str, int i, char c);
+int						len_invalid_type(char *str);
 int						check_redir_type(char *str, int i, int count, char ch);
 void					assign_type_redirections(t_token *tokens);
+void					set_delimiter_quote_status(t_token *token);
 
 /* parser */
 int						parser(t_shell *shell);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 13:55:59 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/20 13:55:59 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 14:58:43 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ char	*get_env_var_value(char *str, t_env *env_list, char *name,
 		return ("");
 	return (NULL);
 }
+
 char	*get_env_from_str(char *str)
 {
 	int		i;
@@ -46,6 +47,7 @@ char	*get_env_from_str(char *str)
 		var_name[i] = str[i];
 	return (var_name);
 }
+
 char	*get_new_str_value(char *str, char *old_value, char *new_value,
 		int prev_index)
 {
@@ -74,6 +76,7 @@ char	*get_new_str_value(char *str, char *old_value, char *new_value,
 	}
 	return (new_str);
 }
+
 char	*get_value_after_expansion(char *str, t_shell *shell, int *i)
 {
 	char	*d_quoted;

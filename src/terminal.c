@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   terminal.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/17 14:28:05 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:01:05 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	valid_quotes(char *str)
 
 /* function that resets the readline user input prompt
 for interactive signal handling */
-
 void	catch_sigint(int signum)
 {
 	(void)signum;
@@ -53,7 +52,7 @@ int	minishell_loop(t_shell *shell)
 		signal(SIGQUIT, SIG_IGN);
 		shell->input = readline(PROMPT);
 		if (!shell->input)
-            free_and_exit_shell(shell, 1);
+			free_and_exit_shell(shell, 1);
 		if (lexer(shell) == EXIT_SUCCESS && parser(shell) == EXIT_SUCCESS)
 			g_exit_code = executer(shell);
 		else
