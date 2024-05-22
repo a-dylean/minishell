@@ -70,10 +70,7 @@ int	handle_parent(t_command *current, t_shell *shell, int prev_fd)
 		close(shell->pipe_fd[1]);
 		prev_fd = shell->pipe_fd[0];
 	}
-	if (shell->infile_fd >= 0)
-		close(shell->infile_fd);
-	if (shell->outfile_fd >= 0)
-		close(shell->outfile_fd);
+	close_fds(shell);
 	return (prev_fd);
 }
 

@@ -149,6 +149,8 @@ void					open_and_redirect_fd(t_command *current,
 							t_shell *shell);
 void					get_fd_out(t_token *redirections, t_shell *shell);
 void					get_fd_in(t_token *redirections, t_shell *shell);
+void					close_fds(t_shell *shell);
+void					duplicate_fd(int fd, int new_fd, t_shell *shell, int exit_status);
 
 /* heredoc */
 void					handle_heredoc(t_token *redirections, t_shell *shell);

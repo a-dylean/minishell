@@ -54,10 +54,7 @@ void	ft_exit(t_command *commands, t_shell *shell, bool pipe)
 {
 	if (commands->redirections)
 		get_fds(commands->redirections, shell);
-	if (shell->infile_fd >= 0)
-		close(shell->infile_fd);
-	if (shell->outfile_fd >= 0)
-		close(shell->outfile_fd);
+	close_fds(shell);
 	if (commands->cmd_name[1])
 	{
 		if (get_exit_status(commands, commands->cmd_name[1], shell, pipe) == 1)

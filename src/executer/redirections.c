@@ -12,6 +12,22 @@
 
 #include "../includes/minishell.h"
 
+void	close_fds(t_shell *shell)
+{
+	if (shell->infile_fd >= 0)
+		close(shell->infile_fd);
+	if (shell->outfile_fd >= 0)
+		close(shell->outfile_fd);
+}
+
+void	close_pipe_fds(t_shell *shell)
+{
+	if (shell->pipe_fd[0] != -2)
+		close(shell->pipe_fd[0]);
+	if (shell->pipe_fd[1] != -2)
+		close(shell->pipe_fd[1]);
+}
+
 void	get_fds(t_token *redirections, t_shell *shell)
 {
 	if (redirections->type == GREAT || redirections->type == GREATGREAT)
@@ -31,22 +47,12 @@ void	open_and_redirect_fd(t_command *current, t_shell *shell)
 	get_fds(current->redirections, shell);
 	if (shell->infile_fd != -2)
 	{
-		if (dup2(shell->infile_fd, STDIN_FILENO) == -1)
-		{
-			perror("dup2");
-			shell->exit_status = 1;
-			free_and_exit_shell(shell, shell->exit_status);
-		}
+		duplicate_fd(shell->infile_fd, STDIN_FILENO, shell, 1);
 		close(shell->infile_fd);
 	}
 	if (shell->outfile_fd != -2)
 	{
-		if (dup2(shell->outfile_fd, STDOUT_FILENO) == -1)
-		{
-			perror("dup2");
-			shell->exit_status = 1;
-			free_and_exit_shell(shell, shell->exit_status);
-		}
+		duplicate_fd(shell->outfile_fd, STDOUT_FILENO, shell, 1);
 		close(shell->outfile_fd);
 	}
 	if (shell->heredoc && !current->next)
@@ -58,25 +64,10 @@ void	has_no_filename(t_command *current, t_shell *shell, int prev_fd)
 {
 	if (prev_fd != 0 && shell->infile_fd == -2)
 	{
-		if (dup2(prev_fd, STDIN_FILENO) == -1)
-		{
-			perror("dup2");
-			shell->exit_status = 1;
-			free_and_exit_shell(shell, shell->exit_status);
-		}
+		duplicate_fd(prev_fd, STDIN_FILENO, shell, 1);
 		close(prev_fd);
 	}
 	if (current->next && shell->outfile_fd == -2)
-	{
-		if (dup2(shell->pipe_fd[1], STDOUT_FILENO) == -1)
-		{
-			perror("dup2");
-			shell->exit_status = 1;
-			free_and_exit_shell(shell, shell->exit_status);
-		}
-	}
-	if (shell->pipe_fd[0] != -2)
-		close(shell->pipe_fd[0]);
-	if (shell->pipe_fd[1] != -2)
-		close(shell->pipe_fd[1]);
+		duplicate_fd(shell->pipe_fd[1], STDOUT_FILENO, shell, 1);
+	close_pipe_fds(shell);
 }
