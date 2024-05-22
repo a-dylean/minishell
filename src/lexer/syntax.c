@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:16:29 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 14:30:05 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 17:00:38 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int	check_syntax(t_token *tokens, t_shell *shell)
 	{
 		if (tmp->type == -1)
 			return (invalid_type_syntax_error(tmp, shell));
-		if (tmp->type == PIPE && (!tmp->prev || !tmp->next))
+		if (tmp->type == PIPE && (!tmp->prev || !tmp->next
+				|| tmp->prev->value[0] == '|' || tmp->next->value[0] == '|'))
 			return (invalid_type_syntax_error(tmp, shell));
 		if (tmp->type >= LESS && tmp->type <= LESSLESS)
 		{
