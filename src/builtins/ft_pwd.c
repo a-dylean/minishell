@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:10:39 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/16 14:00:26 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:12:29 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_pwd(t_command *commands)
 	if (commands->cmd_name[1] && commands->cmd_name[1][0]
 			&& commands->cmd_name[1][0] == '-')
 	{
-		write_error(commands->cmd_name[1], "invalid option");
+		write_error(commands->cmd_name[1], "invalid option", NULL);
 		return (2);
 	}
 	if (getcwd(cwd, sizeof(cwd)) == NULL)

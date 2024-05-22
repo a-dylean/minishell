@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 15:21:38 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 15:21:55 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:11:52 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ void					free_commands(t_command **commands);
 char					**init_array(int size);
 void					free_array(char **arr);
 int						str_is_empty_or_space_only(char *str);
-void					write_error(char *cmd, char *error);
+void					write_error(char *cmd, char *error, char *arg);
 char					*remove_char(char *str, char c);
 
 /* signals */

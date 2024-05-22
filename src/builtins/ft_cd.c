@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:44:36 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/17 16:22:06 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:12:19 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ int	cd_minus(t_shell *shell, int option)
 	old_dir = ft_getenv(shell->env_list, "PWD");
 	if (!curr_dir)
 	{
-		write_error("cd", "OLDPWD not set");
+		write_error("cd", "OLDPWD not set", NULL);
 		return (free_and_return(curr_dir, old_dir, 1));
 	}
 	else if (!old_dir)
 	{
-		write_error("cd", "PWD not set");
+		write_error("cd", "PWD not set", NULL);
 		return (free_and_return(curr_dir, old_dir, 1));
 	}
 	if (curr_dir && chdir(curr_dir) == -1)
@@ -82,7 +82,7 @@ int	ft_cd(t_command *commands, t_shell *shell)
 
 	if (commands->cmd_name[0] && commands->cmd_name[1] && commands->cmd_name[2])
 	{
-		write_error("cd", "too many arguments");
+		write_error("cd", "too many arguments", NULL);
 		return (1);
 	}
 	if (!commands->cmd_name[1])
@@ -90,7 +90,7 @@ int	ft_cd(t_command *commands, t_shell *shell)
 		value = ft_getenv(shell->env_list, "HOME");
 		if (!value)
 		{
-			write_error("cd", "HOME not set");
+			write_error("cd", "HOME not set", NULL);
 			return (1);
 		}
 		if (chdir(value) == -1)

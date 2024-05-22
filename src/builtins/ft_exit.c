@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:43:34 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 14:21:44 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:12:24 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	get_exit_status(t_command *commands, char *arg,
 	{
 		if (pipe == false)
 			ft_putstr_fd("exit\n", STDOUT_FILENO);
-		write_error("exit", "too many arguments");
+		write_error("exit", "too many arguments", NULL);
 		shell->exit_status = 1;
 		return (1);
 	}

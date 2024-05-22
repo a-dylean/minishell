@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 17:05:44 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/22 15:46:32 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:12:01 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	g_exit_code;
 int	invalid_arg(int argc)
 {
 	if (argc != 1)
-		return (write_error(NULL, "minishell doesn't take any arguments"),
+		return (write_error(NULL, "minishell doesn't take any arguments", NULL),
 			EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

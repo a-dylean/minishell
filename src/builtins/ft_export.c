@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 13:38:03 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/20 18:01:18 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:14:16 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ int	valid_for_export(char *str)
 	char	**split;
 
 	if (ft_strlen(str) == 0)
-		return (err_msg_with_arg("export", str, "not a valid identifier"), -1);
+		return (write_error(str, "export", "not a valid identifier"), -1);
 	if (!ft_strchr(str, '=') || str[0] == '=')
 	{
 		if (!is_valid_identifier(str))
-			return (err_msg_with_arg("export", str, "not a valid identifier"),
+			return (write_error(str, "export", "not a valid identifier"),
 				1);
 		return (-1);
 	}
@@ -61,9 +61,9 @@ int	valid_for_export(char *str)
 	if (ft_strcmp(str, "=") == 0 || !is_valid_identifier(split[0]))
 	{
 		if (split[0][0] == '-')
-			return (err_msg_with_arg("export", split[0], "invalid option"),
+			return (write_error(split[0], "export", "invalid option"),
 				free_array(split), 2);
-		return (err_msg_with_arg("export", str, "not a valid identifier"),
+		return (write_error(str, "export", "not a valid identifier"),
 			free_array(split), 1);
 	}
 	if (!split[1])

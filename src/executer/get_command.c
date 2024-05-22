@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:04:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 13:47:11 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:14:51 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	handle_error(char *cmd, char *error,
 				int exit_status, t_shell *shell)
 {
-	write_error(cmd, error);
+	write_error(cmd, error, NULL);
 	shell->exit_status = exit_status;
 	free_and_exit_shell(shell, shell->exit_status);
 }
