@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/16 14:02:46 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:42:26 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,16 @@ int	check_if_other_heredoc(t_token *current)
 	return (0);
 }
 
-void	write_line_to_heredoc(int fd, t_token *tmp,
-			t_shell *shell, t_token *redirections)
+void	write_line_to_heredoc(int fd, char *tmp,
+			t_shell *shell, int quotes_status)
 {
-	if (redirections->next->quotes_status == 0)
-		tmp->value = expander(tmp->value, shell);
-	if (tmp->value)
-		write(fd, tmp->value, ft_strlen(tmp->value));
+	if (quotes_status == 0)
+		tmp = expander(tmp, shell);
+	if (tmp)
+		write(fd, tmp, ft_strlen(tmp));
 	write(fd, "\n", 1);
-	if (tmp->value)
-		free(tmp->value);
+	if (tmp)
+		free(tmp);
 }
 
 void	free_line(char *line, t_token *tmp)
@@ -58,8 +58,6 @@ void	pipe_and_fork(t_command *current, t_shell *shell)
 			exit(EXIT_FAILURE);
 		}
 	}
-	if (current->redirections)
-		handle_heredoc(current->redirections, shell);
 	shell->last_pid = fork();
 	if (shell->last_pid == -1)
 	{

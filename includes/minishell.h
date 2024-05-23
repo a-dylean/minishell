@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 15:21:38 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 17:11:09 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:20:43 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,11 +149,11 @@ void					duplicate_fd(int fd, int new_fd, t_shell *shell,
 							int exit_status);
 
 /* heredoc */
-void					handle_heredoc(t_token *redirections, t_shell *shell);
+int					handle_heredoc(char *delimiter, t_shell *shell, int quote_status, int option);
 void					unlink_heredoc(t_shell *shell);
 void					free_line(char *line, t_token *tmp);
-void					write_line_to_heredoc(int fd, t_token *tmp,
-							t_shell *shell, t_token *redirections);
+void					write_line_to_heredoc(int fd, char *tmp,
+							t_shell *shell, int quotes_status);
 int						check_if_other_heredoc(t_token *current);
 
 /* builtins */
@@ -177,6 +177,7 @@ void					free_tokens(t_token **tokens);
 
 /* errors */
 int						check_syntax(t_token *tokens, t_shell *shell);
+int						invalid_type_syntax_error(t_token *token, t_shell *shell);
 int						syntax_error_eof(void);
 int						syntax_error_in_token(char *token, t_shell *shell);
 

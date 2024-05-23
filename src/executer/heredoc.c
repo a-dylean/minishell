@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/16 17:47:35 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:42:58 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,12 @@ void	create_filename(t_shell *shell)
 	shell->heredoc = temp_file;
 }
 
-void	create_heredoc(t_token *redirections, t_shell *shell)
+void	create_heredoc(char *delimiter, t_shell *shell, int quote_status)
 {
 	int		fd;
 	char	*line;
-	t_token	tmp;
+	char	*tmp;
 
-	ft_memset(&tmp, 0, sizeof(t_token));
 	fd = open(shell->heredoc, O_RDWR | O_CREAT, 0666);
 	if (fd == -1)
 	{
@@ -63,10 +62,10 @@ void	create_heredoc(t_token *redirections, t_shell *shell)
 	line = readline("> ");
 	while (line != NULL)
 	{
-		if (ft_strcmp(line, redirections->next->value) == 0)
+		if (ft_strcmp(line, delimiter) == 0)
 			break ;
-		tmp.value = line;
-		write_line_to_heredoc(fd, &tmp, shell, redirections);
+		tmp = line;
+		write_line_to_heredoc(fd, tmp, shell, quote_status);
 		line = readline("> ");
 	}
 	if (line)
@@ -74,22 +73,43 @@ void	create_heredoc(t_token *redirections, t_shell *shell)
 	close(fd);
 }
 
-void	handle_heredoc(t_token *redirections, t_shell *shell)
+int	case_heredoc_syntax(t_token *tokens, t_shell *shell)
 {
-	t_token	*current;
+	t_token	*tmp;
 
-	current = redirections;
-	while (current)
+	tmp = tokens;
+	while (tmp)
 	{
-		if (current->type == LESSLESS)
+		if (tmp->type == -1)
+			return (invalid_type_syntax_error(tmp, shell));
+		else if (tmp->type == PIPE && (!tmp->prev || !tmp->next
+				|| tmp->prev->value[0] == '|' || tmp->next->value[0] == '|'))
+			return (invalid_type_syntax_error(tmp, shell));
+		else if (tmp->type >= LESS && tmp->type <= LESSLESS)
 		{
-			if (shell->heredoc)
-				free(shell->heredoc);
-			create_filename(shell);
-			create_heredoc(current, shell);
-			if (!shell->heredoc)
-				return ;
+			if (!tmp->next)
+				return (syntax_error_in_token("newline", shell));
+			else if (tmp->next->type != FILENAME
+				&& tmp->next->type != DELIMITER)
+				return (syntax_error_in_token(tmp->next->value, shell));
 		}
-		current = current->next;
+		tmp = tmp->next;
 	}
+	return (0);
+}
+
+int	handle_heredoc(char *delimiter, t_shell *shell, int quote_status, int option)
+{
+	int	ret;
+
+	ret = 0;
+	if (option == 0)
+		ret = case_heredoc_syntax(shell->tokens, shell);
+	if (shell->heredoc)
+		free(shell->heredoc);
+	create_filename(shell);
+	create_heredoc(delimiter, shell, quote_status);
+	if (!shell->heredoc)
+		return (1);
+	return (ret);
 }
