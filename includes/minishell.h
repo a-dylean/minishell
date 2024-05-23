@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 15:21:38 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/23 13:20:43 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/23 15:34:34 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ void					duplicate_fd(int fd, int new_fd, t_shell *shell,
 							int exit_status);
 
 /* heredoc */
-int					handle_heredoc(char *delimiter, t_shell *shell, int quote_status, int option);
+int						handle_heredoc(t_token *tmp, t_shell *shell, int option);
 void					unlink_heredoc(t_shell *shell);
 void					free_line(char *line, t_token *tmp);
 void					write_line_to_heredoc(int fd, char *tmp,
@@ -195,8 +195,4 @@ char					*remove_char(char *str, char c);
 /* signals */
 void					catch_sigint(int signum);
 
-/* tests */
-void					print_commands(t_command *commands);
-void					test_list(t_token *tokens);
-void					print_commands_reverse(t_command *commands);
 #endif

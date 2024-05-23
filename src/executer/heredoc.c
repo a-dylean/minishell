@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/23 13:42:58 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/23 15:34:13 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	case_heredoc_syntax(t_token *tokens, t_shell *shell)
 	return (0);
 }
 
-int	handle_heredoc(char *delimiter, t_shell *shell, int quote_status, int option)
+int	handle_heredoc(t_token *tmp, t_shell *shell, int option)
 {
 	int	ret;
 
@@ -108,7 +108,7 @@ int	handle_heredoc(char *delimiter, t_shell *shell, int quote_status, int option
 	if (shell->heredoc)
 		free(shell->heredoc);
 	create_filename(shell);
-	create_heredoc(delimiter, shell, quote_status);
+	create_heredoc(tmp->value, shell, tmp->quotes_status);
 	if (!shell->heredoc)
 		return (1);
 	return (ret);

@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:16:29 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/23 13:46:02 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/23 15:34:54 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int	check_syntax(t_token *tokens, t_shell *shell)
 		if (tmp->type == DELIMITER)
 		{
 			if (heredoc == 0)
-				ret = handle_heredoc(tmp->value, shell, tmp->quotes_status, heredoc);
+				ret = handle_heredoc(tmp, shell, heredoc);
 			else
-				handle_heredoc(tmp->value, shell, tmp->quotes_status, heredoc);
+				handle_heredoc(tmp, shell, heredoc);
 			heredoc++;
 		}
 		if (heredoc == 0)
