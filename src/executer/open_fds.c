@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:46:13 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 14:12:25 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/23 16:34:34 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	get_file_as_fd_in(t_token *redirections, t_shell *shell)
 
 void	get_fd_in(t_token *redirections, t_shell *shell)
 {
-	if (shell->heredoc)
+	if (shell->heredoc && redirections->type == LESSLESS)
 	{
 		if (shell->infile_fd != -2)
 			close(shell->infile_fd);
