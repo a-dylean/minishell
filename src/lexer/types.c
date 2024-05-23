@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 12:35:58 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/23 15:46:48 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/23 16:26:42 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	check_redir_type(char *str, int i, int count, char ch)
 	return (-1);
 }
 
-int check_pipe_type(char *str, int i, int count)
+int	check_pipe_type(char *str, int i, int count)
 {
 	count = i;
 	while (str[count] == '|')
