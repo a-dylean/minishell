@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 15:21:38 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 16:11:52 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 17:11:09 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,24 +73,17 @@ typedef struct s_env
 typedef struct s_shell
 {
 	char				*input;
-	int					interactive;
 	t_token				*tokens;
 	t_command			*commands;
-	int					envless;
 	int					infile_fd;
 	int					outfile_fd;
-	int					prev_fd;
 	pid_t				last_pid;
 	int					pipe_fd[2];
 	int					wstatus;
 	char				*cmd_path;
 	char				**env;
-	char				*prompt;
 	char				*heredoc;
 	int					exit_status;
-	char				*prev_dir;
-	char				*cur_dir;
-	char				*user_name;
 	t_env				*env_list;
 }						t_shell;
 
@@ -106,9 +99,7 @@ void					set_delimiter_quote_status(t_token *token);
 
 /* parser */
 int						parser(t_shell *shell);
-int						count_tokens_before_pipe(t_token *tokens);
 int						count_not_null_tokens(t_token *tokens);
-int						no_pipe_in_list(t_token *tokens);
 void					handle_redirections(t_token *tokens,
 							t_command *command);
 
@@ -137,8 +128,6 @@ void					ft_setenv(t_env *env_head, char *name, char *value);
 /* executer */
 int						init_shell(t_shell *shell, char **env);
 int						minishell_loop(t_shell *shell);
-int						non_interactive_behaviour(t_shell *shell,
-							char *command);
 int						executer(t_shell *shell);
 char					*get_cmd_path(char *cmd, t_shell *shell);
 void					wait_commands(t_shell *shell);
@@ -188,9 +177,7 @@ void					free_tokens(t_token **tokens);
 
 /* errors */
 int						check_syntax(t_token *tokens, t_shell *shell);
-int						undefined_behavior_error(char *str);
 int						syntax_error_eof(void);
-void					err_msg_with_arg(char *cmd, char *arg, char *error);
 int						syntax_error_in_token(char *token, t_shell *shell);
 
 /* utils */

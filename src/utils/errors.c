@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:19:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 16:20:32 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 17:10:57 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@ int	syntax_error_eof(void)
 {
 	ft_putstr_fd("minishell: syntax error: unexpected end of file\n",
 		STDERR_FILENO);
-	return (1);
-}
-
-int	undefined_behavior_error(char *str)
-{
-	ft_putstr_fd("minishell: undefined behavior caused by ", STDERR_FILENO);
-	ft_putstr_fd(str, STDERR_FILENO);
-	ft_putstr_fd("\n", STDERR_FILENO);
 	return (1);
 }
 

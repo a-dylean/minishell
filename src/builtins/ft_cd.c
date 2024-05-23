@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:44:36 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 16:12:19 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/22 17:07:14 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int	free_and_return(char *curr_dir, char *old_dir, int ret)
 	return (ret);
 }
 
-int	handle_chdir_error(t_shell *shell, char *curr_dir, char *old_dir)
+int	handle_chdir_error(char *curr_dir, char *old_dir)
 {
 	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
-	perror(shell->prev_dir);
+	perror(old_dir);
 	return (free_and_return(curr_dir, old_dir, 1));
 }
 
@@ -46,7 +46,7 @@ int	cd_minus(t_shell *shell, int option)
 		return (free_and_return(curr_dir, old_dir, 1));
 	}
 	if (curr_dir && chdir(curr_dir) == -1)
-		return (handle_chdir_error(shell, curr_dir, old_dir));
+		return (handle_chdir_error(curr_dir, old_dir));
 	if (option == 1)
 	{
 		ft_putstr_fd(curr_dir, STDOUT_FILENO);
