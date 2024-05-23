@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:43:00 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 17:37:29 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/23 15:30:05 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,5 @@ int	minishell_loop(t_shell *shell)
 			g_exit_code = 1;
 		free_shell(shell);
 	}
-	rl_clear_history();
 	return (EXIT_SUCCESS);
 }
