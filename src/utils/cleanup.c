@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 18:52:49 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/23 15:31:05 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/24 11:10:05 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	free_and_exit_shell(t_shell *shell, int exit_code)
 		if (shell->env_list)
 			free_env((shell->env_list));
 	}
-	exit(exit_code);
 	rl_clear_history();
+	exit(exit_code);
 }
 
 void	free_shell(t_shell *shell)

@@ -6,11 +6,27 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:44:36 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 17:07:14 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/24 11:03:27 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	update_pwd(t_shell *shell)
+{
+	char	cwd[4096];
+	char	*old_dir;
+
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+	{
+		perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
+		return ;
+	}
+	old_dir = ft_getenv(shell->env_list, "PWD");
+	ft_setenv(shell->env_list, "OLDPWD", old_dir);
+	free(old_dir);
+	ft_setenv(shell->env_list, "PWD", cwd);
+}
 
 int	free_and_return(char *curr_dir, char *old_dir, int ret)
 {
@@ -72,6 +88,12 @@ int	check_for_arguments(t_command *commands, t_shell *shell)
 			perror(commands->cmd_name[1]);
 			return (1);
 		}
+		update_pwd(shell);
+		// if (getcwd(cwd, sizeof(cwd)) == NULL)
+		// {
+		// 	perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
+		// 	return (1);
+		// }
 	}
 	return (0);
 }
@@ -95,11 +117,11 @@ int	ft_cd(t_command *commands, t_shell *shell)
 		}
 		if (chdir(value) == -1)
 		{
-			ft_putstr_fd("minishell: cd :", STDERR_FILENO);
-			perror("");
+			perror("minishell: cd:");
 			free(value);
 			return (1);
 		}
+		update_pwd(shell);
 		free(value);
 	}
 	return (check_for_arguments(commands, shell));
