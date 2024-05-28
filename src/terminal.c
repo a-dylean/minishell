@@ -36,12 +36,14 @@ int	valid_quotes(char *str)
 for interactive signal handling */
 void	catch_sigint(int signum)
 {
-	(void)signum;
-	g_exit_code = signum;
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	if (signum == SIGINT)
+	{
+		g_exit_code = signum;
+		ft_putstr_fd("\n", STDOUT_FILENO);
+		rl_replace_line("", STDIN_FILENO);
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
 
 int	minishell_loop(t_shell *shell)

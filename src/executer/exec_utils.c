@@ -80,6 +80,8 @@ void	wait_commands(t_shell *shell)
 				shell->exit_status = 128 + WTERMSIG(shell->wstatus);
 				if (shell->exit_status == 131)
 					ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+				else if (shell->exit_status == 139)
+					ft_putstr_fd("Segmentation fault (core dumped)\n", STDERR_FILENO);
 			}
 		}
 	}
