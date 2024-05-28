@@ -53,6 +53,11 @@ int	minishell_loop(t_shell *shell)
 		shell->input = readline(PROMPT);
 		if (!shell->input)
 			free_and_exit_shell(shell, 1);
+		if (g_exit_code == 2)
+		{
+			shell->exit_status = 130;
+			g_exit_code = 0;
+		}
 		if (lexer(shell) == EXIT_SUCCESS && parser(shell) == EXIT_SUCCESS)
 			g_exit_code = executer(shell);
 		else
