@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/23 13:42:26 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/24 13:15:48 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,11 @@ void	wait_commands(t_shell *shell)
 			if (WIFEXITED(shell->wstatus))
 				shell->exit_status = WEXITSTATUS(shell->wstatus);
 			else
+			{
 				shell->exit_status = 128 + WTERMSIG(shell->wstatus);
+				if (shell->exit_status == 131)
+					ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+			}
 		}
 	}
 	signal(SIGINT, catch_sigint);
