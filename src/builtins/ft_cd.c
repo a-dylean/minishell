@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:44:36 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/24 11:03:27 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/29 09:42:59 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,6 @@ int	check_for_arguments(t_command *commands, t_shell *shell)
 			return (1);
 		}
 		update_pwd(shell);
-		// if (getcwd(cwd, sizeof(cwd)) == NULL)
-		// {
-		// 	perror("cd: error retrieving current directory: getcwd: cannot access parent directories");
-		// 	return (1);
-		// }
 	}
 	return (0);
 }
