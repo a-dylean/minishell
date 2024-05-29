@@ -47,31 +47,48 @@ void	create_filename(t_shell *shell)
 	shell->heredoc = temp_file;
 }
 
-void	create_heredoc(char *delimiter, t_shell *shell, int quote_status)
+void	heredoc_sig(int code)
+{
+	(void)code;
+	g_exit_code = 130;
+	printf("\n");
+	close(STDIN_FILENO);
+}
+
+int	create_heredoc(char *delimiter, t_shell *shell, int quote_status)
 {
 	int		fd;
 	char	*line;
 	char	*tmp;
 
-	fd = open(shell->heredoc, O_RDWR | O_CREAT, 0666);
+	// fd = open(shell->heredoc, O_RDWR | O_CREAT, 0666);
+	fd = dup(STDIN_FILENO);
 	if (fd == -1)
-		return (perror("open"));
-	line = readline("> ");
-	if (line == NULL)
-		write_warning(delimiter);
-	while (line != NULL)
+		return (perror("open"), 0);
+	signal(SIGINT, &heredoc_sig);
+	while (1)
 	{
+		line = readline("> ");
+		if (!line || g_exit_code == 130)
+		{
+			write_warning(delimiter);
+			free(line);
+			return (close(fd), 0);
+		}
 		if (ft_strcmp(line, delimiter) == 0)
-			break ;
+		{
+			free(line);
+			return (close(fd), 0);
+		}
 		tmp = line;
 		write_line_to_heredoc(fd, tmp, shell, quote_status);
 		line = readline("> ");
 		if (line == NULL)
 			write_warning(delimiter);
 	}
-	if (line)
-		free(line);
-	close(fd);
+	// if (line)
+	// 	free(line);
+	// close(fd);
 }
 
 int	case_heredoc_syntax(t_token *tokens, t_shell *shell)
