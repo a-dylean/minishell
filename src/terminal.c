@@ -46,12 +46,18 @@ void	catch_sigint(int signum)
 	}
 }
 
+void	ignore_signals(void)
+{
+	signal(SIGTERM, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, catch_sigint);
+}
+
 int	minishell_loop(t_shell *shell)
 {
 	while (1)
 	{
-		signal(SIGINT, catch_sigint);
-		signal(SIGQUIT, SIG_IGN);
+		ignore_signals();
 		shell->input = readline(PROMPT);
 		if (!shell->input)
 		{
