@@ -23,9 +23,9 @@ void	unlink_heredoc(t_shell *shell)
 
 void	create_filename(t_shell *shell)
 {
-	char		*temp_file;
-	int			fd;
-	char		*temp_num;
+	char	*temp_file;
+	int		fd;
+	char	*temp_num;
 
 	temp_num = ft_itoa(getpid() + 1);
 	temp_file = ft_strjoin("/tmp/minishell_heredoc_", temp_num);
@@ -67,6 +67,8 @@ void	create_heredoc(char *delimiter, t_shell *shell, int quote_status)
 		tmp = line;
 		write_line_to_heredoc(fd, tmp, shell, quote_status);
 		line = readline("> ");
+		if (line == NULL)
+			write_warning(delimiter);
 	}
 	if (line)
 		free(line);

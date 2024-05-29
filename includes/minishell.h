@@ -133,8 +133,8 @@ char					*get_cmd_path(char *cmd, t_shell *shell);
 void					wait_commands(t_shell *shell);
 void					pipe_and_fork(t_command *current, t_shell *shell);
 void					close_pipe_fds(t_shell *shell);
-void					handle_error(char *cmd, char *error,
-							int exit_status, t_shell *shell);
+void					handle_error(char *cmd, char *error, int exit_status,
+							t_shell *shell);
 
 /* redirections */
 void					get_fds(t_token *redirections, t_shell *shell);
@@ -149,12 +149,12 @@ void					duplicate_fd(int fd, int new_fd, t_shell *shell,
 							int exit_status);
 
 /* heredoc */
-int						handle_heredoc(t_token *tmp,
-							t_shell *shell, int option);
+int						handle_heredoc(t_token *tmp, t_shell *shell,
+							int option);
 void					unlink_heredoc(t_shell *shell);
 void					free_line(char *line, t_token *tmp);
-void					write_line_to_heredoc(int fd, char *tmp,
-							t_shell *shell, int quotes_status);
+void					write_line_to_heredoc(int fd, char *tmp, t_shell *shell,
+							int quotes_status);
 int						check_if_other_heredoc(t_token *current);
 
 /* builtins */
@@ -182,6 +182,7 @@ int						invalid_type_syntax_error(t_token *token,
 							t_shell *shell);
 int						syntax_error_eof(void);
 int						syntax_error_in_token(char *token, t_shell *shell);
+void					write_warning(char *arg);
 
 /* utils */
 void					free_and_exit_shell(t_shell *shell, int exit_code);

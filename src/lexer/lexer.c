@@ -88,11 +88,11 @@ int	lexer(t_shell *shell)
 		exit(EXIT_FAILURE);
 	else if (ft_strcmp(shell->input, "\0") == 0)
 		return (EXIT_FAILURE);
-	else if (!valid_quotes(shell->input))
-		return (printf("Error: invalid quotes\n"), EXIT_FAILURE);
 	else if (str_is_empty_or_space_only(shell->input))
 		return (EXIT_SUCCESS);
-	add_history(shell->input);
+	add_history(shell->input);		
+	if (!valid_quotes(shell->input))
+		return (printf("Error: invalid quotes\n"), EXIT_FAILURE);
 	expanded_input = expander(shell->input, shell);
 	if (!expanded_input)
 		return (EXIT_SUCCESS);

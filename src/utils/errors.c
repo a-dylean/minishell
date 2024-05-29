@@ -46,3 +46,11 @@ void	write_error(char *cmd, char *error, char *arg)
 	ft_putstr_fd(error, STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
+void	write_warning(char *arg)
+{
+	ft_putstr_fd("minishell: warning: ", STDERR_FILENO);
+	ft_putstr_fd("here-document delimited by end-of-file (wanted `",
+		STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd("\')\n", STDERR_FILENO);
+}
