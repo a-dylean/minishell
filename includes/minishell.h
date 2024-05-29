@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 15:21:38 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/23 16:27:12 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/29 13:55:38 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,8 @@ int						ft_env(t_shell *shell);
 int						ft_export(char **cmd, t_shell *shell);
 int						ft_unset(char **cmd, t_shell *shell);
 int						is_valid_identifier(char *str);
+int						free_and_return(char *curr_dir, char *old_dir, int ret);
+int						handle_chdir_error(char *curr_dir, char *old_dir);
 
 /* linked lists*/
 t_command				*init_command(void);

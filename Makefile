@@ -8,7 +8,7 @@ INCLUDES = -I includes -I libft
 
 SRC = 	src/main.c src/terminal.c src/init.c\
 		src/builtins/ft_pwd.c src/builtins/ft_cd.c src/builtins/ft_echo.c src/builtins/ft_exit.c src/builtins/ft_env.c\
-		src/builtins/ft_export.c src/builtins/ft_unset.c\
+		src/builtins/ft_export.c src/builtins/ft_unset.c src/builtins/utils.c\
         src/utils/array.c src/utils/linked_lists.c src/utils/string.c src/utils/cleanup.c src/utils/errors.c\
         src/executer/executer.c src/executer/redirections.c src/executer/exec_utils.c src/executer/heredoc.c src/executer/open_fds.c\
         src/executer/get_command.c src/executer/redirections_utils.c\

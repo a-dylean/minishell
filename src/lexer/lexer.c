@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:58:21 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/23 16:30:01 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/29 13:56:18 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	lexer(t_shell *shell)
 		return (EXIT_FAILURE);
 	else if (str_is_empty_or_space_only(shell->input))
 		return (EXIT_SUCCESS);
-	add_history(shell->input);		
+	add_history(shell->input);
 	if (!valid_quotes(shell->input))
 		return (printf("Error: invalid quotes\n"), EXIT_FAILURE);
 	expanded_input = expander(shell->input, shell);

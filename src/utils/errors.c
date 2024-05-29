@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:19:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 17:10:57 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/29 13:56:36 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	write_error(char *cmd, char *error, char *arg)
 	ft_putstr_fd(error, STDERR_FILENO);
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
+
 void	write_warning(char *arg)
 {
 	ft_putstr_fd("minishell: warning: ", STDERR_FILENO);

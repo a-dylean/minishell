@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:10:39 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/24 10:43:37 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/29 13:45:49 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	ft_pwd(t_command *commands)
 	}
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 	{
-		perror("pwd: error retrieving current directory: getcwd: cannot access parent directories");
+		ft_putstr_fd("pwd: error retrieving ", STDERR_FILENO);
+		perror("current directory: getcwd: cannot access parent directories");
 		return (1);
 	}
 	ft_putstr_fd(cwd, STDOUT_FILENO);
