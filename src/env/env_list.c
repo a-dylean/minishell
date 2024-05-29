@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 15:38:36 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/22 15:44:13 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/29 13:40:23 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*value_mem_alloc(char *str, size_t var_name_len)
 	{
 		value = malloc(2);
 		if (!value)
-			exit(EXIT_FAILURE);
+			return (NULL);
 		value[0] = ' ';
 		value[1] = '\0';
 	}
@@ -32,8 +32,7 @@ char	*value_mem_alloc(char *str, size_t var_name_len)
 	{
 		value = malloc(full_str_len - var_name_len);
 		if (!value)
-		//exit properly
-			exit(EXIT_FAILURE);
+			return (NULL);
 	}
 	return (value);
 }

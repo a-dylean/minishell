@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/23 15:44:34 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/29 13:39:09 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,10 @@ void	create_heredoc(char *delimiter, t_shell *shell, int quote_status)
 
 	fd = open(shell->heredoc, O_RDWR | O_CREAT, 0666);
 	if (fd == -1)
-	{
-		perror("open");
-		return ;
-	}
+		return (perror("open"));
 	line = readline("> ");
+	if (line == NULL)
+		write_warning(delimiter);
 	while (line != NULL)
 	{
 		if (ft_strcmp(line, delimiter) == 0)
