@@ -18,7 +18,7 @@ int	syntax_error_in_token(char *token, t_shell *shell)
 		STDERR_FILENO);
 	ft_putstr_fd(token, 2);
 	ft_putstr_fd("'\n", 2);
-	shell->exit_status = 1;
+	shell->exit_status = 2;
 	return (1);
 }
 

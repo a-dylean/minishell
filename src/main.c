@@ -30,8 +30,6 @@ int	main(int argc, char **argv, char **env)
 	if (invalid_arg(argc) || init_shell(&shell, env))
 		free_and_exit_shell(NULL, EXIT_FAILURE);
 	minishell_loop(&shell);
-	if (isatty(STDIN_FILENO))
-		write(2, "exit\n", 6);
-	free_and_exit_shell(&shell, g_exit_code);
+	free_and_exit_shell(&shell, shell.exit_status);
 	return (0);
 }

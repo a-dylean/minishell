@@ -26,8 +26,8 @@ int	check_if_other_heredoc(t_token *current)
 	return (0);
 }
 
-void	write_line_to_heredoc(int fd, char *tmp,
-			t_shell *shell, int quotes_status)
+void	write_line_to_heredoc(int fd, char *tmp, t_shell *shell,
+		int quotes_status)
 {
 	if (quotes_status == 0)
 		tmp = expander(tmp, shell);
@@ -81,9 +81,11 @@ void	wait_commands(t_shell *shell)
 				if (shell->exit_status == 131)
 					ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 				else if (shell->exit_status == 139)
-					ft_putstr_fd("Segmentation fault (core dumped)\n", STDERR_FILENO);
+					ft_putstr_fd("Segmentation fault (core dumped)\n",
+						STDERR_FILENO);
 			}
+			if (shell->exit_status == 130)
+				ft_putstr_fd("\n", STDERR_FILENO);
 		}
 	}
-	signal(SIGINT, catch_sigint);
 }

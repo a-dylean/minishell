@@ -38,7 +38,7 @@ void	catch_sigint(int signum)
 {
 	if (signum == SIGINT)
 	{
-		g_exit_code = signum;
+		g_exit_code = 130;
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		rl_replace_line("", STDIN_FILENO);
 		rl_on_new_line();
@@ -54,8 +54,12 @@ int	minishell_loop(t_shell *shell)
 		signal(SIGQUIT, SIG_IGN);
 		shell->input = readline(PROMPT);
 		if (!shell->input)
-			free_and_exit_shell(shell, 1);
-		if (g_exit_code == 2)
+		{
+			if (isatty(STDIN_FILENO))
+				write(2, "exit\n", 6);
+			free_and_exit_shell(shell, shell->exit_status);
+		}
+		if (g_exit_code == 130)
 		{
 			shell->exit_status = 130;
 			g_exit_code = 0;
