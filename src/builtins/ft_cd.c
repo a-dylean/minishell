@@ -65,7 +65,7 @@ int	check_for_arguments(t_command *commands, t_shell *shell)
 		if (commands->cmd_name[1][0] == '-' && !commands->cmd_name[1][1])
 			return (cd_minus(shell, 1));
 		else if (commands->cmd_name[1][0] == '-'
-				&& commands->cmd_name[1][1] == '-' && !commands->cmd_name[1][2])
+			&& commands->cmd_name[1][1] == '-' && !commands->cmd_name[1][2])
 			return (cd_minus(shell, 0));
 		else if (chdir(commands->cmd_name[1]) == -1)
 		{
@@ -91,16 +91,14 @@ int	ft_cd(t_command *commands, t_shell *shell)
 	{
 		value = ft_getenv(shell->env_list, "HOME");
 		if (!value)
+			return (write_error("cd", "HOME not set", NULL), free(value), 1);
+		if (ft_strlen(value) == 0)
 		{
-			write_error("cd", "HOME not set", NULL);
-			return (1);
+			free(value);
+			value = getcwd(NULL, 0);
 		}
 		if (chdir(value) == -1)
-		{
-			perror("minishell: cd:");
-			free(value);
-			return (1);
-		}
+			return (perror("minishell: cd:"), free(value), 1);
 		update_pwd(shell, commands->cmd_name[0]);
 		free(value);
 	}
