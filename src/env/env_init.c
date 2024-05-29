@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 15:42:53 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/17 18:00:36 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/29 15:28:50 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,25 +71,52 @@ int	list_len(t_env *env_head)
 	return (i);
 }
 
-char	**init_env_array(t_env *env_head)
+// char	**init_env_array(t_env *env_head)
+// {
+// 	int		i;
+// 	t_env	*current;
+// 	char	**res;
+// 	char 	*tmp;
+
+// 	i = 0;
+// 	current = env_head;
+// 	res = malloc(sizeof(char *) * (list_len(current) + 1));
+// 	if (!res)
+// 		return (NULL);
+// 	while (current)
+// 	{
+// 		tmp = ft_strjoin(current->var_name, "=");
+// 		if (!tmp)
+// 			return (free_array(res), NULL);
+// 		if (current->value)
+// 		{
+// 			res[i] = ft_strjoin(tmp, current->value);
+// 			free(tmp);
+// 			if (!res[i])
+// 				return (free_array(res), NULL);
+// 		}
+// 		i++;
+// 		current = current->next;
+// 	}
+// 	res[i] = NULL;
+// 	return (res);
+// }
+
+char	**fill_env_array(t_env *current, char **res)
 {
 	int		i;
-	t_env	*current;
-	char	**res;
+	char	*tmp;
 
 	i = 0;
-	current = env_head;
-	res = malloc(sizeof(char *) * (list_len(current) + 1));
-	if (!res)
-		return (NULL);
 	while (current)
 	{
-		res[i] = ft_strjoin(current->var_name, "=");
-		if (!res[i])
+		tmp = ft_strjoin(current->var_name, "=");
+		if (!tmp)
 			return (free_array(res), NULL);
 		if (current->value)
 		{
-			res[i] = ft_strjoin(res[i], current->value);
+			res[i] = ft_strjoin(tmp, current->value);
+			free(tmp);
 			if (!res[i])
 				return (free_array(res), NULL);
 		}
@@ -98,4 +125,16 @@ char	**init_env_array(t_env *env_head)
 	}
 	res[i] = NULL;
 	return (res);
+}
+
+char	**init_env_array(t_env *env_head)
+{
+	t_env	*current;
+	char	**res;
+
+	current = env_head;
+	res = malloc(sizeof(char *) * (list_len(current) + 1));
+	if (!res)
+		return (NULL);
+	return (fill_env_array(current, res));
 }
