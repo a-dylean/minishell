@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:44:36 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/29 13:55:03 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 11:16:24 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	update_pwd(t_shell *shell, char *command)
 		return ;
 	}
 	old_dir = ft_getenv(shell->env_list, "PWD");
+	if (!old_dir)
+		return ;
 	ft_setenv(shell->env_list, "OLDPWD", old_dir);
 	free(old_dir);
 	ft_setenv(shell->env_list, "PWD", cwd);
@@ -67,6 +69,11 @@ int	check_for_arguments(t_command *commands, t_shell *shell)
 		else if (commands->cmd_name[1][0] == '-'
 				&& commands->cmd_name[1][1] == '-' && !commands->cmd_name[1][2])
 			return (cd_minus(shell, 0));
+		// else if (commands->cmd_name[1][0] == '-' && commands->cmd_name[1][1])
+		// {
+		// 	write_error("cd", "invalid option", commands->cmd_name[1]);
+		// 	return (1);
+		// }
 		else if (chdir(commands->cmd_name[1]) == -1)
 		{
 			ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
@@ -91,16 +98,14 @@ int	ft_cd(t_command *commands, t_shell *shell)
 	{
 		value = ft_getenv(shell->env_list, "HOME");
 		if (!value)
+			return (write_error("cd", "HOME not set", NULL), free(value), 1);
+		if (ft_strlen(value) == 0)
 		{
-			write_error("cd", "HOME not set", NULL);
-			return (1);
+			free(value);
+			value = getcwd(NULL, 0);
 		}
 		if (chdir(value) == -1)
-		{
-			perror("minishell: cd:");
-			free(value);
-			return (1);
-		}
+			return (perror("minishell: cd:"), free(value), 1);
 		update_pwd(shell, commands->cmd_name[0]);
 		free(value);
 	}
