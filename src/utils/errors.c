@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:19:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/29 13:56:36 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 11:06:36 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	write_error(char *cmd, char *error, char *arg)
 	if (arg)
 	{
 		ft_putchar_fd('`', STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
 		ft_putchar_fd('\'', STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 	}
