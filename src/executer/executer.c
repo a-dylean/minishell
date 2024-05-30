@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 11:34:18 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 14:11:50 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/29 15:15:43 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	execute_command(t_command *current, t_shell *shell)
 		perror(shell->cmd_path);
 		if (shell && shell->cmd_path)
 			free(shell->cmd_path);
+		free_and_exit_shell(shell, shell->exit_status);
 	}
 }
 
