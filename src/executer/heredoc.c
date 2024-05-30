@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/29 13:39:09 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:22:21 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,14 @@ void	create_filename(t_shell *shell)
 	shell->heredoc = temp_file;
 }
 
+void	heredoc_sigint(int signum)
+{
+	(void)signum;
+	g_exit_code = 130;
+	ft_putstr_fd("\n", STDOUT_FILENO);
+	close(STDIN_FILENO);
+}
+
 void	create_heredoc(char *delimiter, t_shell *shell, int quote_status)
 {
 	int		fd;
@@ -56,22 +64,28 @@ void	create_heredoc(char *delimiter, t_shell *shell, int quote_status)
 	fd = open(shell->heredoc, O_RDWR | O_CREAT, 0666);
 	if (fd == -1)
 		return (perror("open"));
-	line = readline("> ");
-	if (line == NULL)
-		write_warning(delimiter);
-	while (line != NULL)
-	{
-		if (ft_strcmp(line, delimiter) == 0)
+	signal(SIGINT, heredoc_sigint);
+	while (g_exit_code != 130)
+	{	
+		line = readline("> ");
+		if ((line && ft_strcmp(line, delimiter) == 0))
 			break ;
+		if (line == NULL)
+		{
+			if (g_exit_code != 130)
+				write_warning(delimiter);
+			break;
+		}
 		tmp = line;
 		write_line_to_heredoc(fd, tmp, shell, quote_status);
-		line = readline("> ");
-		if (line == NULL)
-			write_warning(delimiter);
 	}
 	if (line)
 		free(line);
-	close(fd);
+	if (fd != -1)
+		close(fd);
+	close(STDIN_FILENO);
+	dup2(shell->old_stdin, STDIN_FILENO);
+	close(shell->old_stdin);
 }
 
 int	case_heredoc_syntax(t_token *tokens, t_shell *shell)
@@ -99,16 +113,20 @@ int	case_heredoc_syntax(t_token *tokens, t_shell *shell)
 	return (0);
 }
 
+
+
 int	handle_heredoc(t_token *tmp, t_shell *shell, int option)
 {
 	int	ret;
 
 	ret = 0;
+	shell->old_stdin = dup(STDIN_FILENO);
 	if (option == 0)
 		ret = case_heredoc_syntax(shell->tokens, shell);
 	if (shell->heredoc)
 		free(shell->heredoc);
 	create_filename(shell);
+	signal(SIGINT, heredoc_sigint);
 	create_heredoc(tmp->value, shell, tmp->quotes_status);
 	if (!shell->heredoc)
 		return (1);

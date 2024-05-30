@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 15:46:13 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/23 16:34:34 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 11:34:08 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,7 @@ void	get_fd_in(t_token *redirections, t_shell *shell)
 			close(shell->infile_fd);
 		shell->infile_fd = open(shell->heredoc, O_RDONLY);
 	}
-	else
-		get_file_as_fd_in(redirections, shell);
+	get_file_as_fd_in(redirections, shell);
 }
 
 static void	open_outfile(char *filename, t_shell *shell, int flags)

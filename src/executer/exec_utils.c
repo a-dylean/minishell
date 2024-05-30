@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:48:58 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/24 13:15:48 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:21:17 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,6 @@ void	wait_commands(t_shell *shell)
 				ft_putstr_fd("\n", STDERR_FILENO);
 		}
 	}
+	if (g_exit_code == 130)
+		shell->exit_status = 130;
 }
