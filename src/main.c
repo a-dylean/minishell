@@ -38,16 +38,16 @@ int	minishell_loop(t_shell *shell)
 	{
 		ignore_signals();
 		shell->input = readline(PROMPT);
+		if (g_exit_code == 130)
+		{
+			shell->exit_status = 130;
+			g_exit_code = 0;
+		}
 		if (!shell->input)
 		{
 			if (isatty(STDIN_FILENO))
 				write(2, "exit\n", 6);
 			free_and_exit_shell(shell, shell->exit_status);
-		}
-		if (g_exit_code == 130)
-		{
-			shell->exit_status = 130;
-			g_exit_code = 0;
 		}
 		if (lexer(shell) == EXIT_SUCCESS && parser(shell) == EXIT_SUCCESS)
 			g_exit_code = executer(shell);

@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 11:23:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/22 14:27:06 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 16:50:14 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int	ft_echo(t_command *commands)
 		write(STDOUT_FILENO, "\n", 1);
 		return (0);
 	}
-	check_for_n_flag(commands, &n_flag, &i);
+	if (commands->cmd_name[i][0] == '-' && commands->cmd_name[i][1] == 'n')
+		check_for_n_flag(commands, &n_flag, &i);
 	write_commands(commands, n_flag, &i);
 	return (0);
 }
