@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/30 14:22:21 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 15:01:39 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,15 @@ void	heredoc_sigint(int signum)
 	close(STDIN_FILENO);
 }
 
+void	cleanup_heredoc(int fd, t_shell *shell)
+{
+	if (fd != -1)
+		close(fd);
+	close(STDIN_FILENO);
+	dup2(shell->old_stdin, STDIN_FILENO);
+	close(shell->old_stdin);
+}
+
 void	create_heredoc(char *delimiter, t_shell *shell, int quote_status)
 {
 	int		fd;
@@ -74,18 +83,14 @@ void	create_heredoc(char *delimiter, t_shell *shell, int quote_status)
 		{
 			if (g_exit_code != 130)
 				write_warning(delimiter);
-			break;
+			break ;
 		}
 		tmp = line;
 		write_line_to_heredoc(fd, tmp, shell, quote_status);
 	}
 	if (line)
 		free(line);
-	if (fd != -1)
-		close(fd);
-	close(STDIN_FILENO);
-	dup2(shell->old_stdin, STDIN_FILENO);
-	close(shell->old_stdin);
+	cleanup_heredoc(fd, shell);
 }
 
 int	case_heredoc_syntax(t_token *tokens, t_shell *shell)

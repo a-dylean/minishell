@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:44:36 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/30 14:57:15 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:57:54 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	update_pwd(t_shell *shell, char *command)
 	free(old_dir);
 	ft_setenv(shell->env_list, "PWD", cwd);
 }
+
 int	cd_minus(t_shell *shell, int option)
 {
 	char	*curr_dir;
@@ -58,6 +59,7 @@ int	cd_minus(t_shell *shell, int option)
 	ft_setenv(shell->env_list, "OLDPWD", old_dir);
 	return (free_and_return(curr_dir, old_dir, 0));
 }
+
 int	check_for_arguments(t_command *commands, t_shell *shell)
 {
 	if (commands->cmd_name[1])
