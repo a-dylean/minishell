@@ -49,21 +49,20 @@ int	valid_for_export(char *str)
 	char	**split;
 
 	if (ft_strlen(str) == 0)
-		return (write_error(str, "not a valid identifier", "export"), -1);
+		return (write_error("export", "not a valid identifier", str), 1);
 	if (!ft_strchr(str, '=') || str[0] == '=')
 	{
 		if (!is_valid_identifier(str))
-			return (write_error(str, "not a valid identifier", "export"),
-				1);
+			return (write_error("export", "not a valid identifier", str), 1);
 		return (-1);
 	}
 	split = ft_split(str, '=');
 	if (ft_strcmp(str, "=") == 0 || !is_valid_identifier(split[0]))
 	{
 		if (split[0][0] == '-')
-			return (write_error(split[0], "invalid option", "export"),
+			return (write_error("export", "invalid option", split[0]),
 				free_array(split), 2);
-		return (write_error(str, "not a valid identifier", "export"),
+		return (write_error("export", "not a valid identifier", str),
 			free_array(split), 1);
 	}
 	if (!split[1])
