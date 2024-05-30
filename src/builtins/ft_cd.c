@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/23 12:44:36 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/30 11:26:27 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:57:15 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	cd_minus(t_shell *shell, int option)
 		write_error("cd", "PWD not set", NULL);
 		return (free_and_return(curr_dir, old_dir, 1));
 	}
-	if (curr_dir && chdir(curr_dir) == -1) // correct here for the first cd - or cd --
+	if (curr_dir && chdir(curr_dir) == -1)
 		return (handle_chdir_error(curr_dir, old_dir));
 	if (option == 1)
 	{
@@ -67,11 +67,11 @@ int	check_for_arguments(t_command *commands, t_shell *shell)
 		else if (commands->cmd_name[1][0] == '-'
 			&& commands->cmd_name[1][1] == '-' && !commands->cmd_name[1][2])
 			return (cd_minus(shell, 0));
-		// else if (commands->cmd_name[1][0] == '-' && commands->cmd_name[1][1])
-		// {
-		// 	write_error("cd", "invalid option", commands->cmd_name[1]);
-		// 	return (1);
-		// }
+		else if (commands->cmd_name[1][0] == '-' && commands->cmd_name[1][1])
+		{
+			write_error("cd", "invalid option", commands->cmd_name[1]);
+			return (2);
+		}
 		else if (chdir(commands->cmd_name[1]) == -1)
 		{
 			ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
