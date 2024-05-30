@@ -54,12 +54,33 @@ void	heredoc_sig(int code)
 	printf("\n");
 	close(STDIN_FILENO);
 }
+int	handle_close_heredoc(char *buf, char *str, int fd)
+{
+	if (g_exit_code == 130)
+	{
+		if (str)
+		{
+			free(str);
+			str = NULL;
+		}
+		if (buf)
+		{
+			free(buf);
+			buf = NULL;
+		}
+		g_exit_code = 0;
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+		return (-2);
+	}
+	return (0);
+}
 
 int	create_heredoc(char *delimiter, t_shell *shell, int quote_status)
 {
 	int		fd;
 	char	*line;
-	char	*tmp;
+	char	*tmp = NULL;
 
 	// fd = open(shell->heredoc, O_RDWR | O_CREAT, 0666);
 	fd = dup(STDIN_FILENO);
@@ -72,6 +93,8 @@ int	create_heredoc(char *delimiter, t_shell *shell, int quote_status)
 		if (!line || g_exit_code == 130)
 		{
 			write_warning(delimiter);
+			if (handle_close_heredoc(tmp, line, fd) == -2)
+				return (-2);
 			free(line);
 			return (close(fd), 0);
 		}
