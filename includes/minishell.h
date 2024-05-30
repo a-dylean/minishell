@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 15:21:38 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/29 13:55:38 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:01:02 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct s_shell
 	char				*cmd_path;
 	char				**env;
 	char				*heredoc;
+	int					old_stdin;
 	int					exit_status;
 	t_env				*env_list;
 }						t_shell;

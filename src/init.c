@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:28:00 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/22 17:03:58 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:12:10 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ int	init_shell(t_shell *shell, char **env)
 	shell->pipe_fd[1] = -2;
 	shell->exit_status = 0;
 	shell->heredoc = NULL;
+	shell->old_stdin = -1;
 	return (EXIT_SUCCESS);
 }
