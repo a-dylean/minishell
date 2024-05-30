@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   cmds_ops.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atonkopi <atonkopi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 15:22:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/16 15:33:35 by atonkopi         ###   ########.fr       */
+/*   Updated: 2024/05/30 15:17:58 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+t_command	*get_command(t_token *tokens)
+{
+	t_command	*command;
+
+	if (!tokens)
+		return (NULL);
+	command = malloc(sizeof(t_command));
+	if (!command)
+		return (NULL);
+	ft_memset(command, 0, sizeof(t_command));
+	command->cmd_name = get_cmd_array_from_tokens(tokens);
+	handle_redirections(tokens, command);
+	if (command->cmd_name && command->cmd_name[0])
+		command->is_builtin = is_builtin(command->cmd_name[0]);
+	return (command);
+}
 
 t_command	*init_command(void)
 {

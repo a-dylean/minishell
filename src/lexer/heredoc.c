@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:43:15 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/30 15:01:39 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 15:22:06 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,6 @@ void	create_filename(t_shell *shell)
 	shell->heredoc = temp_file;
 }
 
-void	heredoc_sigint(int signum)
-{
-	(void)signum;
-	g_exit_code = 130;
-	ft_putstr_fd("\n", STDOUT_FILENO);
-	close(STDIN_FILENO);
-}
-
 void	cleanup_heredoc(int fd, t_shell *shell)
 {
 	if (fd != -1)
@@ -91,31 +83,6 @@ void	create_heredoc(char *delimiter, t_shell *shell, int quote_status)
 	if (line)
 		free(line);
 	cleanup_heredoc(fd, shell);
-}
-
-int	case_heredoc_syntax(t_token *tokens, t_shell *shell)
-{
-	t_token	*tmp;
-
-	tmp = tokens;
-	while (tmp)
-	{
-		if (tmp->type == -1)
-			return (invalid_type_syntax_error(tmp, shell));
-		else if (tmp->type == PIPE && (!tmp->prev || !tmp->next
-				|| tmp->prev->value[0] == '|' || tmp->next->value[0] == '|'))
-			return (invalid_type_syntax_error(tmp, shell));
-		else if (tmp->type >= LESS && tmp->type <= LESSLESS)
-		{
-			if (!tmp->next)
-				return (syntax_error_in_token("newline", shell));
-			else if (tmp->next->type != FILENAME
-				&& tmp->next->type != DELIMITER)
-				return (syntax_error_in_token(tmp->next->value, shell));
-		}
-		tmp = tmp->next;
-	}
-	return (0);
 }
 
 int	handle_heredoc(t_token *tmp, t_shell *shell, int option)

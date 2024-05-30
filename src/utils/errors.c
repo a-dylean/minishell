@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 16:19:54 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/30 11:06:36 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 15:15:46 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,12 @@ void	write_warning(char *arg)
 		STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd("\')\n", STDERR_FILENO);
+}
+
+int	invalid_arg(int argc)
+{
+	if (argc != 1)
+		return (write_error(NULL, "minishell doesn't take any arguments", NULL),
+			EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }

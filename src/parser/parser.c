@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:27:28 by atonkopi          #+#    #+#             */
-/*   Updated: 2024/05/23 13:43:49 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 15:20:48 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,36 +56,6 @@ bool	is_builtin(char *cmd)
 		i++;
 	}
 	return (false);
-}
-
-t_command	*get_command(t_token *tokens)
-{
-	t_command	*command;
-
-	if (!tokens)
-		return (NULL);
-	command = malloc(sizeof(t_command));
-	if (!command)
-		return (NULL);
-	ft_memset(command, 0, sizeof(t_command));
-	command->cmd_name = get_cmd_array_from_tokens(tokens);
-	handle_redirections(tokens, command);
-	if (command->cmd_name && command->cmd_name[0])
-		command->is_builtin = is_builtin(command->cmd_name[0]);
-	return (command);
-}
-
-t_token	*get_next_pipe(t_token *token)
-{
-	if (!token)
-		return (NULL);
-	while (token)
-	{
-		if (token->type == PIPE)
-			return (token);
-		token = token->next;
-	}
-	return (NULL);
 }
 
 int	parser(t_shell *shell)

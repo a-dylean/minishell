@@ -6,11 +6,45 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 15:03:25 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/23 12:44:01 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 15:26:32 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	str_is_empty_or_space_only(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != ' ')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	valid_quotes(char *str)
+{
+	int	i;
+	int	in_single_quote;
+	int	in_double_quote;
+
+	i = 0;
+	in_single_quote = 0;
+	in_double_quote = 0;
+	while (str[i])
+	{
+		if (str[i] == S_QUOTE && !in_double_quote)
+			in_single_quote = !in_single_quote;
+		else if (str[i] == D_QUOTE && !in_single_quote)
+			in_double_quote = !in_double_quote;
+		i++;
+	}
+	return (!(in_single_quote || in_double_quote));
+}
 
 void	set_delimiter_quote_status(t_token *token)
 {

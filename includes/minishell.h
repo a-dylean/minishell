@@ -6,7 +6,7 @@
 /*   By: jlabonde <jlabonde@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 15:21:38 by jlabonde          #+#    #+#             */
-/*   Updated: 2024/05/30 14:01:02 by jlabonde         ###   ########.fr       */
+/*   Updated: 2024/05/30 15:22:44 by jlabonde         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,10 @@ int						parser(t_shell *shell);
 int						count_not_null_tokens(t_token *tokens);
 void					handle_redirections(t_token *tokens,
 							t_command *command);
+char					**get_cmd_array_from_tokens(t_token *tokens);
+bool					is_builtin(char *cmd);
+t_command				*get_command(t_token *tokens);
+t_token					*get_next_pipe(t_token *token);
 
 /* expander */
 char					*expander(char *str, t_shell *shell);
@@ -185,7 +189,9 @@ int						invalid_type_syntax_error(t_token *token,
 							t_shell *shell);
 int						syntax_error_eof(void);
 int						syntax_error_in_token(char *token, t_shell *shell);
+int						case_heredoc_syntax(t_token *tokens, t_shell *shell);
 void					write_warning(char *arg);
+int						invalid_arg(int argc);
 
 /* utils */
 void					free_and_exit_shell(t_shell *shell, int exit_code);
@@ -200,5 +206,7 @@ char					*remove_char(char *str, char c);
 
 /* signals */
 void					catch_sigint(int signum);
+void					heredoc_sigint(int signum);
+void					ignore_signals(void);
 
 #endif
